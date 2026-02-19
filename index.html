@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/png" href="favicon.png">
-<title>MLBB Player Ranking — Brutally Honest</title>
+<title>MLBB Player Ranking — EPI Formula</title>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -23,10 +22,11 @@
   --yellow: #f5c842;
   --red: #f05060;
   --blue: #5ab4f0;
-  --p1: #f0a040;  /* Fenrir */
-  --p2: #a040f0;  /* Tok Dalang */
-  --p3: #40b8f0;  /* LeoXent */
-  --p4: #f04070;  /* Sofea */
+  --p1: #f0a040;
+  --p2: #a040f0;
+  --p3: #40b8f0;
+  --p4: #f04070;
+  --p5: #40e0a0;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
@@ -34,7 +34,7 @@ body {
   color: var(--text);
   font-family: 'Inter', sans-serif;
   font-size: 13.5px;
-  padding: 36px 20px 60px;
+  padding: 36px 20px 0;
   min-height: 100vh;
 }
 body::before {
@@ -46,1703 +46,996 @@ body::before {
   background-size: 48px 48px;
   pointer-events: none; z-index: 0;
 }
-.wrap { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; }
+.wrap { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding-bottom: 0; }
 
 /* === HEADER === */
-.hdr { text-align: center; margin-bottom: 48px; }
-.hdr-tag {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.7rem;
-  color: var(--muted);
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-}
-.hdr h1 {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 2.6rem;
-  font-weight: 700;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: #e0eeff;
-  line-height: 1;
-}
+.hdr { text-align: center; margin-bottom: 40px; }
+.hdr-tag { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: var(--muted); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; }
+.hdr h1 { font-family: 'Rajdhani', sans-serif; font-size: 2.6rem; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #e0eeff; line-height: 1; }
 .hdr h1 span { color: var(--gold); }
-.hdr-sub {
-  margin-top: 10px;
-  font-size: 0.78rem;
-  color: var(--muted);
-  letter-spacing: 1px;
-}
-.weight-note {
-  display: inline-flex;
-  gap: 12px;
-  margin-top: 16px;
-  padding: 6px 16px;
-  background: var(--s1);
-  border: 1px solid var(--border);
+.hdr-sub { margin-top: 10px; font-size: 0.78rem; color: var(--muted); letter-spacing: 1px; }
+.formula-badge {
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-top: 16px; padding: 8px 20px;
+  background: linear-gradient(135deg, rgba(245,185,66,0.08), rgba(90,180,240,0.05));
+  border: 1px solid rgba(245,185,66,0.25);
   border-radius: 99px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.72rem;
-  color: var(--muted);
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--muted);
+  flex-wrap: wrap; justify-content: center; max-width: 700px; margin-left: auto; margin-right: auto;
 }
-.weight-note .w-main { color: var(--green); }
-.weight-note .w-cur { color: var(--yellow); }
-
-/* === PODIUM === */
-.podium {
-  display: grid;
-  grid-template-columns: 1fr 1.1fr 1fr;
-  gap: 12px;
-  margin-bottom: 28px;
-  align-items: end;
-}
-.pod-card {
-  background: var(--s1);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 20px 16px 16px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-.pod-card::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0;
-  height: 3px;
-}
-.pod-1::before { background: var(--gold); box-shadow: 0 0 12px var(--gold); }
-.pod-2::before { background: var(--silver); }
-.pod-3::before { background: var(--bronze); }
-.pod-glow {
-  position: absolute; top: -30px; left: 50%;
-  transform: translateX(-50%);
-  width: 120px; height: 120px;
-  border-radius: 50%;
-  opacity: 0.06;
-}
-.pod-1 .pod-glow { background: var(--gold); }
-.pod-2 .pod-glow { background: var(--silver); }
-.pod-3 .pod-glow { background: var(--bronze); }
-.pod-rank {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 2.2rem;
-  font-weight: 700;
-  line-height: 1;
-  margin-bottom: 4px;
-}
-.pod-1 .pod-rank { color: var(--gold); }
-.pod-2 .pod-rank { color: var(--silver); }
-.pod-3 .pod-rank { color: var(--bronze); }
-.pod-name {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 1.1rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  margin-bottom: 2px;
-}
-.pod-score {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.82rem;
-  color: var(--muted);
-  margin-bottom: 8px;
-}
-.pod-score span { color: var(--text); font-weight: 600; }
-.pod-tag {
-  display: inline-block;
-  padding: 3px 10px;
-  border-radius: 99px;
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  background: rgba(255,255,255,0.06);
-  color: var(--muted);
-}
-
-/* === RANK 4 CARD === */
-.rank4-card {
-  background: var(--s1);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px 20px;
-  margin-bottom: 28px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-.r4-badge {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: var(--rank4);
-  flex-shrink: 0;
-  width: 40px;
-  text-align: center;
-}
-.r4-name {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-}
-.r4-score {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.75rem;
-  color: var(--muted);
-}
-.r4-score span { color: var(--text); }
-
-/* === SECTION HEADERS === */
-.section-title {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 16px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--border);
-}
-
-/* === SCORE BREAKDOWN TABLE === */
-.score-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 40px;
-  font-size: 0.82rem;
-}
-.score-table th {
-  padding: 8px 12px;
-  text-align: left;
-  color: var(--muted);
-  font-size: 0.68rem;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  font-weight: 600;
-  background: #090d18;
-  border-bottom: 1px solid var(--border);
-}
-.score-table td {
-  padding: 9px 12px;
-  border-bottom: 1px solid rgba(28,42,68,0.5);
-  vertical-align: middle;
-}
-.score-table tbody tr:hover { background: var(--s1); }
-.score-table .cat { color: var(--text); font-weight: 500; }
-.score-table .note { color: var(--muted); font-size: 0.75rem; margin-top: 2px; }
-.mini-bar {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-}
-.mini-bar-track {
-  width: 60px; height: 5px;
-  background: var(--dim);
-  border-radius: 3px;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-.mini-bar-fill { height: 100%; border-radius: 3px; }
-.score-val {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.8rem;
-  font-weight: 600;
-  min-width: 30px;
-  text-align: right;
-}
-.hi { color: var(--green); }
-.mi { color: var(--yellow); }
-.ok { color: #c8a050; }
-.lo { color: var(--red); }
-.best { color: var(--gold); }
-.good { color: var(--green); }
-.bad  { color: var(--red); }
-
-/* === DETAILED ANALYSIS === */
-.analysis-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 40px;
-}
-.player-card {
-  background: var(--s1);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-}
-.pc-header {
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.pc-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.pc-name { font-family: 'Rajdhani', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 1px; }
-.pc-rank-badge {
-  margin-left: auto;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.7rem;
-  padding: 2px 8px;
-  border-radius: 99px;
-  font-weight: 600;
-}
-.pc-body { padding: 14px 16px; }
-.verdict {
-  font-size: 0.82rem;
-  line-height: 1.65;
-  color: #a0b8d8;
-  margin-bottom: 12px;
-}
-.strength-weakness {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-top: 10px;
-}
-.sw-box {
-  padding: 8px 10px;
-  border-radius: 8px;
-  font-size: 0.74rem;
-  line-height: 1.5;
-}
-.sw-box.str { background: rgba(61,232,126,0.07); border: 1px solid rgba(61,232,126,0.15); }
-.sw-box.wk  { background: rgba(240,80,96,0.07); border: 1px solid rgba(240,80,96,0.15); }
-.sw-label {
-  font-weight: 700;
-  font-size: 0.65rem;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  margin-bottom: 4px;
-}
-.sw-box.str .sw-label { color: var(--green); }
-.sw-box.wk  .sw-label  { color: var(--red); }
-.sw-item { color: var(--muted); line-height: 1.6; }
-
-/* === FINAL VERDICT === */
-.final-box {
-  background: linear-gradient(135deg, #0d1528 0%, #07090f 100%);
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--gold);
-  border-radius: 12px;
-  padding: 24px 28px;
-  margin-bottom: 40px;
-}
-.final-box h2 {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 14px;
-}
-.final-box p {
-  font-size: 0.85rem;
-  line-height: 1.75;
-  color: #a0b8d8;
-  margin-bottom: 10px;
-}
-.final-box p:last-child { margin-bottom: 0; }
-.final-box strong { color: var(--text); }
+.formula-badge .f-eq { color: var(--gold); font-weight: 600; }
+.formula-badge .f-kda { color: #f04070; }
+.formula-badge .f-tf { color: #40b8f0; }
+.formula-badge .f-rel { color: var(--green); }
 
 /* === PAGE NAV === */
 .page-nav {
-  display: flex;
-  gap: 0;
-  margin-bottom: 40px;
-  background: var(--s1);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  overflow: hidden;
+  display: flex; gap: 0; margin-bottom: 40px;
+  background: var(--s1); border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
 }
 .page-btn {
-  flex: 1;
-  padding: 12px 16px;
-  background: transparent;
-  border: none;
-  color: var(--muted);
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 0.88rem;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  cursor: pointer;
-  border-right: 1px solid var(--border);
-  transition: all .2s;
-  position: relative;
+  flex: 1; padding: 12px 16px; background: transparent; border: none;
+  color: var(--muted); font-family: 'Rajdhani', sans-serif; font-size: 0.88rem;
+  font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer;
+  border-right: 1px solid var(--border); transition: all .2s; position: relative;
 }
 .page-btn:last-child { border-right: none; }
 .page-btn:hover { color: var(--text); background: rgba(255,255,255,0.03); }
-.page-btn.active {
-  color: #000;
-  background: #5ab4f0;
-}
-.page-btn.active::after {
-  content: '';
-  position: absolute; bottom: 0; left: 0; right: 0;
-  height: 2px;
-  background: rgba(255,255,255,0.3);
-}
+.page-btn.active { color: #000; background: #5ab4f0; }
 .page { display: none; }
 .page.active { display: block; }
 
 /* === DISCLAIMER === */
 .disclaimer {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  background: rgba(90,180,240,0.05);
-  border: 1px solid rgba(90,180,240,0.15);
-  border-radius: 8px;
-  padding: 10px 14px;
-  margin-bottom: 32px;
-  font-size: 0.75rem;
-  color: var(--muted);
-  line-height: 1.6;
+  display: flex; align-items: flex-start; gap: 10px;
+  background: rgba(90,180,240,0.05); border: 1px solid rgba(90,180,240,0.15);
+  border-radius: 8px; padding: 10px 14px; margin-bottom: 32px;
+  font-size: 0.75rem; color: var(--muted); line-height: 1.6;
 }
 .disclaimer-icon { font-size: 0.9rem; flex-shrink: 0; margin-top: 1px; }
 .disclaimer strong { color: #5ab4f0; }
 
-/* === H2H PAGE STYLES === */
-.h2h-intro {
-  font-size: 0.82rem;
-  color: var(--muted);
-  line-height: 1.7;
-  margin-bottom: 28px;
-  padding: 14px 18px;
-  background: var(--s1);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-}
-.h2h-filter {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 28px;
-  align-items: center;
-}
-.h2h-filter-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.68rem;
-  color: var(--muted);
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  margin-right: 4px;
-}
-.filter-btn {
-  padding: 5px 14px;
-  border-radius: 99px;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--muted);
-  font-family: 'Rajdhani', sans-serif;
-  font-weight: 700;
-  font-size: 0.78rem;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: all .15s;
-}
-.filter-btn:hover { color: var(--text); border-color: #3a5080; }
-.filter-btn.active { background: var(--s2); color: var(--text); border-color: #3a6090; }
-.h2h-search {
-  margin-left: auto;
-  padding: 5px 12px;
-  background: var(--s1);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  color: var(--text);
-  font-family: 'Inter', sans-serif;
-  font-size: 0.78rem;
-  outline: none;
-  width: 180px;
-  transition: border-color .2s;
-}
-.h2h-search:focus { border-color: #5ab4f0; }
-.h2h-search::placeholder { color: var(--muted); }
-
-/* H2H Hero Card */
-.h2h-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.h2h-card {
-  background: var(--s1);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  overflow: hidden;
-  transition: border-color .2s;
-}
-.h2h-card:hover { border-color: #2a4060; }
-.h2h-card-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 16px;
-  background: #090d18;
-  border-bottom: 1px solid var(--border);
-}
-.h2h-hero-name {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  color: #d8e8ff;
-}
-.h2h-role-tag {
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  padding: 2px 7px;
-  border-radius: 3px;
-  background: rgba(255,255,255,0.06);
-  color: var(--muted);
-}
-.h2h-verdict-badge {
-  margin-left: auto;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.68rem;
-  font-weight: 600;
-  padding: 3px 10px;
-  border-radius: 99px;
-}
-.h2h-players {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0;
-}
-.h2h-player-cell {
-  padding: 12px 14px;
-  border-right: 1px solid var(--border);
-  position: relative;
-}
-.h2h-player-cell:last-child { border-right: none; }
-.h2h-cell-name {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.62rem;
-  color: var(--muted);
-  letter-spacing: 1px;
-  margin-bottom: 6px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-.h2h-cell-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-.h2h-wr-big {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 1.4rem;
-  font-weight: 700;
-  line-height: 1;
-  margin-bottom: 2px;
-}
-.h2h-matches-small {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.65rem;
-  color: var(--muted);
-  margin-bottom: 6px;
-}
-.h2h-mini-bar {
-  height: 3px;
-  background: var(--dim);
-  border-radius: 2px;
-  overflow: hidden;
-  margin-bottom: 4px;
-}
-.h2h-mini-fill { height: 100%; border-radius: 2px; }
-.h2h-crown {
-  position: absolute;
-  top: 8px; right: 10px;
-  font-size: 0.75rem;
-  opacity: 0.8;
-}
-.h2h-no-data {
-  opacity: 0.35;
-}
-.h2h-no-data .h2h-wr-big { font-size: 0.85rem; color: var(--muted); }
-.h2h-summary {
-  padding: 8px 16px;
-  background: rgba(0,0,0,0.2);
-  border-top: 1px solid var(--border);
-  font-size: 0.72rem;
-  color: var(--muted);
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-.h2h-summary strong { color: var(--text); }
-.h2h-no-results {
-  text-align: center;
-  padding: 48px;
-  color: var(--muted);
-  font-size: 0.85rem;
+/* === SECTION TITLE === */
+.section-title {
+  font-family: 'Rajdhani', sans-serif; font-size: 0.75rem; font-weight: 600;
+  letter-spacing: 3px; text-transform: uppercase; color: var(--muted);
+  margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border);
 }
 
-/* === SCORE MINI CARDS in podium === */
-.pod-stats {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin-top: 10px;
-  text-align: left;
+/* === PODIUM === */
+.podium { display: grid; grid-template-columns: 1fr 1.12fr 1fr; gap: 12px; margin-bottom: 16px; align-items: end; }
+.pod-card {
+  background: var(--s1); border: 1px solid var(--border); border-radius: 12px;
+  padding: 20px 16px 16px; text-align: center; position: relative; overflow: hidden;
 }
-.pod-stat-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.72rem;
-  color: var(--muted);
-  font-family: 'IBM Plex Mono', monospace;
-}
+.pod-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.pod-1::before { background: var(--gold); box-shadow: 0 0 14px var(--gold); }
+.pod-2::before { background: var(--silver); }
+.pod-3::before { background: var(--bronze); }
+.pod-glow { position: absolute; top: -30px; left: 50%; transform: translateX(-50%); width: 120px; height: 120px; border-radius: 50%; opacity: 0.06; }
+.pod-1 .pod-glow { background: var(--gold); }
+.pod-2 .pod-glow { background: var(--silver); }
+.pod-3 .pod-glow { background: var(--bronze); }
+.pod-rank { font-family: 'Rajdhani', sans-serif; font-size: 2.2rem; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+.pod-1 .pod-rank { color: var(--gold); }
+.pod-2 .pod-rank { color: var(--silver); }
+.pod-3 .pod-rank { color: var(--bronze); }
+.pod-name { font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: 700; letter-spacing: 1px; margin-bottom: 4px; }
+.pod-epi { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: var(--muted); margin-bottom: 2px; }
+.pod-epi .ev { color: var(--text); font-weight: 600; }
+.pod-epi .es { font-size: 0.65rem; color: var(--muted); }
+.pod-tag { display: inline-block; padding: 3px 10px; border-radius: 99px; font-size: 0.68rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; background: rgba(255,255,255,0.06); color: var(--muted); margin-bottom: 10px; }
+.pod-stats { display: flex; flex-direction: column; gap: 3px; text-align: left; }
+.pod-stat-row { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--muted); font-family: 'IBM Plex Mono', monospace; }
 .pod-stat-row span:last-child { color: var(--text); }
 
-/* === HERO PROFILE SECTION === */
-.hero-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin-bottom: 40px;
+/* === RANK 4/5 CARDS === */
+.rankx-card {
+  background: var(--s1); border: 1px solid var(--border); border-radius: 12px;
+  padding: 14px 20px; margin-bottom: 12px; display: flex; align-items: center; gap: 16px;
 }
-.hero-profile-card {
-  background: var(--s1);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-}
-.hpc-header {
-  padding: 14px 18px 12px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  position: relative;
-  overflow: hidden;
-}
-.hpc-header::after {
-  content: '';
-  position: absolute; right: -10px; top: -10px;
-  width: 80px; height: 80px;
-  border-radius: 50%;
-  opacity: 0.05;
-}
-.hpc-p1 .hpc-header::after { background: var(--p1); }
-.hpc-p2 .hpc-header::after { background: var(--p2); }
-.hpc-p3 .hpc-header::after { background: var(--p3); }
-.hpc-p4 .hpc-header::after { background: var(--p4); }
-.hpc-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.hpc-name { font-family: 'Rajdhani', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 1px; }
-.hpc-sub { font-size: 0.7rem; color: var(--muted); margin-left: auto; font-family: 'IBM Plex Mono', monospace; }
-.hpc-body { padding: 16px 18px; }
+.rx-badge { font-family: 'Rajdhani', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--rank4); flex-shrink: 0; width: 40px; text-align: center; }
+.rx-name { font-family: 'Rajdhani', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 1px; }
+.rx-score { font-family: 'IBM Plex Mono', monospace; font-size: 0.74rem; color: var(--muted); margin-top: 2px; }
+.rx-score span { color: var(--text); }
 
-/* Role + Personality Tags */
-.tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
-.tag {
-  padding: 3px 9px;
-  border-radius: 4px;
-  font-size: 0.64rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+/* === EPI BREAKDOWN TABLE === */
+.epi-table { width: 100%; border-collapse: collapse; margin-bottom: 40px; font-size: 0.8rem; }
+.epi-table th {
+  padding: 8px 10px; text-align: left; color: var(--muted); font-size: 0.65rem;
+  letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600;
+  background: #090d18; border-bottom: 1px solid var(--border);
 }
-.tag-role  { background: rgba(90,180,240,0.12); color: #5ab4f0; border: 1px solid rgba(90,180,240,0.2); }
-.tag-style { background: rgba(245,185,66,0.1);  color: #f5b942; border: 1px solid rgba(245,185,66,0.2); }
-.tag-trait { background: rgba(61,232,126,0.08); color: #3de87e; border: 1px solid rgba(61,232,126,0.15); }
-.tag-warn  { background: rgba(240,80,96,0.08);  color: #f05060; border: 1px solid rgba(240,80,96,0.15); }
+.epi-table td { padding: 8px 10px; border-bottom: 1px solid rgba(28,42,68,0.5); vertical-align: middle; }
+.epi-table tbody tr:hover { background: rgba(255,255,255,0.015); }
+.epi-table .cat { color: var(--text); font-weight: 500; }
+.epi-table .note { color: var(--muted); font-size: 0.7rem; margin-top: 2px; }
+.epi-table .w-tag { font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem; padding: 1px 5px; border-radius: 3px; background: rgba(245,185,66,0.1); color: var(--gold); border: 1px solid rgba(245,185,66,0.2); }
+.sv { font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; font-weight: 600; }
+.sv.best { color: var(--gold); }
+.sv.good { color: var(--green); }
+.sv.ok   { color: var(--yellow); }
+.sv.lo   { color: var(--red); }
+.sv.dim  { color: var(--muted); }
 
-/* Hero fav list */
-.hero-list-title {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.62rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 8px;
-}
-.hero-row {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  padding: 5px 0;
-  border-bottom: 1px solid rgba(28,42,68,0.4);
-}
-.hero-row:last-child { border-bottom: none; }
-.hero-num { font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem; color: var(--dim); width: 14px; flex-shrink: 0; }
-.hero-hname { flex: 1; font-size: 0.8rem; font-weight: 600; color: var(--text); }
-.hero-chip {
-  font-size: 0.58rem; padding: 1px 5px; border-radius: 3px;
-  background: rgba(255,255,255,0.05); color: var(--muted);
-  font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; flex-shrink: 0;
-}
-.hero-matches { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: var(--muted); min-width: 44px; text-align: right; }
-.hero-wr { font-family: 'IBM Plex Mono', monospace; font-size: 0.73rem; font-weight: 600; min-width: 42px; text-align: right; }
-.hero-list-wrap { margin-bottom: 14px; }
+/* === ANALYSIS GRID === */
+.analysis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 40px; }
+.player-card { background: var(--s1); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.pc-header { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+.pc-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.pc-name { font-family: 'Rajdhani', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 1px; }
+.pc-rank-badge { margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; padding: 2px 8px; border-radius: 99px; font-weight: 600; }
+.pc-body { padding: 14px 16px; }
+.verdict { font-size: 0.81rem; line-height: 1.65; color: #a0b8d8; margin-bottom: 12px; }
 
-/* Personality + Gameplay blurb */
-.personality-box {
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(28,42,68,0.7);
-  border-radius: 8px;
-  padding: 11px 13px;
-  margin-bottom: 10px;
+/* Top 5 Heroes */
+.top5-heroes { margin: 10px 0 12px; }
+.top5-title { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; }
+.hero-pill-row { display: flex; flex-wrap: wrap; gap: 5px; }
+.hero-pill {
+  display: flex; align-items: center; gap: 5px;
+  padding: 4px 9px; border-radius: 6px;
+  background: rgba(0,0,0,0.3); border: 1px solid var(--border);
+  font-size: 0.7rem;
 }
-.pb-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.6rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 5px;
+.hero-pill-name { color: #d0e0f8; font-weight: 600; }
+.hero-pill-games { color: var(--muted); font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; }
+.hero-pill-wr { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; font-weight: 700; }
+
+.strength-weakness { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+.sw-box { padding: 8px 10px; border-radius: 8px; font-size: 0.73rem; line-height: 1.5; }
+.sw-box.str { background: rgba(61,232,126,0.07); border: 1px solid rgba(61,232,126,0.15); }
+.sw-box.wk  { background: rgba(240,80,96,0.07); border: 1px solid rgba(240,80,96,0.15); }
+.sw-label { font-weight: 700; font-size: 0.65rem; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; }
+.sw-box.str .sw-label { color: var(--green); }
+.sw-box.wk  .sw-label { color: var(--red); }
+.sw-item { color: var(--muted); line-height: 1.6; }
+
+/* === FINAL BOX === */
+.final-box {
+  background: linear-gradient(135deg, #0d1528 0%, #07090f 100%);
+  border: 1px solid var(--border); border-left: 3px solid var(--gold);
+  border-radius: 12px; padding: 24px 28px; margin-bottom: 40px;
 }
-.pb-text { font-size: 0.79rem; line-height: 1.65; color: #8aa8c8; }
+.final-box h2 { font-family: 'Rajdhani', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+.final-box p { font-size: 0.84rem; line-height: 1.75; color: #a0b8d8; margin-bottom: 10px; }
+.final-box p:last-child { margin-bottom: 0; }
+.final-box strong { color: var(--text); }
 
-/* Attribute bars */
-.attr-bars { margin-top: 12px; }
-.ab-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
-.ab-label { font-size: 0.65rem; color: var(--muted); width: 72px; flex-shrink: 0; text-align: right; }
-.ab-track { flex: 1; height: 5px; background: var(--dim); border-radius: 3px; overflow: hidden; }
-.ab-fill { height: 100%; border-radius: 3px; }
-.ab-val { font-family: 'IBM Plex Mono', monospace; font-size: 0.63rem; color: var(--muted); width: 24px; text-align: right; }
+/* === H2H === */
+.h2h-filter { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; align-items: center; }
+.h2h-filter-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+.filter-btn { padding: 5px 14px; border-radius: 99px; border: 1px solid var(--border); background: transparent; color: var(--muted); font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 0.78rem; letter-spacing: 1px; cursor: pointer; transition: all .15s; }
+.filter-btn:hover { color: var(--text); border-color: #3a5080; }
+.filter-btn.active { background: var(--s2); color: var(--text); border-color: #3a6090; }
+.h2h-search { margin-left: auto; padding: 5px 12px; background: var(--s1); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-family: 'Inter', sans-serif; font-size: 0.78rem; outline: none; width: 180px; transition: border-color .2s; }
+.h2h-search:focus { border-color: #5ab4f0; }
+.h2h-search::placeholder { color: var(--muted); }
+.h2h-grid { display: flex; flex-direction: column; gap: 12px; }
+.h2h-card { background: var(--s1); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.h2h-card:hover { border-color: #2a4060; }
+.h2h-card-header { display: flex; align-items: center; gap: 12px; padding: 10px 16px; background: #090d18; border-bottom: 1px solid var(--border); }
+.h2h-hero-name { font-family: 'Rajdhani', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 1px; color: #d8e8ff; }
+.h2h-role-tag { font-size: 0.6rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 2px 7px; border-radius: 3px; background: rgba(255,255,255,0.06); color: var(--muted); }
+.h2h-verdict-badge { margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; font-weight: 600; padding: 3px 10px; border-radius: 99px; }
+.h2h-players { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; }
+.h2h-player-cell { padding: 10px 12px; border-right: 1px solid var(--border); position: relative; }
+.h2h-player-cell:last-child { border-right: none; }
+.h2h-cell-name { font-family: 'IBM Plex Mono', monospace; font-size: 0.58rem; color: var(--muted); letter-spacing: 1px; margin-bottom: 5px; display: flex; align-items: center; gap: 4px; }
+.h2h-cell-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+.h2h-wr-big { font-family: 'Rajdhani', sans-serif; font-size: 1.3rem; font-weight: 700; line-height: 1; margin-bottom: 2px; }
+.h2h-matches-small { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; color: var(--muted); margin-bottom: 5px; }
+.h2h-mini-bar { height: 3px; background: var(--dim); border-radius: 2px; overflow: hidden; margin-bottom: 4px; }
+.h2h-mini-fill { height: 100%; border-radius: 2px; }
+.h2h-crown { position: absolute; top: 6px; right: 8px; font-size: 0.7rem; opacity: 0.8; }
+.h2h-no-data { opacity: 0.3; }
+.h2h-no-data .h2h-wr-big { font-size: 0.85rem; color: var(--muted); }
+.h2h-summary { padding: 8px 16px; background: rgba(0,0,0,0.2); border-top: 1px solid var(--border); font-size: 0.72rem; color: var(--muted); }
+.h2h-summary strong { color: var(--text); }
+.h2h-no-results { text-align: center; padding: 48px; color: var(--muted); font-size: 0.85rem; }
 
-@media (max-width: 600px) {
+/* === POOL PAGE === */
+.pool-tab-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+.pool-tab { padding: 6px 18px; border-radius: 99px; border: 1px solid var(--border); background: transparent; color: var(--muted); font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; cursor: pointer; transition: all .2s; }
+.pool-tab:hover { color: var(--text); }
+.player-section-pool { margin-bottom: 48px; }
+
+/* === FOOTER METHODOLOGY === */
+.footer-methodology {
+  background: linear-gradient(135deg, #080c18 0%, #050810 100%);
+  border-top: 1px solid var(--border);
+  margin-top: 60px;
+  padding: 48px 20px 60px;
+}
+.footer-inner { max-width: 900px; margin: 0 auto; }
+.footer-title {
+  font-family: 'Rajdhani', sans-serif; font-size: 1.4rem; font-weight: 700;
+  letter-spacing: 4px; text-transform: uppercase; color: #7eb8ff;
+  margin-bottom: 6px;
+}
+.footer-subtitle { font-size: 0.75rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 32px; }
+.meth-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px; }
+.meth-card {
+  background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+  border-radius: 10px; padding: 18px 20px;
+}
+.meth-card-title {
+  font-family: 'Rajdhani', sans-serif; font-size: 0.85rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase; color: var(--blue);
+  margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border);
+}
+.meth-formula {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem;
+  color: var(--gold); background: rgba(245,185,66,0.06);
+  border: 1px solid rgba(245,185,66,0.15); border-radius: 6px;
+  padding: 10px 14px; margin-bottom: 14px; line-height: 1.7;
+}
+.meth-text { font-size: 0.78rem; line-height: 1.75; color: #8aa8c8; }
+.meth-text strong { color: var(--text); }
+.weight-breakdown { width: 100%; border-collapse: collapse; margin-top: 12px; }
+.weight-breakdown th { padding: 6px 10px; text-align: left; font-size: 0.65rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); background: rgba(0,0,0,0.2); border-bottom: 1px solid var(--border); font-weight: 600; }
+.weight-breakdown td { padding: 7px 10px; font-size: 0.76rem; border-bottom: 1px solid rgba(28,42,68,0.4); color: var(--text); }
+.weight-breakdown tr:last-child td { border-bottom: none; }
+.wt { font-family: 'IBM Plex Mono', monospace; color: var(--gold); font-weight: 600; }
+.w-bar { display: inline-block; height: 4px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
+.step-list { counter-reset: step; margin-top: 10px; }
+.step-item {
+  counter-increment: step; padding: 8px 0 8px 32px; position: relative;
+  font-size: 0.78rem; color: #8aa8c8; line-height: 1.6;
+  border-bottom: 1px solid rgba(28,42,68,0.3);
+}
+.step-item:last-child { border-bottom: none; }
+.step-item::before {
+  content: counter(step);
+  position: absolute; left: 0; top: 8px;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(90,180,240,0.15); border: 1px solid rgba(90,180,240,0.3);
+  color: #5ab4f0; font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem;
+  font-weight: 600; display: flex; align-items: center; justify-content: center;
+}
+.step-item strong { color: var(--text); }
+.meth-note {
+  background: rgba(240,80,96,0.05); border: 1px solid rgba(240,80,96,0.15);
+  border-radius: 8px; padding: 12px 16px; margin-top: 20px;
+  font-size: 0.75rem; color: #a0b8d8; line-height: 1.7;
+}
+.meth-note strong { color: #f05060; }
+.footer-cutoff {
+  text-align: center; font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem; color: var(--muted); letter-spacing: 2px;
+  margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--border);
+}
+
+@media (max-width: 640px) {
   .podium { grid-template-columns: 1fr; }
   .analysis-grid { grid-template-columns: 1fr; }
-  .hero-grid { grid-template-columns: 1fr; }
+  .meth-grid { grid-template-columns: 1fr; }
+  .h2h-players { grid-template-columns: repeat(3, 1fr); }
 }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <!-- PAGE NAVIGATION -->
+  <!-- PAGE NAV -->
   <div class="page-nav">
-    <button class="page-btn active" onclick="switchPage('main', this)">📊 Main Analysis</button>
-    <button class="page-btn" onclick="switchPage('h2h', this)">⚔️ Head to Head</button>
-    <button class="page-btn" onclick="switchPage('pool', this)">🃏 Hero Pool</button>
+    <button class="page-btn active" onclick="switchPage('main',this)">📊 Main Ranking</button>
+    <button class="page-btn" onclick="switchPage('h2h',this)">⚔️ Head to Head</button>
+    <button class="page-btn" onclick="switchPage('pool',this)">🃏 Hero Pool</button>
   </div>
 
-  <!-- =================== PAGE 1: MAIN =================== -->
+  <!-- ===== PAGE 1: MAIN ===== -->
   <div class="page active" id="page-main">
 
-  <!-- HEADER -->
-  <div class="hdr">
-    <div class="hdr-tag">Analisa Objektif · Weighted Score</div>
-    <h1>MLBB <span>Player</span> Ranking</h1>
-    <div class="hdr-sub">Hero Pool + Player Stats · Brutally Honest · No Bias</div>
-    <div class="weight-note">
-      <span class="w-main">All-Time: 90%</span>
-      <span style="color:var(--dim)">|</span>
-      <span class="w-cur">Current Season: 10%</span>
-    </div>
-  </div>
-
-  <!-- DISCLAIMER -->
-  <div class="disclaimer">
-    <span class="disclaimer-icon">ℹ️</span>
-    <span>
-      <strong>Data Cutoff: 17 Februari 2026.</strong>
-      Semua stats, win rate, dan hero pool data dalam analisa ini adalah berdasarkan data yang diambil sehingga tarikh tersebut. Sebarang perubahan stats selepas tarikh ini tidak diambil kira. Analisa ini bukan rasmi dan adalah berdasarkan data yang dikongsi oleh pemain sendiri.
-    </span>
-  </div>
-
-  <!-- PODIUM TOP 3 -->
-  <div class="section-title">🏆 Final Ranking</div>
-  <div class="podium">
-    <!-- 2nd -->
-    <div class="pod-card pod-2">
-      <div class="pod-glow"></div>
-      <div class="pod-rank">#2</div>
-      <div class="pod-name">Sofea Trisha</div>
-      <div class="pod-score">Score: <span>74.1</span>/100</div>
-      <span class="pod-tag">Carry Assassin</span>
-      <div class="pod-stats">
-        <div class="pod-stat-row"><span>WR (all)</span><span>55.46%</span></div>
-        <div class="pod-stat-row"><span>KDA (all)</span><span>3.82</span></div>
-        <div class="pod-stat-row"><span>Hero pool</span><span>48 heroes</span></div>
+    <div class="hdr">
+      <div class="hdr-tag">Elite Performance Index · EPI v2.0 Formula</div>
+      <h1>MLBB <span>Player</span> Ranking</h1>
+      <div class="hdr-sub">5 Players · 8-Metric Weighted Analysis · Objectively Scored</div>
+      <div class="formula-badge">
+        <span class="f-eq">EPI</span>
+        <span style="color:var(--dim)">= (</span>
+        <span class="f-kda">KDA×0.28</span>
+        <span style="color:var(--dim)">+</span>
+        <span class="f-tf">TF%×0.20</span>
+        <span style="color:var(--dim)">+ WR×0.12 + DMG/Gold×0.12 + Turret×0.08 + MVPRate×0.08 + PoolDepth×0.06 + CSForm×0.06)</span>
+        <span style="color:var(--dim)">×</span>
+        <span class="f-rel">log₁₀(Matches)</span>
       </div>
-    </div>
-    <!-- 1st -->
-    <div class="pod-card pod-1">
-      <div class="pod-glow"></div>
-      <div class="pod-rank">#1</div>
-      <div class="pod-name">LeoXent</div>
-      <div class="pod-score">Score: <span>82.4</span>/100</div>
-      <span class="pod-tag">Elite Carry</span>
-      <div class="pod-stats">
-        <div class="pod-stat-row"><span>WR (all)</span><span>57.44%</span></div>
-        <div class="pod-stat-row"><span>KDA (all)</span><span>4.42</span></div>
-        <div class="pod-stat-row"><span>Hero pool</span><span>48 heroes</span></div>
-      </div>
-    </div>
-    <!-- 3rd -->
-    <div class="pod-card pod-3">
-      <div class="pod-glow"></div>
-      <div class="pod-rank">#3</div>
-      <div class="pod-name">Fenrir</div>
-      <div class="pod-score">Score: <span>65.8</span>/100</div>
-      <span class="pod-tag">Versatile Flex</span>
-      <div class="pod-stats">
-        <div class="pod-stat-row"><span>WR (all)</span><span>55.65%</span></div>
-        <div class="pod-stat-row"><span>KDA (all)</span><span>3.14</span></div>
-        <div class="pod-stat-row"><span>Hero pool</span><span>48 heroes</span></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- RANK 4 -->
-  <div class="rank4-card">
-    <div class="r4-badge">#4</div>
-    <div>
-      <div class="r4-name">🟣 Tok Dalang</div>
-      <div class="r4-score">Score: <span>58.3</span>/100 · WR: 55.07% (all) · KDA: 3.51 · 1,863 matches</div>
-    </div>
-    <div style="margin-left:auto;font-size:0.72rem;color:var(--muted);text-align:right;font-family:'IBM Plex Mono',monospace;">
-      Smallest sample<br>High variance
-    </div>
-  </div>
-
-  <!-- SCORE BREAKDOWN -->
-  <div class="section-title">📊 Score Breakdown (Weighted)</div>
-  <table class="score-table">
-    <thead>
-      <tr>
-        <th>Kategori</th>
-        <th>LeoXent</th>
-        <th>Sofea Trisha</th>
-        <th>Fenrir</th>
-        <th>Tok Dalang</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>
-          <div class="cat">Win Rate (All-time)</div>
-          <div class="note">Ketulenan skill sepanjang karier</div>
-        </td>
-        <td><span class="score-val best">57.44%</span></td>
-        <td><span class="score-val good">55.46%</span></td>
-        <td><span class="score-val good">55.65%</span></td>
-        <td><span class="score-val ok">55.07%</span></td>
-      </tr>
-      <tr>
-        <td>
-          <div class="cat">KDA (All-time)</div>
-          <div class="note">Kualiti play — survive & impact</div>
-        </td>
-        <td><span class="score-val best">4.42</span></td>
-        <td><span class="score-val good">3.82</span></td>
-        <td><span class="score-val ok">3.14</span></td>
-        <td><span class="score-val ok">3.51</span></td>
-      </tr>
-      <tr>
-        <td>
-          <div class="cat">Total Matches (Experience)</div>
-          <div class="note">Volume = reliability of stats</div>
-        </td>
-        <td><span class="score-val best">9,748</span></td>
-        <td><span class="score-val good">6,360</span></td>
-        <td><span class="score-val good">7,508</span></td>
-        <td><span class="score-val bad">1,863</span></td>
-      </tr>
-      <tr>
-        <td>
-          <div class="cat">Teamfight Participation (All)</div>
-          <div class="note">Seberapa relevant dalam game</div>
-        </td>
-        <td><span class="score-val best">58.5%</span></td>
-        <td><span class="score-val good">55.1%</span></td>
-        <td><span class="score-val ok">53.1%</span></td>
-        <td><span class="score-val ok">55.0%</span></td>
-      </tr>
-      <tr>
-        <td>
-          <div class="cat">Deaths/Match (All-time)</div>
-          <div class="note">Lower = better decision making</div>
-        </td>
-        <td><span class="score-val best">3.61</span></td>
-        <td><span class="score-val good">4.03</span></td>
-        <td><span class="score-val bad">4.76</span></td>
-        <td><span class="score-val bad">5.29</span></td>
-      </tr>
-      <tr>
-        <td>
-          <div class="cat">Hero Pool Depth</div>
-          <div class="note">Avg WR hero pool teratas</div>
-        </td>
-        <td><span class="score-val best">~57.5% avg</span></td>
-        <td><span class="score-val good">~54.8% avg</span></td>
-        <td><span class="score-val ok">~56.2% avg</span></td>
-        <td><span class="score-val ok">~53.1% avg</span></td>
-      </tr>
-      <tr>
-        <td>
-          <div class="cat">MVP Rate</div>
-          <div class="note">MVP / Total Matches (all-time)</div>
-        </td>
-        <td><span class="score-val best">16.1%</span></td>
-        <td><span class="score-val good">17.7%</span></td>
-        <td><span class="score-val ok">9.9%</span></td>
-        <td><span class="score-val bad">7.9%</span></td>
-      </tr>
-      <tr>
-        <td>
-          <div class="cat">Current Season Form</div>
-          <div class="note">WR current season (10% weight)</div>
-        </td>
-        <td><span class="score-val best">62.22%</span></td>
-        <td><span class="score-val good">55.28%</span></td>
-        <td><span class="score-val ok">54.43%</span></td>
-        <td><span class="score-val good">58.24%</span></td>
-      </tr>
-      <tr style="background:rgba(245,185,66,0.04);">
-        <td><div class="cat" style="color:var(--gold);font-weight:700;">WEIGHTED TOTAL</div></td>
-        <td><span class="score-val best" style="font-size:1rem;">82.4</span></td>
-        <td><span class="score-val good" style="font-size:1rem;">74.1</span></td>
-        <td><span class="score-val ok" style="font-size:1rem;">65.8</span></td>
-        <td><span class="score-val bad" style="font-size:1rem;">58.3</span></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- DETAILED PLAYER ANALYSIS -->
-  <div class="section-title">🔬 Analisa Per Player</div>
-  <div class="analysis-grid">
-
-    <!-- LeoXent -->
-    <div class="player-card">
-      <div class="pc-header">
-        <div class="pc-dot" style="background:var(--p3);box-shadow:0 0 6px var(--p3)"></div>
-        <div class="pc-name">LeoXent</div>
-        <div class="pc-rank-badge" style="background:rgba(245,185,66,0.15);color:var(--gold);">🥇 #1</div>
-      </div>
-      <div class="pc-body">
-        <div class="verdict">
-          Stats paling konsisten dan menyeluruh antara semua 4 player. KDA 4.42 all-time dengan 9,748 matches — sample size paling besar, bermakna stats dia paling reliable dan bukan tuah semata. Win rate 57.44% maintained sepanjang karier, dan current season naik lagi ke 62.22% — tanda dia tengah peak form. Teamfight participation 58.5% menunjukkan dia sentiasa relevant dalam teamfight. Hero main Gusion dengan 1,466 matches dan 61% WR — tahap mastery yang genuine. Hero pool lebar dengan command real atas pelbagai role.
-        </div>
-        <div class="strength-weakness">
-          <div class="sw-box str">
-            <div class="sw-label">✦ Kelebihan</div>
-            <div class="sw-item">KDA terbaik (4.42)<br>Sample terbesar (9.7k matches)<br>TF participation #1 (58.5%)<br>Deaths/match terendah (3.61)<br>Current season peak (62%)<br>Gusion mastery elite</div>
-          </div>
-          <div class="sw-box wk">
-            <div class="sw-label">✦ Kelemahan</div>
-            <div class="sw-item">Turret DMG/match paling rendah (3,157) — mungkin kurang objective-focused<br>Maniac count rendah berbanding matches played<br>Gold/min bukan yang tertinggi</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Sofea Trisha -->
-    <div class="player-card">
-      <div class="pc-header">
-        <div class="pc-dot" style="background:var(--p4);box-shadow:0 0 6px var(--p4)"></div>
-        <div class="pc-name">Sofea Trisha</div>
-        <div class="pc-rank-badge" style="background:rgba(192,120,56,0.15);color:var(--silver);">🥈 #2</div>
-      </div>
-      <div class="pc-body">
-        <div class="verdict">
-          Player paling aggressive dalam group ni — highest DMG taken/min all-time (23,402), first blood rate tinggi, dan turret DMG/match tertinggi (3,590). Hero pool assassin-heavy dengan Lancelot 701 matches 60.1% WR, Hayabusa 522 matches 58.8% — both elite. MVP rate 17.7% (all-time) sebenarnya lebih tinggi dari LeoXent. Tapi dia bayar harga dengan deaths/match 4.03 — lebih agresif tapi juga lebih die. Trade-off seorang carry player. KDA 3.82 still respectable. Overall package solid, cuma style aggressive dia boleh jadi liability dalam high-stakes.
-        </div>
-        <div class="strength-weakness">
-          <div class="sw-box str">
-            <div class="sw-label">✦ Kelebihan</div>
-            <div class="sw-item">MVP rate tertinggi (17.7%)<br>Turret DMG #1 (3,590/match)<br>Savage count (15) — clutch plays<br>Hero pool assassin deep<br>Gold efficiency tinggi (698 cur)</div>
-          </div>
-          <div class="sw-box wk">
-            <div class="sw-label">✦ Kelemahan</div>
-            <div class="sw-item">Current season WR drop (55.28%) — under pressure atau meta tak sesuai<br>Deaths boleh kurang dengan decision making lebih baik<br>Terlalu assassin-dependent</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Fenrir -->
-    <div class="player-card">
-      <div class="pc-header">
-        <div class="pc-dot" style="background:var(--p1);box-shadow:0 0 6px var(--p1)"></div>
-        <div class="pc-name">Fenrir</div>
-        <div class="pc-rank-badge" style="background:rgba(192,120,56,0.15);color:var(--bronze);">🥉 #3</div>
-      </div>
-      <div class="pc-body">
-        <div class="verdict">
-          Hero pool paling versatile — Chou main dengan 701 matches, tapi dia comfortable merata roles: fighter, mage, marksman, tank. Ini nilai yang underrated dalam team environment. Win rate all-time 55.65% stable. Tapi KDA 3.14 paling rendah dalam group, dan deaths/match 4.76 — paling tinggi, menunjukkan positioning atau decision making yang perlu improve. Longest win streak 18 (tertinggi dalam group!) menunjukkan potensi bila tengah dalam flow, tapi consistency tu yang jadi masalah. MVP rate 9.9% untuk 7,508 matches — underperforming given experience level.
-        </div>
-        <div class="strength-weakness">
-          <div class="sw-box str">
-            <div class="sw-label">✦ Kelebihan</div>
-            <div class="sw-item">Longest win streak (18) — team synergy tinggi<br>Hero pool paling versatile<br>Turret DMG/match tinggi (3,799)<br>Most Kills record 33 — ceiling tinggi</div>
-          </div>
-          <div class="sw-box wk">
-            <div class="sw-label">✦ Kelemahan</div>
-            <div class="sw-item">KDA terendah (3.14)<br>Deaths/match tertinggi (4.76) — positioning issue<br>MVP rate paling rendah untuk experience level<br>Inconsistent — win streak tinggi tapi avg win rate ok je</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Tok Dalang -->
-    <div class="player-card">
-      <div class="pc-header">
-        <div class="pc-dot" style="background:var(--p2);box-shadow:0 0 6px var(--p2)"></div>
-        <div class="pc-name">Tok Dalang</div>
-        <div class="pc-rank-badge" style="background:rgba(107,122,148,0.15);color:var(--rank4);">#4</div>
-      </div>
-      <div class="pc-body">
-        <div class="verdict">
-          Caveat besar dulu: 1,863 matches all-time vs 6k–9.7k untuk player lain — sample size dia boleh buat stats fluctuate lebih. Deaths/match 5.29 paling tinggi dalam group, MVP rate 7.9% paling rendah. Hero pool juga paling shallow — heavily reliant pada Zhask (471 matches, 60.1%) dan bila Zhask kena ban, options lain semua low matches. TAPI — current season WR 58.24% adalah yang kedua terbaik, dan KDA current season 3.9 menunjukkan dia tengah improve. Ada trajectory positif, cuma track record all-time belum cukup kuat lagi.
-        </div>
-        <div class="strength-weakness">
-          <div class="sw-box str">
-            <div class="sw-label">✦ Kelebihan</div>
-            <div class="sw-item">Current season WR #2 (58.24%)<br>Zhask mastery genuine (60.1% WR)<br>Highest Assist record (43)<br>Positive trajectory — improving</div>
-          </div>
-          <div class="sw-box wk">
-            <div class="sw-label">✦ Kelemahan</div>
-            <div class="sw-item">Sample size terkecil (1,863) — stats kurang reliable<br>Deaths/match tertinggi (5.29)<br>Hero pool terlalu narrow — Zhask-dependent<br>MVP rate terendah (7.9%)<br>Moskov WR 9.1% — ada hero yang clearly tak boleh main</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- HERO FAVOURITE ANALYSIS -->
-  <div class="section-title">🎮 Hero Favourite · Personaliti · Gameplay · Role</div>
-  <div class="hero-grid">
-
-    <!-- LeoXent -->
-    <div class="hero-profile-card hpc-p3">
-      <div class="hpc-header">
-        <div class="hpc-dot" style="background:var(--p3);box-shadow:0 0 6px var(--p3)"></div>
-        <div class="hpc-name">LeoXent</div>
-        <div class="hpc-sub">🥇 #1 · 9,748 matches</div>
-      </div>
-      <div class="hpc-body">
-        <div class="tag-row">
-          <span class="tag tag-role">Assassin</span>
-          <span class="tag tag-role">Support</span>
-          <span class="tag tag-role">Tank</span>
-          <span class="tag tag-style">Roamer</span>
-          <span class="tag tag-trait">Calculated</span>
-          <span class="tag tag-trait">Team-First</span>
-        </div>
-
-        <div class="hero-list-title">⭐ Top 5 Hero Favourite</div>
-        <div class="hero-list-wrap">
-          <div class="hero-row">
-            <span class="hero-num">1</span>
-            <span class="hero-hname">Gusion</span>
-            <span class="hero-chip">Assassin</span>
-            <span class="hero-matches">1,466</span>
-            <span class="hero-wr hi">61.0%</span>
-          </div>
-          <div class="hero-row">
-            <span class="hero-num">2</span>
-            <span class="hero-hname">Akai</span>
-            <span class="hero-chip">Tank</span>
-            <span class="hero-matches">951</span>
-            <span class="hero-wr mi">56.5%</span>
-          </div>
-          <div class="hero-row">
-            <span class="hero-num">3</span>
-            <span class="hero-hname">Kaja</span>
-            <span class="hero-chip">Support</span>
-            <span class="hero-matches">859</span>
-            <span class="hero-wr best">64.0%</span>
-          </div>
-          <div class="hero-row">
-            <span class="hero-num">4</span>
-            <span class="hero-hname">Popol & Kupa</span>
-            <span class="hero-chip">Marksman</span>
-            <span class="hero-matches">611</span>
-            <span class="hero-wr best">63.2%</span>
-          </div>
-          <div class="hero-row">
-            <span class="hero-num">5</span>
-            <span class="hero-hname">Luo Yi</span>
-            <span class="hero-chip">Mage</span>
-            <span class="hero-matches">572</span>
-            <span class="hero-wr mi">60.1%</span>
-          </div>
-        </div>
-
-        <div class="personality-box">
-          <div class="pb-label">🧠 Personaliti</div>
-          <div class="pb-text">Player yang cerebral dan systematic. Bukan type yang main agresif tanpa sebab — setiap move ada purpose. Deaths terendah dalam group bukan luck, tu discipline. Comfortable jadi backbone team, bukan semestinya spotlight. Kalau team kalah, dia akan reflect balik apa yang boleh dia buat lain.</div>
-        </div>
-        <div class="personality-box">
-          <div class="pb-label">⚔️ Gameplay Style</div>
-          <div class="pb-text">Roamer yang tahu bila nak rotate, bila nak back off. Gusion main dia bukan gaya YOLO burst — dia tunggu timing yang betul. Dengan Akai dan Kaja dalam pool dia, clear yang dia suka control teamfight dari belakang — setup engage atau hard CC untuk carry team. Seldom troll, seldom int. Boring tapi effective.</div>
-        </div>
-        <div class="attr-bars">
-          <div class="ab-row"><span class="ab-label">Aggression</span><div class="ab-track"><div class="ab-fill" style="width:52%;background:#f5b942"></div></div><span class="ab-val">5</span></div>
-          <div class="ab-row"><span class="ab-label">Consistency</span><div class="ab-track"><div class="ab-fill" style="width:90%;background:#3de87e"></div></div><span class="ab-val">9</span></div>
-          <div class="ab-row"><span class="ab-label">Team Play</span><div class="ab-track"><div class="ab-fill" style="width:85%;background:#3de87e"></div></div><span class="ab-val">9</span></div>
-          <div class="ab-row"><span class="ab-label">Mechanics</span><div class="ab-track"><div class="ab-fill" style="width:80%;background:#5ab4f0"></div></div><span class="ab-val">8</span></div>
-          <div class="ab-row"><span class="ab-label">Adaptability</span><div class="ab-track"><div class="ab-fill" style="width:85%;background:#5ab4f0"></div></div><span class="ab-val">9</span></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Sofea Trisha -->
-    <div class="hero-profile-card hpc-p4">
-      <div class="hpc-header">
-        <div class="hpc-dot" style="background:var(--p4);box-shadow:0 0 6px var(--p4)"></div>
-        <div class="hpc-name">Sofea Trisha</div>
-        <div class="hpc-sub">🥈 #2 · 6,360 matches</div>
-      </div>
-      <div class="hpc-body">
-        <div class="tag-row">
-          <span class="tag tag-role">Assassin</span>
-          <span class="tag tag-role">Fighter</span>
-          <span class="tag tag-style">Hard Carry</span>
-          <span class="tag tag-style">Snowballer</span>
-          <span class="tag tag-trait">Aggressive</span>
-          <span class="tag tag-warn">High Risk</span>
-        </div>
-
-        <div class="hero-list-title">⭐ Top 5 Hero Favourite</div>
-        <div class="hero-list-wrap">
-          <div class="hero-row">
-            <span class="hero-num">1</span>
-            <span class="hero-hname">Lancelot</span>
-            <span class="hero-chip">Assassin</span>
-            <span class="hero-matches">701</span>
-            <span class="hero-wr best">60.1%</span>
-          </div>
-          <div class="hero-row">
-            <span class="hero-num">2</span>
-            <span class="hero-hname">Hayabusa</span>
-            <span class="hero-chip">Assassin</span>
-            <span class="hero-matches">522</span>
-            <span class="hero-wr mi">58.8%</span>
-          </div>
-          <div class="hero-row">
-            <span class="hero-num">3</span>
-            <span class="hero-hname">Gusion</span>
-            <span class="hero-chip">Assassin</span>
-            <span class="hero-matches">352</span>
-            <span class="hero-wr mi">52.0%</span>
-          </div>
-          <div class="hero-row">
-            <span class="hero-num">4</span>
-            <span class="hero-hname">Fanny</span>
-            <span class="hero-chip">Assassin</span>
-            <span class="hero-matches">308</span>
-            <span class="hero-wr lo">45.8%</span>
-          </div>
-          <div class="hero-row">
-            <span class="hero-num">5</span>
-            <span class="hero-hname">Harley</span>
-            <span class="hero-chip">Mage</span>
-            <span class="hero-matches">290</span>
-            <span class="hero-wr lo">47.6%</span>
-          </div>
-        </div>
-
-        <div class="personality-box">
-          <div class="pb-label">🧠 Personaliti</div>
-          <div class="pb-text">Tipikal main character energy — suka carry game sendiri. Bila tengah flow, memang menakutkan (15 savage all-time bukan main-main). Tapi bila benda tak jalan, tendency untuk force plays yang sepatutnya tak perlu. MVP-Loss count 713 menunjukkan dia sering jadi yang terbaik dalam team yang kalah — ertinya dia tak menyerah walaupun team struggling.</div>
-        </div>
-        <div class="personality-box">
-          <div class="pb-label">⚔️ Gameplay Style</div>
-          <div class="pb-text">Pure solo carry. Top 4 hero semuanya assassin — dia tak mahu bergantung pada team untuk deal damage. Lancelot dan Hayabusa adalah hero yang memerlukan micro-mechanics tinggi, dan WR masing-masing cecah 60% membuktikan kemahiran mechanical dia genuine. Tapi Fanny 45.8% dan Harley 47.6% dalam top 5 menunjukkan ada hero yang dia paksa main tapi belum truly mastered.</div>
-        </div>
-        <div class="attr-bars">
-          <div class="ab-row"><span class="ab-label">Aggression</span><div class="ab-track"><div class="ab-fill" style="width:90%;background:#f05060"></div></div><span class="ab-val">9</span></div>
-          <div class="ab-row"><span class="ab-label">Consistency</span><div class="ab-track"><div class="ab-fill" style="width:65%;background:#f5b942"></div></div><span class="ab-val">7</span></div>
-          <div class="ab-row"><span class="ab-label">Team Play</span><div class="ab-track"><div class="ab-fill" style="width:45%;background:#f5b942"></div></div><span class="ab-val">5</span></div>
-          <div class="ab-row"><span class="ab-label">Mechanics</span><div class="ab-track"><div class="ab-fill" style="width:85%;background:#3de87e"></div></div><span class="ab-val">9</span></div>
-          <div class="ab-row"><span class="ab-label">Adaptability</span><div class="ab-track"><div class="ab-fill" style="width:50%;background:#f5b942"></div></div><span class="ab-val">5</span></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Fenrir -->
-    <div class="hero-profile-card hpc-p1">
-      <div class="hpc-header">
-        <div class="hpc-dot" style="background:var(--p1);box-shadow:0 0 6px var(--p1)"></div>
-        <div class="hpc-name">Fenrir</div>
-        <div class="hpc-sub">🥉 #3 · 7,508 matches</div>
-      </div>
-      <div class="hpc-body">
-        <div class="tag-row">
-          <span class="tag tag-role">Fighter</span>
-          <span class="tag tag-role">Mage</span>
-          <span class="tag tag-role">Marksman</span>
-          <span class="tag tag-role">Tank</span>
-          <span class="tag tag-style">Flex Pick</span>
-          <span class="tag tag-trait">Versatile</span>
-          <span class="tag tag-warn">Inconsistent</span>
-        </div>
-
-        <div class="hero-list-title">⭐ Top 5 Hero Favourite</div>
-        <div class="hero-list-wrap">
-          <div class="hero-row">
-            <span class="hero-num">1</span>
-            <span class="hero-hname">Chou</span>
-            <span class="hero-chip">Fighter</span>
-            <span class="hero-matches">701</span>
-            <span class="hero-wr mi">58.2%</span>
-          </div>
-          <div class="hero-row">
-            <span class="hero-num">2</span>
-            <span class="hero-hname">Claude</span>
-            <span class="hero-chip">Marksman</span>
-            <span class="hero-matches">340</span>
-            <span class="hero-wr mi">58.5%</span>
-          </div>
-          <div class="hero-row">
-            <span class="hero-num">3</span>
-            <span class="hero-hname">Ruby</span>
-            <span class="hero-chip">Fighter</span>
-            <span class="hero-matches">330</span>
-            <span class="hero-wr mi">55.8%</span>
-          </div>
-          <div class="hero-row">
-            <span class="hero-num">4</span>
-            <span class="hero-hname">Kagura</span>
-            <span class="hero-chip">Mage</span>
-            <span class="hero-matches">287</span>
-            <span class="hero-wr ok">51.9%</span>
-          </div>
-          <div class="hero-row">
-            <span class="hero-num">5</span>
-            <span class="hero-hname">Granger</span>
-            <span class="hero-chip">Marksman</span>
-            <span class="hero-matches">286</span>
-            <span class="hero-wr ok">52.4%</span>
-          </div>
-        </div>
-
-        <div class="personality-box">
-          <div class="pb-label">🧠 Personaliti</div>
-          <div class="pb-text">Jack of all trades, dan tu memang genuine — bukan sebab tak ada main hero, tapi sebab dia genuinely okay dengan pelbagai role. Longest win streak 18 menunjukkan bila dia dalam synergy yang betul dengan team, dia boleh jadi perekat yang menyatukan semua orang. Tapi inconsistency dia datang dari sini jugak — terlalu adaptive sampai tak ada satu identity yang dominant.</div>
-        </div>
-        <div class="personality-box">
-          <div class="pb-label">⚔️ Gameplay Style</div>
-          <div class="pb-text">Flex player yang boleh isi mana-mana slot yang kosong dalam team. Chou main dia adalah hero yang hybrid — bukan pure tank, bukan pure fighter, dan sangat skill-expression dependent. Claude dan Granger dalam top 5 pula tunjukkan dia selesa jadi backline DPS. Masalahnya: deaths/match 4.76 menunjukkan dia sering overextend, mungkin sebab terlalu percaya hero dia untuk escape.</div>
-        </div>
-        <div class="attr-bars">
-          <div class="ab-row"><span class="ab-label">Aggression</span><div class="ab-track"><div class="ab-fill" style="width:65%;background:#f5b942"></div></div><span class="ab-val">7</span></div>
-          <div class="ab-row"><span class="ab-label">Consistency</span><div class="ab-track"><div class="ab-fill" style="width:55%;background:#f5b942"></div></div><span class="ab-val">6</span></div>
-          <div class="ab-row"><span class="ab-label">Team Play</span><div class="ab-track"><div class="ab-fill" style="width:75%;background:#5ab4f0"></div></div><span class="ab-val">8</span></div>
-          <div class="ab-row"><span class="ab-label">Mechanics</span><div class="ab-track"><div class="ab-fill" style="width:65%;background:#5ab4f0"></div></div><span class="ab-val">7</span></div>
-          <div class="ab-row"><span class="ab-label">Adaptability</span><div class="ab-track"><div class="ab-fill" style="width:95%;background:#3de87e"></div></div><span class="ab-val">10</span></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Tok Dalang -->
-    <div class="hero-profile-card hpc-p2">
-      <div class="hpc-header">
-        <div class="hpc-dot" style="background:var(--p2);box-shadow:0 0 6px var(--p2)"></div>
-        <div class="hpc-name">Tok Dalang</div>
-        <div class="hpc-sub">#4 · 1,863 matches</div>
-      </div>
-      <div class="hpc-body">
-        <div class="tag-row">
-          <span class="tag tag-role">Mage</span>
-          <span class="tag tag-role">Support</span>
-          <span class="tag tag-style">Zone Control</span>
-          <span class="tag tag-style">Poke</span>
-          <span class="tag tag-trait">Strategic</span>
-          <span class="tag tag-warn">One-Trick</span>
-        </div>
-
-        <div class="hero-list-title">⭐ Top 5 Hero Favourite</div>
-        <div class="hero-list-wrap">
-          <div class="hero-row">
-            <span class="hero-num">1</span>
-            <span class="hero-hname">Zhask</span>
-            <span class="hero-chip">Mage</span>
-            <span class="hero-matches">471</span>
-            <span class="hero-wr best">60.1%</span>
-          </div>
-          <div class="hero-row">
-            <span class="hero-num">2</span>
-            <span class="hero-hname">Belerick</span>
-            <span class="hero-chip">Tank</span>
-            <span class="hero-matches">294</span>
-            <span class="hero-wr mi">55.8%</span>
-          </div>
-          <div class="hero-row">
-            <span class="hero-num">3</span>
-            <span class="hero-hname">X.Borg</span>
-            <span class="hero-chip">Fighter</span>
-            <span class="hero-matches">173</span>
-            <span class="hero-wr ok">52.6%</span>
-          </div>
-          <div class="hero-row">
-            <span class="hero-num">4</span>
-            <span class="hero-hname">Estes</span>
-            <span class="hero-chip">Support</span>
-            <span class="hero-matches">164</span>
-            <span class="hero-wr ok">50.0%</span>
-          </div>
-          <div class="hero-row">
-            <span class="hero-num">5</span>
-            <span class="hero-hname">Vexana</span>
-            <span class="hero-chip">Mage</span>
-            <span class="hero-matches">153</span>
-            <span class="hero-wr ok">54.9%</span>
-          </div>
-        </div>
-
-        <div class="personality-box">
-          <div class="pb-label">🧠 Personaliti</div>
-          <div class="pb-text">Player yang suka control situasi dari jauh — Zhask adalah hero yang paling passive-aggressive dalam game, dan tu cermin personality dia. Dia akan bagi command dari selamat, bukan dive masuk. Highest assist record (43) menunjukkan dia suka setup, bukan finish. Tapi bila kena keluar dari comfort zone, deaths/match 5.29 reveal yang dia struggling untuk survive bila dipaksa berdepan.</div>
-        </div>
-        <div class="personality-box">
-          <div class="pb-label">⚔️ Gameplay Style</div>
-          <div class="pb-text">Zone controller dan poke specialist. Zhask dimainkan dengan letakkan sarang dan control area — sangat teamfight-centric bila setup betul. Belerick sebagai secondary menunjukkan dia kadang bersedia jadi human shield untuk team. Hero pool dia melompat-lompat (Mage → Tank → Fighter → Support) tapi setiap satu low matches — tanda dia masih exploring identity. Moskov 9.1% WR dalam top pool adalah lampu merah terang — ada hero yang kena drop segera.</div>
-        </div>
-        <div class="attr-bars">
-          <div class="ab-row"><span class="ab-label">Aggression</span><div class="ab-track"><div class="ab-fill" style="width:35%;background:#f05060"></div></div><span class="ab-val">4</span></div>
-          <div class="ab-row"><span class="ab-label">Consistency</span><div class="ab-track"><div class="ab-fill" style="width:50%;background:#f5b942"></div></div><span class="ab-val">5</span></div>
-          <div class="ab-row"><span class="ab-label">Team Play</span><div class="ab-track"><div class="ab-fill" style="width:70%;background:#5ab4f0"></div></div><span class="ab-val">7</span></div>
-          <div class="ab-row"><span class="ab-label">Mechanics</span><div class="ab-track"><div class="ab-fill" style="width:55%;background:#f5b942"></div></div><span class="ab-val">6</span></div>
-          <div class="ab-row"><span class="ab-label">Adaptability</span><div class="ab-track"><div class="ab-fill" style="width:30%;background:#f05060"></div></div><span class="ab-val">3</span></div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- FINAL VERDICT -->
-  <div class="final-box">
-    <h2>⚡ Verdict Akhir</h2>
-    <p><strong>LeoXent (#1)</strong> menang clear atas hampir semua metrik yang meaningful — KDA, experience volume, deaths/match, teamfight presence, dan current form peak. Kalau nak duduk dalam satu team untuk ranked serious, dia yang paling reliable.</p>
-    <p><strong>Sofea Trisha (#2)</strong> sebenarnya neck-and-neck dengan LeoXent dalam beberapa area — MVP rate dan turret damage dia lebih tinggi. Dia carry yang genuine, cuma style dia lebih high-risk high-reward. Gap dengan #1 sebenarnya tak besar.</p>
-    <p><strong>Fenrir (#3)</strong> mempunyai experience dan versatility yang solid, tapi KDA dan death rate dia menjatuhkan scoring dia. Potensi ada — win streak 18 buktikan tu — tapi consistency perlu diperkemaskan. Boleh naik ranking kalau focus kurangkan unnecessary deaths.</p>
-    <p><strong>Tok Dalang (#4)</strong> — ranking paling bawah bukan bermakna dia bad player, tapi all-time sample terlalu kecil untuk buat kesimpulan kuat. Current season form dia sebenarnya promising. Hero pool kena expand urgent — kalau Zhask kena ban dalam ranked penting, pilihan jadi sangat terhad.</p>
-  </div><!-- end final-box -->
-
-  </div><!-- end page-main -->
-
-  <!-- =================== PAGE 2: HEAD TO HEAD =================== -->
-  <div class="page" id="page-h2h">
-
-    <div class="hdr" style="margin-bottom:24px;">
-      <div class="hdr-tag">Head to Head Comparison</div>
-      <h1>Hero <span>Battle</span></h1>
-      <div class="hdr-sub">Siapa lagi jago untuk setiap hero? · Ranked by Win Rate</div>
     </div>
 
     <div class="disclaimer">
       <span class="disclaimer-icon">ℹ️</span>
-      <span>
-        <strong>Data Cutoff: 17 Februari 2026.</strong>
-        Pemenang ditentukan menggunakan <strong>Power Score Formula:</strong>
-        <strong style="color:#f5b942">Score = ln(MP) × WR²</strong>
-        — <strong style="color:#5ab4f0">ln(MP)</strong> (logaritma jati) memberi had ganjaran kepada volume: pengalaman dihargai tapi tidak melampau, manakala
-        <strong style="color:#f5b942">WR²</strong> (winrate dikuasakan dua) bertindak sebagai multiplier kritikal yang membezakan player yang sekadar rajin main vs player yang genuinely dominan.
-        Score dinormalize dalam group (0–100) untuk mudah dibandingkan.
-        WR tinggi atas sample kecil (&lt;30 games) ditanda <strong>⚠️</strong> — tetap perlu disikapi skeptikal.
-        Gap &lt;5 mata dianggap <strong>⚖️ contested</strong>.
-        Stats ini "buta" terhadap rank musuh dan mod permainan (Classic vs Ranked).
-        <br><br>
-        <strong style="color:#f05060">⚠️ Nota Penting:</strong>
-        Tidak semua hero dipertaruhkan dalam Hero Battle ini. <strong>Hanya Top 48 hero terbanyak dimainkan untuk setiap player sahaja dinilai.</strong>
-        Hero di luar senarai top 48 masing-masing tidak dimasukkan dalam perbandingan ini, walaupun player berkenaan mungkin pernah memainkannya.
-      </span>
+      <span><strong>Data Cutoff: 17 Februari 2026.</strong> Semua stats berdasarkan All Seasons Ranked data. Formula EPI v2.0 kini merangkumi 8 metrik — termasuk MVP Rate, Hero Pool Depth, dan Current Season Form. Analisa ini tidak rasmi dan berdasarkan data dikongsi oleh pemain sendiri.</span>
+    </div>
+
+    <!-- PODIUM -->
+    <div class="section-title">🏆 Final Ranking — EPI v2.0 Formula</div>
+    <div class="podium">
+      <!-- #2 -->
+      <div class="pod-card pod-2">
+        <div class="pod-glow"></div>
+        <div class="pod-rank">#2</div>
+        <div class="pod-name">Sofea Trisha</div>
+        <div class="pod-epi">EPI: <span class="ev">3.506</span> <span class="es">| scaled: 90.3/100</span></div>
+        <span class="pod-tag">Hard Carry</span>
+        <div class="pod-stats">
+          <div class="pod-stat-row"><span>KDA</span><span>3.82</span></div>
+          <div class="pod-stat-row"><span>TF%</span><span>55.1%</span></div>
+          <div class="pod-stat-row"><span>MVP Rate</span><span>17.7% 👑</span></div>
+          <div class="pod-stat-row"><span>Matches</span><span>6,360</span></div>
+        </div>
+      </div>
+      <!-- #1 -->
+      <div class="pod-card pod-1">
+        <div class="pod-glow"></div>
+        <div class="pod-rank">#1</div>
+        <div class="pod-name">LeoXent</div>
+        <div class="pod-epi">EPI: <span class="ev">3.881</span> <span class="es">| scaled: 100/100</span></div>
+        <span class="pod-tag">Elite Carry</span>
+        <div class="pod-stats">
+          <div class="pod-stat-row"><span>KDA</span><span>4.42</span></div>
+          <div class="pod-stat-row"><span>TF%</span><span>58.5%</span></div>
+          <div class="pod-stat-row"><span>CS Form</span><span>62.22% 🔥</span></div>
+          <div class="pod-stat-row"><span>Matches</span><span>9,748</span></div>
+        </div>
+      </div>
+      <!-- #3 -->
+      <div class="pod-card pod-3">
+        <div class="pod-glow"></div>
+        <div class="pod-rank">#3</div>
+        <div class="pod-name">Fenrir</div>
+        <div class="pod-epi">EPI: <span class="ev">3.264</span> <span class="es">| scaled: 84.1/100</span></div>
+        <span class="pod-tag">Versatile Flex</span>
+        <div class="pod-stats">
+          <div class="pod-stat-row"><span>KDA</span><span>3.14</span></div>
+          <div class="pod-stat-row"><span>TF%</span><span>53.1%</span></div>
+          <div class="pod-stat-row"><span>Turret DMG</span><span>3,799 🏆</span></div>
+          <div class="pod-stat-row"><span>Matches</span><span>7,508</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RANK 4 & 5 -->
+    <div class="rankx-card" style="margin-bottom:12px;">
+      <div class="rx-badge">#4</div>
+      <div>
+        <div class="rx-name">🟢 Smurff</div>
+        <div class="rx-score">EPI: <span>2.830</span> (scaled: <span>72.9/100</span>) · WR: 60.79% · KDA: 3.6 · Pool Depth: ~57.0% · 2,494 matches</div>
+      </div>
+      <div style="margin-left:auto;font-size:0.7rem;color:var(--muted);text-align:right;font-family:'IBM Plex Mono',monospace;">WR tertinggi<br>TF terendah</div>
+    </div>
+    <div class="rankx-card" style="margin-bottom:28px;">
+      <div class="rx-badge">#5</div>
+      <div>
+        <div class="rx-name">🟣 Tok Dalang</div>
+        <div class="rx-score">EPI: <span>2.747</span> (scaled: <span>70.8/100</span>) · WR: 55.07% · KDA: 3.51 · CS Form: 58.24% ↑ · 1,863 matches</div>
+      </div>
+      <div style="margin-left:auto;font-size:0.7rem;color:var(--muted);text-align:right;font-family:'IBM Plex Mono',monospace;">Sample terkecil<br>Trajectory positif</div>
+    </div>
+
+    <!-- EPI BREAKDOWN TABLE -->
+    <div class="section-title">📊 EPI Score Breakdown (8 Metrics)</div>
+    <table class="epi-table">
+      <thead>
+        <tr>
+          <th style="width:200px;">Metrik <span style="color:#1c2a44">·</span> Weight</th>
+          <th>LeoXent</th>
+          <th>Sofea</th>
+          <th>Fenrir</th>
+          <th>Smurff</th>
+          <th>Tok Dalang</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- KDA -->
+        <tr>
+          <td><div class="cat">KDA <span class="w-tag">×0.28</span></div><div class="note">Kualiti mekanik · impact/death</div></td>
+          <td><div class="sv best" style="font-size:0.88rem;">4.42</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:100%;background:var(--gold);border-radius:2px"></div></div></td>
+          <td><div class="sv good" style="font-size:0.88rem;">3.82</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:86.4%;background:var(--green);border-radius:2px"></div></div></td>
+          <td><div class="sv lo" style="font-size:0.88rem;">3.14</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:71.0%;background:var(--red);border-radius:2px"></div></div></td>
+          <td><div class="sv ok" style="font-size:0.88rem;">3.60</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:81.4%;background:var(--yellow);border-radius:2px"></div></div></td>
+          <td><div class="sv ok" style="font-size:0.88rem;">3.51</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:79.4%;background:var(--yellow);border-radius:2px"></div></div></td>
+        </tr>
+        <!-- TF% -->
+        <tr>
+          <td><div class="cat">Teamfight % <span class="w-tag">×0.20</span></div><div class="note">Kehadiran & impak dalam war</div></td>
+          <td><div class="sv best" style="font-size:0.88rem;">58.5%</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:100%;background:var(--gold);border-radius:2px"></div></div></td>
+          <td><div class="sv good" style="font-size:0.88rem;">55.1%</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:94.2%;background:var(--green);border-radius:2px"></div></div></td>
+          <td><div class="sv ok" style="font-size:0.88rem;">53.1%</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:90.8%;background:var(--yellow);border-radius:2px"></div></div></td>
+          <td><div class="sv lo" style="font-size:0.88rem;">52.3%</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:89.4%;background:var(--red);border-radius:2px"></div></div></td>
+          <td><div class="sv ok" style="font-size:0.88rem;">55.0%</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:94.0%;background:var(--yellow);border-radius:2px"></div></div></td>
+        </tr>
+        <!-- WR -->
+        <tr>
+          <td><div class="cat">Win Rate <span class="w-tag">×0.12</span></div><div class="note">Konsistensi kemenangan</div></td>
+          <td><div class="sv ok" style="font-size:0.88rem;">57.44%</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:94.5%;background:var(--yellow);border-radius:2px"></div></div></td>
+          <td><div class="sv ok" style="font-size:0.88rem;">55.46%</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:91.2%;background:var(--yellow);border-radius:2px"></div></div></td>
+          <td><div class="sv ok" style="font-size:0.88rem;">55.65%</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:91.5%;background:var(--yellow);border-radius:2px"></div></div></td>
+          <td><div class="sv best" style="font-size:0.88rem;">60.79%</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:100%;background:var(--gold);border-radius:2px"></div></div></td>
+          <td><div class="sv ok" style="font-size:0.88rem;">55.07%</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:90.6%;background:var(--yellow);border-radius:2px"></div></div></td>
+        </tr>
+        <!-- DMG/Gold -->
+        <tr>
+          <td><div class="cat">Hero DMG/Gold <span class="w-tag">×0.12</span></div><div class="note">Efisiensi sumber → damage</div></td>
+          <td><div class="sv best" style="font-size:0.88rem;">5.272</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:100%;background:var(--gold);border-radius:2px"></div></div></td>
+          <td><div class="sv good" style="font-size:0.88rem;">5.117</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:97.1%;background:var(--green);border-radius:2px"></div></div></td>
+          <td><div class="sv ok" style="font-size:0.88rem;">5.071</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:96.2%;background:var(--yellow);border-radius:2px"></div></div></td>
+          <td><div class="sv lo" style="font-size:0.88rem;">4.486</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:85.1%;background:var(--red);border-radius:2px"></div></div></td>
+          <td><div class="sv ok" style="font-size:0.88rem;">4.693</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:89.0%;background:var(--yellow);border-radius:2px"></div></div></td>
+        </tr>
+        <!-- Turret -->
+        <tr>
+          <td><div class="cat">Turret DMG <span class="w-tag">×0.08</span></div><div class="note">Kesedaran terhadap objektif</div></td>
+          <td><div class="sv lo" style="font-size:0.88rem;">3,157</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:83.1%;background:var(--red);border-radius:2px"></div></div></td>
+          <td><div class="sv ok" style="font-size:0.88rem;">3,590</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:94.5%;background:var(--yellow);border-radius:2px"></div></div></td>
+          <td><div class="sv best" style="font-size:0.88rem;">3,799</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:100%;background:var(--gold);border-radius:2px"></div></div></td>
+          <td><div class="sv lo" style="font-size:0.88rem;">2,418</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:63.6%;background:var(--red);border-radius:2px"></div></div></td>
+          <td><div class="sv ok" style="font-size:0.88rem;">3,186</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:83.9%;background:var(--yellow);border-radius:2px"></div></div></td>
+        </tr>
+        <!-- MVP Rate — NEW -->
+        <tr style="background:rgba(245,185,66,0.018);">
+          <td><div class="cat">MVP Rate <span class="w-tag">×0.08</span></div><div class="note">Pengiktirafan sebagai MVP per match</div></td>
+          <td><div class="sv good" style="font-size:0.88rem;">16.1%</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:91.0%;background:var(--green);border-radius:2px"></div></div></td>
+          <td><div class="sv best" style="font-size:0.88rem;">17.7% 👑</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:100%;background:var(--gold);border-radius:2px"></div></div></td>
+          <td><div class="sv lo" style="font-size:0.88rem;">9.9%</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:55.9%;background:var(--red);border-radius:2px"></div></div></td>
+          <td><div class="sv lo" style="font-size:0.88rem;">8.9%</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:50.3%;background:var(--red);border-radius:2px"></div></div></td>
+          <td><div class="sv lo" style="font-size:0.88rem;">7.9%</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:44.6%;background:var(--red);border-radius:2px"></div></div></td>
+        </tr>
+        <!-- Pool Depth — NEW -->
+        <tr style="background:rgba(90,180,240,0.018);">
+          <td><div class="cat">Hero Pool Depth <span class="w-tag">×0.06</span></div><div class="note">Avg WR hero pool teratas · fleksibiliti</div></td>
+          <td><div class="sv best" style="font-size:0.88rem;">~57.5%</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:100%;background:var(--gold);border-radius:2px"></div></div></td>
+          <td><div class="sv ok" style="font-size:0.88rem;">~54.8%</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:95.3%;background:var(--yellow);border-radius:2px"></div></div></td>
+          <td><div class="sv good" style="font-size:0.88rem;">~56.2%</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:97.7%;background:var(--green);border-radius:2px"></div></div></td>
+          <td><div class="sv good" style="font-size:0.88rem;">~57.0%</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:99.1%;background:var(--green);border-radius:2px"></div></div></td>
+          <td><div class="sv lo" style="font-size:0.88rem;">~53.1%</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:92.3%;background:var(--red);border-radius:2px"></div></div></td>
+        </tr>
+        <!-- Current Season Form — NEW -->
+        <tr style="background:rgba(61,232,126,0.018);">
+          <td><div class="cat">Current Season Form <span class="w-tag">×0.06</span></div><div class="note">WR season semasa · form terkini</div></td>
+          <td><div class="sv best" style="font-size:0.88rem;">62.22% 🔥</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:100%;background:var(--gold);border-radius:2px"></div></div></td>
+          <td><div class="sv ok" style="font-size:0.88rem;">55.28%</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:88.8%;background:var(--yellow);border-radius:2px"></div></div></td>
+          <td><div class="sv ok" style="font-size:0.88rem;">54.43%</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:87.5%;background:var(--yellow);border-radius:2px"></div></div></td>
+          <td><div class="sv ok" style="font-size:0.88rem;">55.69%</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:89.5%;background:var(--yellow);border-radius:2px"></div></div></td>
+          <td><div class="sv good" style="font-size:0.88rem;">58.24% ↑</div><div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden;margin-top:4px;width:80px"><div style="height:100%;width:93.6%;background:var(--green);border-radius:2px"></div></div></td>
+        </tr>
+        <!-- Weighted Sum -->
+        <tr style="background:rgba(90,180,240,0.035);border-top:2px solid rgba(28,42,68,0.8);">
+          <td><div class="cat" style="color:#5ab4f0;">Σ(Vᵢ×Wᵢ)</div><div class="note">Weighted performance sum (8 metrics)</div></td>
+          <td><span class="sv best">0.9730</span></td>
+          <td><span class="sv good">0.9220</span></td>
+          <td><span class="sv ok">0.8420</span></td>
+          <td><span class="sv ok">0.8330</span></td>
+          <td><span class="sv ok">0.8400</span></td>
+        </tr>
+        <!-- Log Factor -->
+        <tr style="background:rgba(61,232,126,0.025);">
+          <td><div class="cat" style="color:var(--green);">log₁₀(Matches)</div><div class="note">Reliability factor · diminishing</div></td>
+          <td><span class="sv best">3.989</span><div class="note">9,748 games</div></td>
+          <td><span class="sv good">3.803</span><div class="note">6,360 games</div></td>
+          <td><span class="sv good">3.876</span><div class="note">7,508 games</div></td>
+          <td><span class="sv ok">3.397</span><div class="note">2,494 games</div></td>
+          <td><span class="sv lo">3.270</span><div class="note">1,863 games</div></td>
+        </tr>
+        <!-- EPI Final -->
+        <tr style="background:rgba(245,185,66,0.06);">
+          <td>
+            <div class="cat" style="color:var(--gold);font-weight:700;">EPI Score v2.0</div>
+            <div class="note">Σ × log₁₀(M) · scaled /100</div>
+          </td>
+          <td>
+            <div style="display:flex;flex-direction:column;gap:3px">
+              <span class="sv best" style="font-size:1rem;line-height:1">3.881</span>
+              <div style="height:4px;background:var(--dim);border-radius:2px;overflow:hidden;width:80px"><div style="height:100%;width:100%;background:var(--gold);border-radius:2px;box-shadow:0 0 4px rgba(245,185,66,0.4)"></div></div>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--gold);opacity:0.7">100 / 100</span>
+            </div>
+          </td>
+          <td>
+            <div style="display:flex;flex-direction:column;gap:3px">
+              <span class="sv good" style="font-size:1rem;line-height:1">3.506</span>
+              <div style="height:4px;background:var(--dim);border-radius:2px;overflow:hidden;width:80px"><div style="height:100%;width:90.3%;background:var(--silver);border-radius:2px"></div></div>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--silver);opacity:0.7">90.3 / 100</span>
+            </div>
+          </td>
+          <td>
+            <div style="display:flex;flex-direction:column;gap:3px">
+              <span class="sv ok" style="font-size:1rem;line-height:1">3.264</span>
+              <div style="height:4px;background:var(--dim);border-radius:2px;overflow:hidden;width:80px"><div style="height:100%;width:84.1%;background:var(--bronze);border-radius:2px"></div></div>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--bronze);opacity:0.7">84.1 / 100</span>
+            </div>
+          </td>
+          <td>
+            <div style="display:flex;flex-direction:column;gap:3px">
+              <span class="sv ok" style="font-size:1rem;line-height:1">2.830</span>
+              <div style="height:4px;background:var(--dim);border-radius:2px;overflow:hidden;width:80px"><div style="height:100%;width:72.9%;background:#5ab4f0;border-radius:2px"></div></div>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:#5ab4f0;opacity:0.7">72.9 / 100</span>
+            </div>
+          </td>
+          <td>
+            <div style="display:flex;flex-direction:column;gap:3px">
+              <span class="sv ok" style="font-size:1rem;line-height:1">2.747</span>
+              <div style="height:4px;background:var(--dim);border-radius:2px;overflow:hidden;width:80px"><div style="height:100%;width:70.8%;background:#a040f0;border-radius:2px"></div></div>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:#a040f0;opacity:0.7">70.8 / 100</span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- PLAYER ANALYSIS -->
+    <div class="section-title">🔬 Analisa Per Player</div>
+    <div class="analysis-grid">
+
+      <!-- LeoXent -->
+      <div class="player-card">
+        <div class="pc-header">
+          <div class="pc-dot" style="background:var(--p3);box-shadow:0 0 6px var(--p3)"></div>
+          <div class="pc-name">LeoXent</div>
+          <div class="pc-rank-badge" style="background:rgba(245,185,66,0.15);color:var(--gold);">🥇 #1 · EPI 3.881</div>
+        </div>
+        <div class="pc-body">
+          <div class="verdict">Pemain paling lengkap dan konsisten dalam group. Dia bukan sekadar nombor satu dalam KDA dan TF% — dia dominan dalam hampir setiap aspek permainan serentak. Sample terbesar (9,748 matches) menjadikan stats dia paling dipercayai, dan current season 62.22% membuktikan dia sedang dalam peak form, bukan declining. Pool dia luas dan stabil dengan average WR tertinggi antara semua player.</div>
+
+          <div class="top5-heroes">
+            <div class="top5-title">🎮 Top 5 Most Played</div>
+            <div class="hero-pill-row">
+              <div class="hero-pill"><span class="hero-pill-name">Gusion</span><span class="hero-pill-games">1,466g</span><span class="hero-pill-wr" style="color:#3de87e">61.0%</span></div>
+              <div class="hero-pill"><span class="hero-pill-name">Akai</span><span class="hero-pill-games">951g</span><span class="hero-pill-wr" style="color:#f5c842">56.5%</span></div>
+              <div class="hero-pill"><span class="hero-pill-name">Kaja</span><span class="hero-pill-games">859g</span><span class="hero-pill-wr" style="color:#f5b942">64.0%</span></div>
+              <div class="hero-pill"><span class="hero-pill-name">Popol&Kupa</span><span class="hero-pill-games">611g</span><span class="hero-pill-wr" style="color:#f5b942">63.2%</span></div>
+              <div class="hero-pill"><span class="hero-pill-name">Luo Yi</span><span class="hero-pill-games">572g</span><span class="hero-pill-wr" style="color:#3de87e">60.1%</span></div>
+            </div>
+          </div>
+
+          <div class="strength-weakness">
+            <div class="sw-box str"><div class="sw-label">✦ Kelebihan</div><div class="sw-item">KDA #1 (4.42) · TF% #1 (58.5%)<br>CS Form tertinggi (62.22% 🔥)<br>Pool Depth terluas · sample paling solid<br>Savage #1 (17) · DMG/Gold #1</div></div>
+            <div class="sw-box wk"><div class="sw-label">✦ Kelemahan</div><div class="sw-item">Turret DMG terendah (3,157)<br>MVP Rate kalah kepada Sofea<br>Sedikit kurang aggressive push</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sofea Trisha -->
+      <div class="player-card">
+        <div class="pc-header">
+          <div class="pc-dot" style="background:var(--p4);box-shadow:0 0 6px var(--p4)"></div>
+          <div class="pc-name">Sofea Trisha</div>
+          <div class="pc-rank-badge" style="background:rgba(192,120,56,0.15);color:var(--silver);">🥈 #2 · EPI 3.506</div>
+        </div>
+        <div class="pc-body">
+          <div class="verdict">Pembunuh berdarah sejuk dalam group ini. MVP Rate 17.7% yang mengatasi semua orang — termasuk LeoXent — membuktikan dia sering jadi penentu perlawanan bila sedang on form. Legendary 1,050 dan Maniac 141 all-time menunjukkan kapasiti carry yang luar biasa. Gap dengan #1 sebenarnya boleh dikecilkan kalau deaths dikurangkan dan TF participation dijaga — sekarang ni dia ada semua tools untuk jadi #1.</div>
+
+          <div class="top5-heroes">
+            <div class="top5-title">🎮 Top 5 Most Played</div>
+            <div class="hero-pill-row">
+              <div class="hero-pill"><span class="hero-pill-name">Lancelot</span><span class="hero-pill-games">701g</span><span class="hero-pill-wr" style="color:#f5b942">60.1%</span></div>
+              <div class="hero-pill"><span class="hero-pill-name">Hayabusa</span><span class="hero-pill-games">522g</span><span class="hero-pill-wr" style="color:#f5c842">58.8%</span></div>
+              <div class="hero-pill"><span class="hero-pill-name">Gusion</span><span class="hero-pill-games">352g</span><span class="hero-pill-wr" style="color:#f5c842">52.0%</span></div>
+              <div class="hero-pill"><span class="hero-pill-name">Fanny</span><span class="hero-pill-games">308g</span><span class="hero-pill-wr" style="color:#f05060">45.8%</span></div>
+              <div class="hero-pill"><span class="hero-pill-name">Harley</span><span class="hero-pill-games">290g</span><span class="hero-pill-wr" style="color:#f05060">47.6%</span></div>
+            </div>
+          </div>
+
+          <div class="strength-weakness">
+            <div class="sw-box str"><div class="sw-label">✦ Kelebihan</div><div class="sw-item">MVP Rate #1 (17.7% 👑)<br>Legendary #1 (1,050) · Maniac #1 (141)<br>Turret DMG #2 (3,590) · Savage #2 (15)</div></div>
+            <div class="sw-box wk"><div class="sw-label">✦ Kelemahan</div><div class="sw-item">Deaths/match 4.03 — lebih dari LeoXent<br>CS season: TF% jatuh ke 49%<br>Pool ada hero WR merah (Fanny 45.8%)</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fenrir -->
+      <div class="player-card">
+        <div class="pc-header">
+          <div class="pc-dot" style="background:var(--p1);box-shadow:0 0 6px var(--p1)"></div>
+          <div class="pc-name">Fenrir</div>
+          <div class="pc-rank-badge" style="background:rgba(192,120,56,0.15);color:var(--bronze);">🥉 #3 · EPI 3.264</div>
+        </div>
+        <div class="pc-body">
+          <div class="verdict">Pemain yang paling objective-minded dalam group. Turret DMG tertinggi (3,799) dan Gold/min tertinggi (627) menggambarkan dia faham cara nak menang melalui struktur dan farming — bukan sekadar kills. Win streak 18 menunjukkan ketika dia masuk momentum, susah nak hentikan. Kelemahan utama dia adalah KDA yang paling rendah dalam group, menunjukkan positioning yang perlu diperbaiki — kalau selesaikan satu masalah tu, ranking dia boleh lompat ke atas.</div>
+
+          <div class="top5-heroes">
+            <div class="top5-title">🎮 Top 5 Most Played</div>
+            <div class="hero-pill-row">
+              <div class="hero-pill"><span class="hero-pill-name">Chou</span><span class="hero-pill-games">701g</span><span class="hero-pill-wr" style="color:#f5c842">58.2%</span></div>
+              <div class="hero-pill"><span class="hero-pill-name">Claude</span><span class="hero-pill-games">340g</span><span class="hero-pill-wr" style="color:#f5c842">58.5%</span></div>
+              <div class="hero-pill"><span class="hero-pill-name">Ruby</span><span class="hero-pill-games">330g</span><span class="hero-pill-wr" style="color:#f5c842">55.8%</span></div>
+              <div class="hero-pill"><span class="hero-pill-name">Kagura</span><span class="hero-pill-games">287g</span><span class="hero-pill-wr" style="color:#f5c842">51.9%</span></div>
+              <div class="hero-pill"><span class="hero-pill-name">Granger</span><span class="hero-pill-games">286g</span><span class="hero-pill-wr" style="color:#f5c842">52.4%</span></div>
+            </div>
+          </div>
+
+          <div class="strength-weakness">
+            <div class="sw-box str"><div class="sw-label">✦ Kelebihan</div><div class="sw-item">Turret DMG #1 (3,799) · Gold/min #1<br>Win streak #1 (18) · Pool versatile<br>Experience solid (7,508 matches)</div></div>
+            <div class="sw-box wk"><div class="sw-label">✦ Kelemahan</div><div class="sw-item">KDA terendah (3.14) · MVP rate 9.9%<br>Deaths/match 4.76 — positioning issue<br>CS season TF% jatuh ke 48.2%</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Smurff -->
+      <div class="player-card">
+        <div class="pc-header">
+          <div class="pc-dot" style="background:var(--p5);box-shadow:0 0 6px var(--p5)"></div>
+          <div class="pc-name">Smurff</div>
+          <div class="pc-rank-badge" style="background:rgba(107,122,148,0.15);color:var(--rank4);">#4 · EPI 2.830</div>
+        </div>
+        <div class="pc-body">
+          <div class="verdict">Pemain tank/support paling konsisten dalam group, dengan Franco 900 games (61.2%) dan Edith 833 games (64.6%) sebagai tulang belakang pool dia. WR all-time 60.79% tertinggi dalam group tapi gaya bermain sebagai enabler bermakna dia kurang mendominasi dalam metrik individu seperti KDA dan damage. Pelakon yang solid dan reliable untuk team — bukan "carry" dalam erti kata konvensional, tapi kepentingan dia terhadap team susah diukur dengan angka semata-mata.</div>
+
+          <div class="top5-heroes">
+            <div class="top5-title">🎮 Top 5 Most Played</div>
+            <div class="hero-pill-row">
+              <div class="hero-pill"><span class="hero-pill-name">Franco</span><span class="hero-pill-games">900g</span><span class="hero-pill-wr" style="color:#3de87e">61.2%</span></div>
+              <div class="hero-pill"><span class="hero-pill-name">Edith</span><span class="hero-pill-games">833g</span><span class="hero-pill-wr" style="color:#f5b942">64.6%</span></div>
+              <div class="hero-pill"><span class="hero-pill-name">Guinevere</span><span class="hero-pill-games">184g</span><span class="hero-pill-wr" style="color:#f5c842">56.0%</span></div>
+              <div class="hero-pill"><span class="hero-pill-name">Tigreal</span><span class="hero-pill-games">117g</span><span class="hero-pill-wr" style="color:#f5c842">59.0%</span></div>
+              <div class="hero-pill"><span class="hero-pill-name">Freya</span><span class="hero-pill-games">83g</span><span class="hero-pill-wr" style="color:#f5c842">55.4%</span></div>
+            </div>
+          </div>
+
+          <div class="strength-weakness">
+            <div class="sw-box str"><div class="sw-label">✦ Kelebihan</div><div class="sw-item">WR all-time #1 (60.79%)<br>Franco (900g, 61.2%) · Edith (833g, 64.6%)<br>Hylos 70.4% WR — clutch tank play</div></div>
+            <div class="sw-box wk"><div class="sw-label">✦ Kelemahan</div><div class="sw-item">Turret · TF% · DMG/Gold semua terendah<br>MVP Rate terendah kedua (8.9%)<br>Savage: 0 — impact individu terhad</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tok Dalang -->
+      <div class="player-card" style="grid-column: span 2;">
+        <div class="pc-header">
+          <div class="pc-dot" style="background:var(--p2);box-shadow:0 0 6px var(--p2)"></div>
+          <div class="pc-name">Tok Dalang</div>
+          <div class="pc-rank-badge" style="background:rgba(107,122,148,0.15);color:var(--rank4);">#5 · EPI 2.747</div>
+        </div>
+        <div class="pc-body">
+          <div class="verdict">Pemain yang paling sukar dinilai secara adil dalam group ini. Weighted sum dia (0.8400) sebenarnya lebih tinggi dari Smurff (0.8330) — bermakna secara per-game, kualiti permainan dia adalah kompetitif. Masalahnya hanya satu: sample terkecil (1,863 matches) yang menjatuhkan reliability factor. Current season dia menunjukkan trajectory yang paling positif dalam group — WR 58.24% (#2) dan KDA 3.9 adalah angka yang meyakinkan. Dengan lebih banyak ranked games, ranking dia akan naik secara natural.</div>
+
+          <div class="top5-heroes">
+            <div class="top5-title">🎮 Top 5 Most Played</div>
+            <div class="hero-pill-row">
+              <div class="hero-pill"><span class="hero-pill-name">Zhask</span><span class="hero-pill-games">471g</span><span class="hero-pill-wr" style="color:#f5b942">60.1%</span></div>
+              <div class="hero-pill"><span class="hero-pill-name">Belerick</span><span class="hero-pill-games">294g</span><span class="hero-pill-wr" style="color:#f5c842">55.8%</span></div>
+              <div class="hero-pill"><span class="hero-pill-name">X.Borg</span><span class="hero-pill-games">173g</span><span class="hero-pill-wr" style="color:#f5c842">52.6%</span></div>
+              <div class="hero-pill"><span class="hero-pill-name">Estes</span><span class="hero-pill-games">164g</span><span class="hero-pill-wr" style="color:#f5c842">50.0%</span></div>
+              <div class="hero-pill"><span class="hero-pill-name">Vexana</span><span class="hero-pill-games">153g</span><span class="hero-pill-wr" style="color:#f5c842">54.9%</span></div>
+            </div>
+          </div>
+
+          <div class="strength-weakness">
+            <div class="sw-box str"><div class="sw-label">✦ Kelebihan</div><div class="sw-item">CS Form #2 (58.24% ↑) · KDA naik (3.9)<br>Weighted sum per-game > Smurff<br>Zhask mastery (471g, 60.1%)<br>Trajectory paling positif dalam group</div></div>
+            <div class="sw-box wk"><div class="sw-label">✦ Kelemahan</div><div class="sw-item">Sample TERKECIL (1,863) — kurang reliable<br>Deaths/match tertinggi (5.29)<br>MVP rate terendah (7.9%)<br>Pool depth paling cetek (~53.1%)</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- FINAL VERDICT -->
+    <div class="final-box">
+      <h2>⚡ Verdict Akhir</h2>
+      <p><strong>LeoXent</strong> adalah pemain yang paling menyeluruh dan konsisten. Dia unggul dalam aspek mekanik, teamfight presence, dan pool depth sekaligus — bukan menang dalam satu atau dua kategori sahaja tapi hampir semua. Sample hampir 10,000 games membuatkan stats dia paling reliable dalam group, dan form semasa 62.22% membuktikan dia makin baik, bukan declining.</p>
+      <p><strong>Sofea Trisha</strong> adalah carry paling merbahaya bila dia in form. MVP Rate tertinggi, Legendary terbanyak, dan Maniac tertinggi semua-time menunjukkan kapasiti carry yang genuine. Kelemahan dia hanya pada consistency — kalau dia berjaya jaga TF participation dan kurangkan deaths, dia adalah cabaran paling nyata kepada LeoXent.</p>
+      <p><strong>Fenrir</strong> adalah pemain yang paling strategic dalam group. Dia faham cara nak push advantage melalui objektif dan farming — turret damage dan gold efficiency dia nombor satu. Dia kurang agresif dalam carry-style tapi gayanya memberi impak yang berbeza dan penting, terutama dalam team yang sudah ada carry.</p>
+      <p><strong>Smurff</strong> adalah anchor team yang paling reliable. WR all-time tertinggi (60.79%) bukan berlaku secara kebetulan — Franco dan Edith dia masing-masing ada ratusan games dengan WR meyakinkan. Sebagai enabler, dia mungkin kurang nampak dalam statistik individu tapi sumbangan dia kepada kemenangan team adalah nyata dan berulang.</p>
+      <p><strong>Tok Dalang</strong> adalah pemain yang paling underrated dalam ranking ini. Angka per-game dia sebenarnya kompetitif berbanding semua orang — masalahnya hanya bilangan games yang belum mencukupi untuk diberi kepercayaan penuh oleh formula. Current season dia adalah yang paling mengghairahkan dalam group — dan ranking ini dijangka berubah bila dia tambah lebih banyak games.</p>
+    </div>
+
+  </div><!-- end page-main -->
+
+  <!-- ===== PAGE 2: H2H ===== -->
+  <div class="page" id="page-h2h">
+    <div class="hdr" style="margin-bottom:24px;">
+      <div class="hdr-tag">Head to Head Comparison</div>
+      <h1>Hero <span>Battle</span></h1>
+      <div class="hdr-sub">Siapa lagi jago untuk setiap hero? · Power Score: ln(MP) × WR²</div>
+    </div>
+
+    <div class="disclaimer">
+      <span class="disclaimer-icon">ℹ️</span>
+      <span><strong>Power Score Formula: Score = ln(MP) × WR²</strong> — ln(MP) bagi diminishing returns kepada volume, WR² membesarkan gap antara WR tinggi vs rendah. Score dinormalize absolute (ceiling = ln(9748) × 0.6222²). Gap &lt;5 mata = ⚖️ Contested. Sample &lt;30 games ditanda ⚠️. <strong style="color:#f05060">Hanya Top 48 hero per player dimasukkan.</strong></span>
     </div>
 
     <div class="h2h-filter">
       <span class="h2h-filter-label">Filter:</span>
-      <button class="filter-btn active" onclick="filterH2H('all', this)">Semua</button>
-      <button class="filter-btn" onclick="filterH2H('Assassin', this)">Assassin</button>
-      <button class="filter-btn" onclick="filterH2H('Fighter', this)">Fighter</button>
-      <button class="filter-btn" onclick="filterH2H('Mage', this)">Mage</button>
-      <button class="filter-btn" onclick="filterH2H('Marksman', this)">Marksman</button>
-      <button class="filter-btn" onclick="filterH2H('Tank', this)">Tank</button>
-      <button class="filter-btn" onclick="filterH2H('Support', this)">Support</button>
+      <button class="filter-btn active" onclick="filterH2H('all',this)">Semua</button>
+      <button class="filter-btn" onclick="filterH2H('Assassin',this)">Assassin</button>
+      <button class="filter-btn" onclick="filterH2H('Fighter',this)">Fighter</button>
+      <button class="filter-btn" onclick="filterH2H('Mage',this)">Mage</button>
+      <button class="filter-btn" onclick="filterH2H('Marksman',this)">Marksman</button>
+      <button class="filter-btn" onclick="filterH2H('Tank',this)">Tank</button>
+      <button class="filter-btn" onclick="filterH2H('Support',this)">Support</button>
       <input class="h2h-search" type="text" placeholder="🔍  Cari hero..." oninput="searchH2H(this.value)">
     </div>
 
     <div class="h2h-grid" id="h2h-grid"></div>
-    <div class="h2h-no-results" id="h2h-empty" style="display:none;">Tiada hero dijumpai untuk filter ini.</div>
+    <div class="h2h-no-results" id="h2h-empty" style="display:none;">Tiada hero dijumpai.</div>
+  </div>
 
-  </div><!-- end page-h2h -->
-
-  <!-- =================== PAGE 3: HERO POOL =================== -->
+  <!-- ===== PAGE 3: HERO POOL ===== -->
   <div class="page" id="page-pool">
-
     <div class="hdr" style="margin-bottom:24px;">
       <div class="hdr-tag">Hero Pool Breakdown · Top 48</div>
       <h1>Hero <span>Pool</span></h1>
-      <div class="hdr-sub">Top 48 heroes paling banyak dimainkan · Sorted by Matches</div>
+      <div class="hdr-sub">Top 48 heroes paling banyak dimainkan · Power Score: ln(M) × WR²</div>
     </div>
 
     <div class="disclaimer">
       <span class="disclaimer-icon">ℹ️</span>
-      <span>
-        <strong>Nota:</strong> Hanya top 48 hero (by matches) untuk setiap player yang ditampilkan di sini.
-        Warna WR: <strong style="color:#f5b942">Kuning ≥ 60%</strong> · <strong style="color:#3de87e">Hijau 55–59%</strong> · <strong style="color:#f5c842">Amber 50–54%</strong> · <strong style="color:#f05060">Merah &lt;50%</strong>.
-        Power Score = ln(Matches) × WR² dinormalize 0–100.
-      </span>
+      <span><strong>Nota:</strong> Hanya top 48 hero (by matches) untuk setiap player. Warna WR: <strong style="color:#f5b942">Kuning ≥60%</strong> · <strong style="color:#3de87e">Hijau 55–59%</strong> · <strong style="color:#f5c842">Amber 50–54%</strong> · <strong style="color:#f05060">Merah &lt;50%</strong>.</span>
     </div>
 
-    <!-- Pool filter tabs -->
-    <div class="tabs" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px;">
-      <button class="pool-tab active" data-pp="all" onclick="switchPool('all',this)"
-        style="padding:6px 18px;border-radius:99px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:1px;cursor:pointer;transition:all .2s;">All Players</button>
-      <button class="pool-tab" data-pp="p1" onclick="switchPool('p1',this)"
-        style="padding:6px 18px;border-radius:99px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:1px;cursor:pointer;transition:all .2s;">🟠 Fenrir</button>
-      <button class="pool-tab" data-pp="p2" onclick="switchPool('p2',this)"
-        style="padding:6px 18px;border-radius:99px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:1px;cursor:pointer;transition:all .2s;">🟣 Tok Dalang</button>
-      <button class="pool-tab" data-pp="p3" onclick="switchPool('p3',this)"
-        style="padding:6px 18px;border-radius:99px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:1px;cursor:pointer;transition:all .2s;">🔵 LeoXent</button>
-      <button class="pool-tab" data-pp="p4" onclick="switchPool('p4',this)"
-        style="padding:6px 18px;border-radius:99px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:1px;cursor:pointer;transition:all .2s;">🔴 Sofea Trisha</button>
-    </div>
-
+    <div class="pool-tab-bar" id="pool-tabs"></div>
     <div id="pool-sections"></div>
-
-    <!-- Analysis section -->
-    <div id="pool-analysis-section" style="margin-top:48px;">
-      <div class="section-title">🔬 Pool Analysis — Perbandingan & Insight</div>
-
-      <!-- Role distribution grid -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;" id="role-dist-grid"></div>
-
-      <!-- Cross-player insights -->
-      <div style="background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:28px;">
-        <div style="font-family:'Rajdhani',sans-serif;font-size:0.75rem;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border);">
-          💡 Key Insights · Cross-Player
-        </div>
-        <div id="pool-insights" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.8rem;line-height:1.65;color:#8aa8c8;"></div>
-      </div>
-
-      <!-- Top performer per hero (heroes played by 2+ players) -->
-      <div style="background:var(--s1);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:28px;">
-        <div style="padding:12px 20px;background:#090d18;border-bottom:1px solid var(--border);font-family:'Rajdhani',sans-serif;font-size:0.75rem;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--muted);">
-          🏆 Hero Dominance — Siapa Unggul Tiap Hero?
-        </div>
-        <div id="pool-dominance" style="padding:16px 20px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;"></div>
-      </div>
-    </div>
-
-  </div><!-- end page-pool -->
+  </div>
 
 </div><!-- end wrap -->
 
+<!-- ===== FOOTER METHODOLOGY ===== -->
+<div class="footer-methodology">
+  <div class="footer-inner">
+    <div class="footer-title">📐 Metodologi & Formula</div>
+    <div class="footer-subtitle">Elite Performance Index v2.0 (EPI) · 8-Metric Multivariate Weighted Analysis</div>
+
+    <div class="meth-grid">
+
+      <div class="meth-card">
+        <div class="meth-card-title">🧮 Formula Utama — EPI v2.0</div>
+        <div class="meth-formula">EPI = Σ(Vᵢ × Wᵢ) × log₁₀(Matches)<br><br>= (KDA×0.28 + TF%×0.20 + WR×0.12<br>&nbsp;&nbsp;&nbsp;+ DMGratio×0.12 + Turret×0.08<br>&nbsp;&nbsp;&nbsp;+ MVPRate×0.08 + PoolDepth×0.06<br>&nbsp;&nbsp;&nbsp;+ CSForm×0.06)<br>&nbsp;&nbsp;× log₁₀(Total Matches)</div>
+        <div class="meth-text">
+          Formula v2.0 mengembangkan EPI asal daripada 5 metrik kepada <strong>8 metrik</strong>, menambah MVP Rate, Hero Pool Depth, dan Current Season Form. Setiap metrik dinormalkan menggunakan nilai tertinggi dalam group sebagai benchmark (1.0) sebelum didarabkan weightage.
+        </div>
+        <table class="weight-breakdown">
+          <thead><tr><th>Metrik</th><th>Weight</th><th>Justifikasi</th></tr></thead>
+          <tbody>
+            <tr><td>KDA</td><td class="wt"><div class="w-bar" style="width:28px;background:#f04070;"></div>0.28</td><td style="color:var(--muted);font-size:0.72rem;">Kualiti mekanik & kecekapan</td></tr>
+            <tr><td>Teamfight %</td><td class="wt"><div class="w-bar" style="width:20px;background:#40b8f0;"></div>0.20</td><td style="color:var(--muted);font-size:0.72rem;">Impak & kehadiran dalam war</td></tr>
+            <tr><td>Win Rate</td><td class="wt"><div class="w-bar" style="width:12px;background:#3de87e;"></div>0.12</td><td style="color:var(--muted);font-size:0.72rem;">Konsistensi kemenangan</td></tr>
+            <tr><td>Hero DMG / Gold</td><td class="wt"><div class="w-bar" style="width:12px;background:#f5b942;"></div>0.12</td><td style="color:var(--muted);font-size:0.72rem;">Efisiensi sumber kepada damage</td></tr>
+            <tr><td>Turret DMG</td><td class="wt"><div class="w-bar" style="width:8px;background:#a040f0;"></div>0.08</td><td style="color:var(--muted);font-size:0.72rem;">Kesedaran terhadap objektif</td></tr>
+            <tr><td>MVP Rate ✦NEW</td><td class="wt"><div class="w-bar" style="width:8px;background:#f5b942;"></div>0.08</td><td style="color:var(--muted);font-size:0.72rem;">Pengiktirafan impak dalam perlawanan</td></tr>
+            <tr><td>Pool Depth ✦NEW</td><td class="wt"><div class="w-bar" style="width:6px;background:#5ab4f0;"></div>0.06</td><td style="color:var(--muted);font-size:0.72rem;">Avg WR pool — fleksibiliti & adaptasi</td></tr>
+            <tr><td>CS Form ✦NEW</td><td class="wt"><div class="w-bar" style="width:6px;background:#3de87e;"></div>0.06</td><td style="color:var(--muted);font-size:0.72rem;">WR season semasa — form terkini</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="meth-card">
+        <div class="meth-card-title">📋 Cara Pengiraan (Step-by-Step)</div>
+        <div class="step-list">
+          <div class="step-item"><strong>Kumpul 8 Metrik</strong> — KDA, TF%, WR, Hero DMG/min, Gold/min, Turret DMG/match, MVP Rate (MVP÷Matches), Pool Depth (avg WR top heroes), Current Season WR, dan Total Matches untuk setiap player.</div>
+          <div class="step-item"><strong>Kira Nisbah Hero DMG/Gold</strong> — bahagikan Hero DMG/min dengan Gold/min untuk dapat efisiensi sumber kepada damage. Kira juga MVP Rate (MVP count ÷ total matches × 100).</div>
+          <div class="step-item"><strong>Normalisasi Vᵢ</strong> — untuk setiap metrik, bahagikan nilai player dengan nilai tertinggi dalam group. Contoh: MVP Rate Sofea 17.7% → Vᵢ = 1.000; LeoXent 16.1% → Vᵢ = 0.910.</div>
+          <div class="step-item"><strong>Kira Weighted Sum Σ(Vᵢ×Wᵢ)</strong> — darab setiap Vᵢ dengan Wᵢ masing-masing dan tambah semua 8 komponen. Nilai antara 0 dan 1.</div>
+          <div class="step-item"><strong>Kira Reliability Factor</strong> — log₁₀(Total Matches). Fungsi logaritma memastikan veteran dihargai tapi secara diminishing returns.</div>
+          <div class="step-item"><strong>EPI Final</strong> — darabkan Weighted Sum dengan Reliability Factor. Scaled 0–100 dengan membahagikan kepada EPI tertinggi dalam group × 100.</div>
+        </div>
+        <div class="meth-note">
+          <strong>⚠️ Limitasi Formula:</strong> EPI adalah <strong>"buta"</strong> terhadap rank lawan, mod permainan, dan peranan spesifik dalam team. Player tank/support mungkin nampak undervalued dalam KDA dan DMG ratio. Pool Depth dikira berdasarkan average WR top heroes sahaja — bukan keseluruhan pool.
+        </div>
+      </div>
+
+      <div class="meth-card">
+        <div class="meth-card-title">⚔️ Power Score (Hero H2H)</div>
+        <div class="meth-formula">PowerScore = ln(MP) × WR²<br>Scaled = (raw ÷ ceiling) × 100<br>ceiling = ln(9748) × 0.6222²</div>
+        <div class="meth-text">
+          Digunakan dalam Head-to-Head hero comparison. <strong>ln(MP)</strong> memberi diminishing returns kepada volume. <strong>WR²</strong> membesarkan gap antara WR tinggi dan rendah. Ceiling ditetapkan secara absolute supaya score bermakna merentasi semua hero. Gap &lt;5 mata dalam group dianggap <strong>Contested ⚖️</strong>.
+        </div>
+      </div>
+
+      <div class="meth-card">
+        <div class="meth-card-title">💡 Kenapa 3 Metrik Baru?</div>
+        <div class="meth-text">EPI v1.0 hanya menilai mekanik dan efficiency semasa permainan. Tiga metrik baru menambah dimensi penting:</div>
+        <div style="margin-top:14px;display:flex;flex-direction:column;gap:8px;">
+          <div style="padding:10px 12px;background:rgba(245,185,66,0.06);border:1px solid rgba(245,185,66,0.15);border-radius:7px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--gold);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">MVP Rate × 0.08</div>
+            <div style="font-size:0.76rem;color:#8aa8c8;line-height:1.6">Pengiktirafan impak dalam setiap perlawanan. Player yang kerap dapat MVP bukan sekadar bermain baik — mereka bermain baik <em>lebih baik dari semua orang</em> dalam game tu. Win Rate tinggi tak semestinya datang dari individu yang benar-benar carry.</div>
+          </div>
+          <div style="padding:10px 12px;background:rgba(90,180,240,0.06);border:1px solid rgba(90,180,240,0.15);border-radius:7px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:#5ab4f0;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Pool Depth × 0.06</div>
+            <div style="font-size:0.76rem;color:#8aa8c8;line-height:1.6">Fleksibiliti hero pool adalah aset dalam ranked. Player yang hanya bagus dengan 1-2 hero mudah di-counter dengan ban. Pool depth yang luas dan konsisten menunjukkan pemahaman game yang lebih menyeluruh.</div>
+          </div>
+          <div style="padding:10px 12px;background:rgba(61,232,126,0.05);border:1px solid rgba(61,232,126,0.12);border-radius:7px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:#3de87e;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Current Season Form × 0.06</div>
+            <div style="font-size:0.76rem;color:#8aa8c8;line-height:1.6">Stats all-time boleh "terlindung" oleh prestasi lama. Current season form mencerminkan keadaan pemain sekarang — adakah dia sedang naik atau turun? Player yang consistently improve perlu diberi kredit.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-cutoff">
+      DATA CUTOFF: 17 FEBRUARI 2026 · ALL SEASONS RANKED · 5 PLAYERS · EPI v2.0<br>
+      Analisa ini tidak rasmi · Berdasarkan data dikongsi oleh pemain sendiri · Formula oleh pakar analisis data
+    </div>
+  </div>
+</div>
+
 <script>
 // ===== PAGE SWITCHING =====
-function switchPage(page, btn) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.page-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('page-' + page).classList.add('active');
+function switchPage(p, btn) {
+  document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.page-btn').forEach(x => x.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
   btn.classList.add('active');
 }
 
-// ===== H2H DATA =====
-// Format: [hero, role, {p: matches, wr}] per player. null = tak main
+// ===== PLAYER META =====
 const PLAYERS_META = [
-  { id: 'p1', name: 'Fenrir',       color: '#f0a040' },
-  { id: 'p2', name: 'Tok Dalang',   color: '#a040f0' },
-  { id: 'p3', name: 'LeoXent',      color: '#40b8f0' },
-  { id: 'p4', name: 'Sofea Trisha', color: '#f04070' },
+  { id:'p1', name:'Fenrir',       color:'#f0a040' },
+  { id:'p2', name:'Tok Dalang',   color:'#a040f0' },
+  { id:'p3', name:'LeoXent',      color:'#40b8f0' },
+  { id:'p4', name:'Sofea Trisha', color:'#f04070' },
+  { id:'p5', name:'Smurff',       color:'#40e0a0' },
 ];
 
-// p1=Fenrir, p2=TokDalang, p3=LeoXent, p4=Sofea
-// [hero, role, p1, p2, p3, p4]  each = [matches, wr] or null
+// ===== H2H DATA =====
 const H2H_RAW = [
-  // ---- ASSASSIN ----
-  ['Lancelot',    'Assassin',  [86,58.1],   null,        [266,56.0],  [701,60.1]],
-  ['Gusion',      'Assassin',  null,         null,        [1466,61.0], [352,52.0]],
-  ['Hayabusa',    'Assassin',  null,         null,        [153,58.8],  [522,58.8]],
-  ['Helcurt',     'Assassin',  null,         null,        [90,63.3],   [122,59.0]],
-  ['Fanny',       'Assassin',  null,         null,        [78,50.0],   [308,45.8]],
-  ['Natalia',     'Assassin',  null,         null,        null,        [178,62.4]],
-  ['Saber',       'Assassin',  null,         [12,66.7],   null,        [118,55.9]],
-  ['Karina',      'Assassin',  null,         null,        null,        [93,50.5]],
-  ['Ling',        'Assassin',  null,         null,        null,        [83,57.8]],
-  ['Hanzo',       'Assassin',  null,         [5,60.0],    null,        null],
-  // ---- FIGHTER ----
-  ['Chou',        'Fighter',   [701,58.2],   null,        [74,45.9],   [270,53.7]],
-  ['Ruby',        'Fighter',   [330,55.8],   null,        [43,69.8],   [135,56.3]],
-  ['Alpha',       'Fighter',   [104,63.5],   [58,48.3],   [121,63.6],  [174,68.4]],
-  ['Lapu-Lapu',   'Fighter',   [115,59.1],   null,        null,        null],
-  ['Badang',      'Fighter',   [106,50.0],   [7,42.9],    null,        [64,54.7]],
-  ['Leomord',     'Fighter',   [78,52.6],    [3,66.7],    [107,57.0],  null],
-  ['Argus',       'Fighter',   null,         null,        [537,53.8],  null],
-  ['Dyrroth',     'Fighter',   [65,46.2],    [91,62.6],   null,        null],
-  ['Khaleed',     'Fighter',   [65,58.5],    null,        null,        null],
-  ['Phoveus',     'Fighter',   null,         null,        [222,63.5],  null],
-  ['Alucard',     'Fighter',   null,         [10,70.0],   null,        [207,55.6]],
-  ['Thamuz',      'Fighter',   null,         null,        [108,55.6],  null],
-  ['Martis',      'Fighter',   null,         [5,60.0],    [54,50.0],   null],
-  ['Fredrinn',    'Fighter',   null,         [6,50.0],    null,        null],
-  ['Julian',      'Fighter',   null,         [65,67.7],   null,        [117,52.1]],
-  ['Hilda',       'Fighter',   null,         null,        null,        [104,55.8]],
-  ['Balmond',     'Fighter',   null,         null,        [67,47.8],   [141,53.9]],
-  ['Freya',       'Fighter',   null,         null,        null,        [77,50.6]],
-  ['X.Borg',      'Fighter',   [200,60.0],   [173,52.6],  [217,62.2],  null],
-  // ---- MAGE ----
-  ['Kagura',      'Mage',      [287,51.9],   null,        null,        [204,48.0]],
-  ['Pharsa',      'Mage',      [240,57.5],   [11,45.5],   null,        null],
-  ['Aurora',      'Mage',      [186,61.3],   [26,42.3],   null,        [73,45.2]],
-  ['Lunox',       'Mage',      [124,51.6],   null,        null,        [116,60.3]],
-  ['Xavier',      'Mage',      [118,50.8],   null,        [189,52.4],  [69,62.3]],
-  ['Valentina',   'Mage',      [172,55.2],   null,        null,        [56,48.2]],
-  ['Yve',         'Mage',      [91,62.6],    null,        null,        null],
-  ["Chang'e",     'Mage',      [72,62.5],    null,        null,        null],
-  ['Vale',        'Mage',      [68,54.4],    null,        null,        null],
-  ['Vexana',      'Mage',      null,         [153,54.9],  [49,61.2],   null],
-  ['Zhask',       'Mage',      null,         [471,60.1],  [125,64.0],  null],
-  ['Eudora',      'Mage',      null,         [42,54.8],   [47,57.4],   null],
-  ['Cecilion',    'Mage',      null,         [11,63.6],   [116,65.5],  null],
-  ['Gord',        'Mage',      null,         [28,57.1],   null,        null],
-  ['Odette',      'Mage',      null,         [5,60.0],    null,        null],
-  ['Cyclops',     'Mage',      null,         [4,25.0],    [110,54.5],  null],
-  ['Luo Yi',      'Mage',      [86,55.8],    null,        [572,60.1],  null],
-  ['Novaria',     'Mage',      null,         null,        [232,56.5],  null],
-  ['Harley',      'Mage',      null,         null,        null,        [290,47.6]],
-  ['Alice',       'Mage',      [103,63.1],   [3,33.3],    null,        null],
-  ['Esmeralda',   'Mage',      [66,43.9],    null,        null,        [75,61.3]],
-  ['Valir',       'Mage',      [81,58.0],    null,        null,        null],
-  ['Guinevere',   'Mage',      null,         null,        [73,53.4],   [60,51.7]],
-  ['Zhuxin',      'Mage',      null,         [64,53.1],   null,        null],
-  ['Harith',      'Mage',      null,         null,        [69,56.5],   [185,58.4]],
-  ['Joy',         'Mage',      null,         null,        null,        [61,44.3]],
-  ['Natan',       'Mage',      [76,67.1],    null,        null,        [60,56.7]],
-  // ---- MARKSMAN ----
-  ['Karrie',      'Marksman',  [266,58.6],   [7,42.9],    null,        [107,55.1]],
-  ['Granger',     'Marksman',  [286,52.4],   null,        [123,52.8],  [74,52.7]],
-  ['Moskov',      'Marksman',  [164,60.4],   [11,9.1],    null,        [201,59.2]],
-  ['Kimmy',       'Marksman',  [135,50.4],   [6,16.7],    null,        null],
-  ['Beatrix',     'Marksman',  [116,51.7],   null,        null,        [70,50.0]],
-  ['Wanwan',      'Marksman',  [96,51.0],    null,        null,        null],
-  ['Hanabi',      'Marksman',  [96,50.0],    null,        null,        null],
-  ['Miya',        'Marksman',  null,         [38,60.5],   null,        [144,56.2]],
-  ['Clint',       'Marksman',  null,         null,        null,        [67,53.7]],
-  ['Layla',       'Marksman',  null,         [23,43.5],   null,        [86,52.3]],
-  ['Lesley',      'Marksman',  null,         null,        null,        [108,48.1]],
-  ['Bruno',       'Marksman',  null,         null,        null,        [86,51.2]],
-  ['Irithel',     'Marksman',  null,         null,        null,        [96,50.0]],
-  ['Roger',       'Marksman',  [147,61.2],   [9,66.7],    null,        [188,62.2]],
-  ['Popol&Kupa',  'Marksman',  null,         null,        [611,63.2],  null],
-  ['Claude',      'Marksman',  [340,58.5],   null,        [298,53.7],  [139,57.6]],
-  ['Yi Sun-shin', 'Marksman',  null,         null,        [211,52.6],  null],
-  ['Melissa',     'Marksman',  null,         null,        [86,61.6],   null],
-  // ---- TANK ----
-  ['Khufra',      'Tank',      [195,54.9],   null,        [125,52.8],  null],
-  ['Tigreal',     'Tank',      [86,48.8],    [82,45.1],   [96,46.9],   null],
-  ['Hylos',       'Tank',      [93,62.4],    [9,33.3],    [145,53.1],  null],
-  ['Belerick',    'Tank',      [95,66.3],    [294,55.8],  null,        null],
-  ['Grock',       'Tank',      [112,45.5],   null,        [417,57.8],  [59,49.2]],
-  ['Gatotkaca',   'Tank',      [76,67.1],    [54,51.9],   [33,48.5],   [61,59.0]],
-  ['Minotaur',    'Tank',      [64,60.9],    [13,53.8],   null,        null],
-  ['Baxia',       'Tank',      null,         [6,50.0],    null,        null],
-  ['Atlas',       'Tank',      null,         [4,50.0],    [128,61.7],  null],
-  ['Akai',        'Tank',      null,         null,        [951,56.5],  [176,52.3]],
-  ['Silvanna',    'Tank',      [76,60.5],    [12,58.3],   null,        null],
-  ['Gloo',        'Tank',      null,         null,        [87,58.6],   [61,63.9]],
-  ['Minsitthar',  'Tank',      [127,54.3],   null,        [329,56.5],  null],
-  ['Chip',        'Tank',      null,         [4,50.0],    null,        null],
-  ['Hylos',       'Tank',      [93,62.4],    [9,33.3],    [145,53.1],  null],
-  ['Franco',      'Tank',      [66,45.5],    [9,33.3],    [74,48.6],   [157,48.4]],
-  ['Johnson',     'Tank',      null,         [3,33.3],    [124,57.3],  [86,51.2]],
-  // ---- SUPPORT ----
-  ['Angela',      'Support',   null,         [143,55.2],  [347,61.4],  null],
-  ['Estes',       'Support',   null,         [164,50.0],  [60,55.0],   null],
-  ['Rafaela',     'Support',   [66,71.2],    null,        null,        null],
-  ['Lolita',      'Support',   [73,60.3],    null,        null,        null],
-  ['Nana',        'Support',   null,         [30,56.7],   [35,57.1],   null],
-  ['Kaja',        'Support',   [74,51.4],    null,        [859,64.0],  null],
-  ['Diggie',      'Support',   null,         null,        [59,55.9],   null],
-  ['Floryn',      'Support',   null,         null,        [91,64.8],   null],
-  ['Carmilla',    'Support',   null,         [2,100.0],   null,        null],
-  ['Selena',      'Support',   [191,43.5],   [8,62.5],    [218,50.9],  [276,56.5]],
-  ['Masha',       'Support',   null,         [4,50.0],    null,        null],
+  ['Lancelot','Assassin',[86,58.1],null,[266,56.0],[701,60.1],null],
+  ['Gusion','Assassin',null,null,[1466,61.0],[352,52.0],[5,0.0]],
+  ['Hayabusa','Assassin',null,null,[153,58.8],[522,58.8],[3,33.3]],
+  ['Helcurt','Assassin',null,null,[90,63.3],[122,59.0],[17,58.8]],
+  ['Fanny','Assassin',null,null,[78,50.0],[308,45.8],null],
+  ['Natalia','Assassin',null,null,null,[178,62.4],[3,100.0]],
+  ['Saber','Assassin',null,[12,66.7],null,[118,55.9],[27,55.6]],
+  ['Karina','Assassin',null,null,null,[93,50.5],[5,20.0]],
+  ['Ling','Assassin',null,null,null,[83,57.8],null],
+  ['Hanzo','Assassin',null,[5,60.0],null,null,[5,20.0]],
+  ['Chou','Fighter',[701,58.2],null,[74,45.9],[270,53.7],null],
+  ['Ruby','Fighter',[330,55.8],null,[43,69.8],[135,56.3],null],
+  ['Alpha','Fighter',[104,63.5],[58,48.3],[121,63.6],[174,68.4],[23,60.9]],
+  ['Lapu-Lapu','Fighter',[115,59.1],null,null,null,null],
+  ['Badang','Fighter',[106,50.0],[7,42.9],null,[64,54.7],null],
+  ['Leomord','Fighter',[78,52.6],[3,66.7],[107,57.0],null,null],
+  ['Argus','Fighter',null,null,[537,53.8],null,null],
+  ['Dyrroth','Fighter',[65,46.2],[91,62.6],null,null,null],
+  ['Khaleed','Fighter',[65,58.5],null,null,null,null],
+  ['Phoveus','Fighter',null,null,[222,63.5],null,[58,58.6]],
+  ['Alucard','Fighter',null,[10,70.0],null,[207,55.6],[19,57.9]],
+  ['Thamuz','Fighter',null,null,[108,55.6],null,null],
+  ['Martis','Fighter',null,[5,60.0],[54,50.0],null,null],
+  ['Julian','Fighter',null,[65,67.7],null,[117,52.1],null],
+  ['Hilda','Fighter',null,null,null,[104,55.8],null],
+  ['Balmond','Fighter',null,null,[67,47.8],[141,53.9],[7,57.1]],
+  ['Freya','Fighter',null,null,null,[77,50.6],[83,55.4]],
+  ['X.Borg','Fighter',[200,60.0],[173,52.6],[217,62.2],null,null],
+  ['Kagura','Mage',[287,51.9],null,null,[204,48.0],null],
+  ['Pharsa','Mage',[240,57.5],[11,45.5],null,null,null],
+  ['Aurora','Mage',[186,61.3],[26,42.3],null,[73,45.2],null],
+  ['Lunox','Mage',[124,51.6],null,null,[116,60.3],null],
+  ['Xavier','Mage',[118,50.8],null,[189,52.4],[69,62.3],null],
+  ['Valentina','Mage',[172,55.2],null,null,[56,48.2],null],
+  ['Yve','Mage',[91,62.6],null,null,null,null],
+  ["Chang'e",'Mage',[72,62.5],null,null,null,[3,66.7]],
+  ['Vexana','Mage',null,[153,54.9],[49,61.2],null,null],
+  ['Zhask','Mage',null,[471,60.1],[125,64.0],null,[21,71.4]],
+  ['Eudora','Mage',null,[42,54.8],[47,57.4],null,[14,28.6]],
+  ['Cecilion','Mage',null,[11,63.6],[116,65.5],null,[14,42.9]],
+  ['Gord','Mage',null,[28,57.1],null,null,[6,33.3]],
+  ['Cyclops','Mage',null,[4,25.0],[110,54.5],null,[27,66.7]],
+  ['Luo Yi','Mage',[86,55.8],null,[572,60.1],null,[7,57.1]],
+  ['Novaria','Mage',null,null,[232,56.5],null,null],
+  ['Harley','Mage',null,null,null,[290,47.6],null],
+  ['Alice','Mage',[103,63.1],[3,33.3],null,null,null],
+  ['Esmeralda','Mage',[66,43.9],null,null,[75,61.3],null],
+  ['Valir','Mage',[81,58.0],null,null,null,null],
+  ['Guinevere','Mage',null,null,[73,53.4],[60,51.7],[184,56.0]],
+  ['Zhuxin','Mage',null,[64,53.1],null,null,null],
+  ['Harith','Mage',null,null,[69,56.5],[185,58.4],[3,66.7]],
+  ['Joy','Mage',null,null,null,[61,44.3],null],
+  ['Natan','Mage',[76,67.1],null,null,[60,56.7],null],
+  ['Karrie','Marksman',[266,58.6],[7,42.9],null,[107,55.1],null],
+  ['Granger','Marksman',[286,52.4],null,[123,52.8],[74,52.7],null],
+  ['Moskov','Marksman',[164,60.4],[11,9.1],null,[201,59.2],null],
+  ['Kimmy','Marksman',[135,50.4],[6,16.7],null,null,[6,50.0]],
+  ['Beatrix','Marksman',[116,51.7],null,null,[70,50.0],null],
+  ['Wanwan','Marksman',[96,51.0],null,null,null,null],
+  ['Hanabi','Marksman',[96,50.0],null,null,null,[29,69.0]],
+  ['Miya','Marksman',null,[38,60.5],null,[144,56.2],[15,46.7]],
+  ['Clint','Marksman',null,null,null,[67,53.7],null],
+  ['Layla','Marksman',null,[23,43.5],null,[86,52.3],[23,87.0]],
+  ['Lesley','Marksman',null,null,null,[108,48.1],[38,42.1]],
+  ['Bruno','Marksman',null,null,null,[86,51.2],null],
+  ['Irithel','Marksman',null,null,null,[96,50.0],[32,50.0]],
+  ['Roger','Marksman',[147,61.2],[9,66.7],null,[188,62.2],[39,71.8]],
+  ['Popol&Kupa','Marksman',null,null,[611,63.2],null,null],
+  ['Claude','Marksman',[340,58.5],null,[298,53.7],[139,57.6],null],
+  ['Yi Sun-shin','Marksman',null,null,[211,52.6],null,null],
+  ['Melissa','Marksman',null,null,[86,61.6],null,null],
+  ['Khufra','Tank',[195,54.9],null,[125,52.8],null,[6,50.0]],
+  ['Tigreal','Tank',[86,48.8],[82,45.1],[96,46.9],null,[117,59.0]],
+  ['Hylos','Tank',[93,62.4],[9,33.3],[145,53.1],null,[54,70.4]],
+  ['Belerick','Tank',[95,66.3],[294,55.8],null,null,null],
+  ['Grock','Tank',[112,45.5],null,[417,57.8],[59,49.2],null],
+  ['Gatotkaca','Tank',[76,67.1],[54,51.9],[33,48.5],[61,59.0],null],
+  ['Minotaur','Tank',[64,60.9],[13,53.8],null,null,null],
+  ['Atlas','Tank',null,[4,50.0],[128,61.7],null,[9,44.4]],
+  ['Akai','Tank',null,null,[951,56.5],[176,52.3],[26,53.8]],
+  ['Silvanna','Tank',[76,60.5],[12,58.3],null,null,null],
+  ['Gloo','Tank',null,null,[87,58.6],[61,63.9],[18,38.9]],
+  ['Minsitthar','Tank',[127,54.3],null,[329,56.5],null,null],
+  ['Franco','Tank',[66,45.5],[9,33.3],[74,48.6],[157,48.4],[900,61.2]],
+  ['Johnson','Tank',null,[3,33.3],[124,57.3],[86,51.2],[4,50.0]],
+  ['Edith','Tank',null,null,null,null,[833,64.6]],
+  ['Angela','Support',null,[143,55.2],[347,61.4],null,[4,75.0]],
+  ['Estes','Support',null,[164,50.0],[60,55.0],[40,67.5],[40,67.5]],
+  ['Rafaela','Support',[66,71.2],null,null,null,null],
+  ['Lolita','Support',[73,60.3],null,null,null,null],
+  ['Nana','Support',null,[30,56.7],[35,57.1],null,[14,57.1]],
+  ['Kaja','Support',[74,51.4],null,[859,64.0],null,null],
+  ['Floryn','Support',null,null,[91,64.8],null,null],
+  ['Selena','Support',[191,43.5],[8,62.5],[218,50.9],[276,56.5],null],
+  ['Diggie','Support',null,null,[59,55.9],null,[5,20.0]],
 ];
 
-// Remove exact duplicates (Hylos appeared twice)
-const seen = new Set();
-const H2H_DATA = H2H_RAW.filter(r => {
-  if (seen.has(r[0])) return false;
-  seen.add(r[0]); return true;
-});
+const seen2 = new Set();
+const H2H_DATA = H2H_RAW.filter(r => { if(seen2.has(r[0])) return false; seen2.add(r[0]); return true; });
 
-function wrColor(wr) {
-  if (wr >= 60) return '#f5b942';
-  if (wr >= 55) return '#3de87e';
-  if (wr >= 50) return '#f5c842';
-  return '#f05060';
+const SCORE_CEILING = Math.log(9748) * (0.6222 * 0.6222);
+function calcScore(m, wr) {
+  const raw = Math.log(m) * Math.pow(wr/100,2);
+  return { score: Math.min(100,(raw/SCORE_CEILING)*100), raw, lnMP: Math.log(m), wrSq: Math.pow(wr/100,2) };
 }
-
-function scoreColor(s) {
-  // Rescaled 0–100 based on absolute ceiling
-  if (s >= 75) return '#f5b942';   // elite
-  if (s >= 50) return '#3de87e';   // good
-  if (s >= 30) return '#f5c842';   // average
-  return '#f05060';                 // weak
-}
-
-// =============================================
-// POWER SCORE FORMULA
-// Score = ln(MP) × WR²  →  rescaled to 0–100
-//
-// ln(MP)  — logarithmic scaling supaya volume dihargai
-//            tapi tidak melampau. ln(10)=2.3, ln(100)=4.6,
-//            ln(1000)=6.9, ln(5000)=8.5 — diminishing returns.
-//
-// WR²     — winrate dikuasakan dua sebagai multiplier kritikal.
-//            WR 50% → 0.25, WR 60% → 0.36, WR 70% → 0.49
-//            Gap makin besar bila WR naik — punish mediocre players.
-//
-// CEILING — ditetapkan secara absolute berdasarkan realistic
-//            max dalam dataset ini: ln(9748) × 0.6222²
-//            = 9.185 × 0.3871 ≈ 3.555
-//            Semua score dibahagi ceiling ini × 100.
-//            Ini elak masalah "winner-always-100" (relative norm)
-//            sambil tetap bagi output 0–100 yang intuitive.
-//
-// Contoh referensi (rescaled):
-//   50 games,  50% WR  → raw 0.977  → ~27.5 / 100
-//   100 games, 55% WR  → raw 1.390  → ~39.1 / 100
-//   500 games, 58% WR  → raw 1.869  → ~52.6 / 100
-//  1000 games, 61% WR  → raw 2.574  → ~72.4 / 100
-//  1500 games, 64% WR  → raw 2.937  → ~82.6 / 100
-// =============================================
-const SCORE_CEILING = Math.log(9748) * (0.6222 * 0.6222); // ≈ 3.555
-
-function calcScore(matches, wr) {
-  const lnMP  = Math.log(matches);
-  const wrDec = wr / 100;
-  const wrSq  = wrDec * wrDec;
-  const raw   = lnMP * wrSq;
-  const score = Math.min(100, (raw / SCORE_CEILING) * 100);
-  return { score, raw, lnMP, wrSq, wrDec };
-}
+function wrColor(wr) { return wr>=60?'#f5b942':wr>=55?'#3de87e':wr>=50?'#f5c842':'#f05060'; }
+function scoreColor(s) { return s>=75?'#f5b942':s>=50?'#3de87e':s>=30?'#f5c842':'#f05060'; }
 
 function renderH2H(data) {
   const grid = document.getElementById('h2h-grid');
   const empty = document.getElementById('h2h-empty');
   grid.innerHTML = '';
-
-  // Only heroes played by ≥2 players
-  const filtered = data.filter(row => {
-    const players = [row[2], row[3], row[4], row[5]];
-    return players.filter(p => p !== null).length >= 2;
-  });
-
-  if (filtered.length === 0) {
-    empty.style.display = 'block'; return;
-  }
+  const filtered = data.filter(row => row.slice(2).filter(p=>p!==null).length >= 2);
+  if (!filtered.length) { empty.style.display='block'; return; }
   empty.style.display = 'none';
 
   filtered.forEach(row => {
-    const [hero, role, p1, p2, p3, p4] = row;
-    const players = [p1, p2, p3, p4];
-    const present = players
-      .map((p, i) => p ? { idx: i, wr: p[1], matches: p[0] } : null)
-      .filter(Boolean);
-
-    // Compute power score per player — absolute ceiling scaled 0–100
-    present.forEach(p => {
-      p.scoreObj = calcScore(p.matches, p.wr);
-      p.score = p.scoreObj.score;
-    });
-
-    // Winner = highest weighted score
-    const winner = present.reduce((a, b) => a.score >= b.score ? a : b);
-    const verdictName = PLAYERS_META[winner.idx].name;
-    const verdictColor = PLAYERS_META[winner.idx].color;
-
-    // Sort present by score descending for summary
-    const ranked = [...present].sort((a, b) => b.score - a.score);
-    const scoreGap = (ranked[0].score - (ranked[1]?.score ?? ranked[0].score)).toFixed(1);
-    const contested = parseFloat(scoreGap) < 5;
-
-    let summaryNote = '';
-    if (present.length === 2) {
-      summaryNote = contested
-        ? `⚖️ Keputusan rapat (gap ${scoreGap} mata) — score terlalu dekat untuk kata pasti`
-        : `${verdictName} unggul ${scoreGap} mata weighted score (60% vol · 40% WR)`;
-    } else {
-      const avg = (present.reduce((s,p) => s+p.score, 0)/present.length).toFixed(1);
-      summaryNote = contested
-        ? `⚖️ ${present.length} player bersaing — keputusan rapat, gap ${scoreGap} mata sahaja`
-        : `${present.length} player · avg score ${avg} · ${verdictName} menang clear (+${scoreGap})`;
-    }
+    const [hero, role, ...pdata] = row;
+    const present = pdata.map((p,i) => p ? {idx:i, matches:p[0], wr:p[1]} : null).filter(Boolean);
+    present.forEach(p => { p.scoreObj = calcScore(p.matches, p.wr); p.score = p.scoreObj.score; });
+    const winner = present.reduce((a,b) => a.score >= b.score ? a : b);
+    const ranked = [...present].sort((a,b) => b.score-a.score);
+    const gap = (ranked[0].score - (ranked[1]?.score ?? ranked[0].score)).toFixed(1);
+    const contested = parseFloat(gap) < 5;
+    const wName = PLAYERS_META[winner.idx].name;
+    const wColor = PLAYERS_META[winner.idx].color;
+    const summary = contested ? `⚖️ Rapat (gap ${gap} mata) — contested` : `👑 ${wName} unggul +${gap} mata`;
 
     const card = document.createElement('div');
     card.className = 'h2h-card';
     card.dataset.role = role;
     card.dataset.hero = hero.toLowerCase();
 
-    let cellsHTML = '';
-    PLAYERS_META.forEach((pm, i) => {
-      const p = players[i];
+    let cells = '';
+    PLAYERS_META.forEach((pm,i) => {
+      const p = pdata[i];
       if (!p) {
-        cellsHTML += `
-          <div class="h2h-player-cell h2h-no-data">
-            <div class="h2h-cell-name">
-              <span class="h2h-cell-dot" style="background:${pm.color}"></span>
-              ${pm.name}
-            </div>
-            <div class="h2h-wr-big" style="color:var(--muted)">—</div>
-            <div class="h2h-matches-small">Tak main</div>
-            <div class="h2h-mini-bar"><div class="h2h-mini-fill" style="width:0%"></div></div>
-            <div style="font-size:0.6rem;color:var(--dim);margin-top:4px;font-family:'IBM Plex Mono',monospace">Score: —</div>
-          </div>`;
+        cells += `<div class="h2h-player-cell h2h-no-data">
+          <div class="h2h-cell-name"><span class="h2h-cell-dot" style="background:${pm.color}"></span>${pm.name.split(' ')[0]}</div>
+          <div class="h2h-wr-big" style="color:var(--muted)">—</div>
+          <div class="h2h-matches-small">Tak main</div>
+          <div class="h2h-mini-bar"></div>
+        </div>`;
       } else {
-        const [matches, wr] = p;
-        const pObj = present.find(x => x.idx === i);
-        const { score, raw, lnMP, wrSq } = pObj.scoreObj;
-        const isWinner = winner.idx === i;
-        const lowSample = matches < 30;
-        const wrBarW   = Math.min(100, Math.max(2, wr));
-        const barW     = Math.min(100, Math.max(2, score));
-        const lnBarW   = Math.min(100, (lnMP / 9.185) * 100);
-        const wrSqBarW = Math.min(100, wrSq * 100);
-
-        cellsHTML += `
-          <div class="h2h-player-cell" style="${isWinner ? 'background:rgba(255,255,255,0.025)' : ''}">
-            ${isWinner ? '<div class="h2h-crown">👑</div>' : ''}
-            <div class="h2h-cell-name">
-              <span class="h2h-cell-dot" style="background:${pm.color}"></span>
-              ${pm.name}
+        const pObj = present.find(x=>x.idx===i);
+        const {score,raw,lnMP,wrSq} = pObj.scoreObj;
+        const isW = winner.idx===i;
+        const low = p[0]<30;
+        cells += `<div class="h2h-player-cell" style="${isW?'background:rgba(255,255,255,0.025)':''}">
+          ${isW?'<div class="h2h-crown">👑</div>':''}
+          <div class="h2h-cell-name"><span class="h2h-cell-dot" style="background:${pm.color}"></span>${pm.name.split(' ')[0]}</div>
+          <div class="h2h-wr-big" style="color:${wrColor(p[1])}">${p[1]}%</div>
+          <div class="h2h-matches-small">${p[0].toLocaleString()}g${low?' ⚠️':''}</div>
+          <div class="h2h-mini-bar"><div class="h2h-mini-fill" style="width:${Math.min(100,p[1])}%;background:${wrColor(p[1])}"></div></div>
+          <div style="margin-top:6px;padding:5px 7px;background:rgba(0,0,0,0.25);border-radius:4px;border:1px solid rgba(255,255,255,0.04)">
+            <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:0.58rem;margin-bottom:3px">
+              <span style="color:var(--muted)">SCORE</span>
+              <span style="color:${scoreColor(score)};font-weight:700">${score.toFixed(1)}</span>
             </div>
-            <div class="h2h-wr-big" style="color:${wrColor(wr)}">${wr}%</div>
-            <div class="h2h-matches-small">${matches.toLocaleString()} games${lowSample ? ' ⚠️' : ''}</div>
-            <div class="h2h-mini-bar" title="Win Rate bar">
-              <div class="h2h-mini-fill" style="width:${wrBarW}%;background:${wrColor(wr)}"></div>
+            <div style="height:2px;background:#1a2340;border-radius:1px;overflow:hidden">
+              <div style="height:100%;width:${Math.min(100,score)}%;background:${scoreColor(score)};border-radius:1px"></div>
             </div>
-            <div style="margin-top:8px;padding:6px 8px;background:rgba(0,0,0,0.25);border-radius:5px;border:1px solid rgba(255,255,255,0.05)">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
-                <span style="font-family:'IBM Plex Mono',monospace;font-size:0.58rem;color:var(--muted);letter-spacing:1px">POWER SCORE</span>
-                <span style="font-family:'IBM Plex Mono',monospace;font-size:0.82rem;font-weight:700;color:${scoreColor(score)}">${score.toFixed(1)}<span style="font-size:0.52rem;opacity:0.5"> /100</span></span>
-              </div>
-              <div style="height:3px;background:#1a2340;border-radius:2px;margin-bottom:7px;overflow:hidden">
-                <div style="height:100%;width:${barW}%;background:${scoreColor(score)};border-radius:2px"></div>
-              </div>
-              <div style="display:flex;flex-direction:column;gap:3px">
-                <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:0.58rem">
-                  <span style="color:var(--muted)">ln(${matches.toLocaleString()})</span>
-                  <span style="color:#5ab4f0;font-weight:600">${lnMP.toFixed(3)}</span>
-                </div>
-                <div style="height:2px;background:#1a2340;border-radius:1px;overflow:hidden;margin-bottom:1px">
-                  <div style="height:100%;width:${lnBarW}%;background:#5ab4f0;opacity:0.6;border-radius:1px"></div>
-                </div>
-                <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:0.58rem">
-                  <span style="color:var(--muted)">${wr}%² = WR²</span>
-                  <span style="color:#f5b942;font-weight:600">${wrSq.toFixed(4)}</span>
-                </div>
-                <div style="height:2px;background:#1a2340;border-radius:1px;overflow:hidden">
-                  <div style="height:100%;width:${wrSqBarW}%;background:#f5b942;opacity:0.6;border-radius:1px"></div>
-                </div>
-                <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:0.55rem;margin-top:4px;padding-top:4px;border-top:1px solid rgba(255,255,255,0.05)">
-                  <span style="color:var(--muted)">raw = ln × WR²</span>
-                  <span style="color:${scoreColor(score)};font-weight:600">${raw.toFixed(4)}</span>
-                </div>
-              </div>
+            <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:0.55rem;margin-top:4px;color:var(--muted)">
+              <span>ln(${p[0]})=${lnMP.toFixed(2)}</span>
+              <span>WR²=${wrSq.toFixed(3)}</span>
             </div>
-          </div>`;
+          </div>
+        </div>`;
       }
     });
 
@@ -1750,350 +1043,199 @@ function renderH2H(data) {
       <div class="h2h-card-header">
         <span class="h2h-hero-name">${hero}</span>
         <span class="h2h-role-tag">${role}</span>
-        <span class="h2h-verdict-badge" style="background:${verdictColor}22;color:${verdictColor};border:1px solid ${verdictColor}44">
-          👑 ${verdictName}
-        </span>
+        <span class="h2h-verdict-badge" style="background:${wColor}22;color:${wColor};border:1px solid ${wColor}44">👑 ${wName}</span>
       </div>
-      <div class="h2h-players">${cellsHTML}</div>
-      <div class="h2h-summary">${summaryNote}</div>
-    `;
+      <div class="h2h-players">${cells}</div>
+      <div class="h2h-summary">${summary}</div>`;
     grid.appendChild(card);
   });
 }
-
-// Initial render
 renderH2H(H2H_DATA);
 
-// ===== HERO POOL PAGE =====
+let activeRole='all', activeSearch='';
+function filterH2H(r,btn) { activeRole=r; document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); applyH2H(); }
+function searchH2H(v) { activeSearch=v.toLowerCase().trim(); applyH2H(); }
+function applyH2H() {
+  let d = H2H_DATA;
+  if(activeRole!=='all') d=d.filter(r=>r[1]===activeRole);
+  if(activeSearch) d=d.filter(r=>r[0].toLowerCase().includes(activeSearch));
+  renderH2H(d);
+}
+
+// ===== POOL DATA =====
 const POOL_PLAYERS = [
-  {
-    pid: 'p1', color: '#f0a040', name: 'Fenrir', main: 'Chou', hp: '2619',
-    heroes: [
-      ['Chou','Fighter',701,58.2],['Claude','Marksman',340,58.5],['Ruby','Fighter',330,55.8],
-      ['Kagura','Mage',287,51.9],['Granger','Marksman',286,52.4],['Karrie','Marksman',266,58.6],
-      ['Pharsa','Mage',240,57.5],['X.Borg','Fighter',200,60.0],['Khufra','Tank',195,54.9],
-      ['Selena','Support',191,43.5],['Aurora','Mage',186,61.3],['Valentina','Mage',172,55.2],
-      ['Moskov','Marksman',164,60.4],['Roger','Marksman',147,61.2],['Kimmy','Marksman',135,50.4],
-      ['Minsitthar','Tank',127,54.3],['Lunox','Mage',124,51.6],['Xavier','Mage',118,50.8],
-      ['Beatrix','Marksman',116,51.7],['Lapu-Lapu','Fighter',115,59.1],['Grock','Tank',112,45.5],
-      ['Badang','Fighter',106,50.0],['Alpha','Fighter',104,63.5],['Alice','Mage',103,63.1],
-      ['Wanwan','Marksman',96,51.0],['Hanabi','Marksman',96,50.0],['Belerick','Tank',95,66.3],
-      ['Hylos','Tank',93,62.4],['Yve','Mage',91,62.6],['Lancelot','Assassin',86,58.1],
-      ['Luo Yi','Mage',86,55.8],['Tigreal','Tank',86,48.8],['Valir','Mage',81,58.0],
-      ['Leomord','Fighter',78,52.6],['Kaja','Support',74,51.4],['Lolita','Support',73,60.3],
-      ["Chang'e",'Mage',72,62.5],['Arlott','Fighter',69,63.8],['Vale','Mage',68,54.4],
-      ['Rafaela','Support',66,71.2],['Franco','Tank',66,45.5],['Esmeralda','Mage',66,43.9],
-      ['Khaleed','Fighter',65,58.5],['Dyrroth','Fighter',65,46.2],['Minotaur','Tank',64,60.9],
-      ['Gatotkaca','Tank',76,67.1],['Natan','Marksman',76,67.1],['Silvanna','Tank',76,60.5],
-    ]
-  },
-  {
-    pid: 'p2', color: '#a040f0', name: 'Tok Dalang', main: 'Zhask', hp: '4098',
-    heroes: [
-      ['Zhask','Mage',471,60.1],['Belerick','Tank',294,55.8],['X.Borg','Fighter',173,52.6],
-      ['Estes','Support',164,50.0],['Vexana','Mage',153,54.9],['Angela','Support',143,55.2],
-      ['Dyrroth','Fighter',91,62.6],['Tigreal','Tank',82,45.1],['Julian','Fighter',65,67.7],
-      ['Zhuxin','Mage',64,53.1],['Alpha','Fighter',58,48.3],['Gatotkaca','Tank',54,51.9],
-      ['Eudora','Mage',42,54.8],['Miya','Marksman',38,60.5],['Nana','Support',30,56.7],
-      ['Gord','Mage',28,57.1],['Aurora','Mage',26,42.3],['Layla','Marksman',23,43.5],
-      ['Minotaur','Tank',13,53.8],['Saber','Assassin',12,66.7],['Silvanna','Tank',12,58.3],
-      ['Cecilion','Mage',11,63.6],['Pharsa','Mage',11,45.5],['Moskov','Marksman',11,9.1],
-      ['Alucard','Fighter',10,70.0],['Roger','Marksman',9,66.7],['Sun','Fighter',9,66.7],
-      ['Hylos','Tank',9,33.3],['Franco','Tank',9,33.3],['Selena','Support',8,62.5],
-      ['Karrie','Marksman',7,42.9],['Badang','Fighter',7,42.9],['Fredrinn','Fighter',6,50.0],
-      ['Baxia','Tank',6,50.0],['Kimmy','Marksman',6,16.7],['Martis','Fighter',5,60.0],
-      ['Hanzo','Assassin',5,60.0],['Odette','Mage',5,60.0],['Atlas','Tank',4,50.0],
-      ['Chip','Tank',4,50.0],['Masha','Support',4,50.0],['Cyclops','Mage',4,25.0],
-      ['Leomord','Fighter',3,66.7],['Alice','Mage',3,33.3],['Johnson','Tank',3,33.3],
-      ['Carmilla','Support',2,100.0],['Bane','Fighter',2,50.0],['Suyou','Assassin',2,50.0],
-    ]
-  },
-  {
-    pid: 'p3', color: '#40b8f0', name: 'LeoXent', main: 'Gusion', hp: '2994',
-    heroes: [
-      ['Gusion','Assassin',1466,61.0],['Akai','Tank',951,56.5],['Kaja','Support',859,64.0],
-      ['Popol & Kupa','Marksman',611,63.2],['Luo Yi','Mage',572,60.1],['Argus','Fighter',537,53.8],
-      ['Grock','Tank',417,57.8],['Angela','Support',347,61.4],['Minsitthar','Tank',329,56.5],
-      ['Claude','Marksman',298,53.7],['Lancelot','Assassin',266,56.0],['Novaria','Mage',232,56.5],
-      ['Phoveus','Fighter',222,63.5],['Selena','Support',218,50.9],['X.Borg','Fighter',217,62.2],
-      ['Yi Sun-shin','Marksman',211,52.6],['Xavier','Mage',189,52.4],['Hayabusa','Assassin',153,58.8],['Hylos','Tank',145,53.1],
-      ['Atlas','Tank',128,61.7],['Zhask','Mage',125,64.0],['Khufra','Tank',125,52.8],
-      ['Johnson','Tank',124,57.3],['Granger','Marksman',123,52.8],['Alpha','Fighter',121,63.6],
-      ['Cecilion','Mage',116,65.5],['Cyclops','Mage',110,54.5],['Thamuz','Fighter',108,55.6],
-      ['Leomord','Fighter',107,57.0],['Tigreal','Tank',96,46.9],['Floryn','Support',91,64.8],
-      ['Helcurt','Assassin',90,63.3],['Gloo','Tank',87,58.6],['Melissa','Marksman',86,61.6],
-      ['Fanny','Assassin',78,50.0],['Franco','Tank',74,48.6],['Chou','Fighter',74,45.9],
-      ['Guinevere','Mage',73,53.4],['Harith','Mage',69,56.5],['Balmond','Fighter',67,47.8],
-      ['Estes','Support',60,55.0],['Diggie','Support',59,55.9],['Martis','Fighter',54,50.0],
-      ['Vexana','Mage',49,61.2],['Eudora','Mage',47,57.4],
-      ['Ruby','Fighter',43,69.8],['Nana','Support',35,57.1],['Gatotkaca','Tank',33,48.5],
-    ]
-  },
-  {
-    pid: 'p4', color: '#f04070', name: 'Sofea Trisha', main: 'Lancelot', hp: '1706',
-    heroes: [
-      ['Lancelot','Assassin',701,60.1],['Hayabusa','Assassin',522,58.8],['Gusion','Assassin',352,52.0],
-      ['Fanny','Assassin',308,45.8],['Harley','Mage',290,47.6],['Selena','Support',276,56.5],
-      ['Chou','Fighter',270,53.7],['Alucard','Fighter',207,55.6],['Kagura','Mage',204,48.0],
-      ['Moskov','Marksman',201,59.2],['Roger','Marksman',188,62.2],['Harith','Mage',185,58.4],
-      ['Natalia','Assassin',178,62.4],['Akai','Tank',176,52.3],['Alpha','Fighter',174,68.4],
-      ['Franco','Tank',157,48.4],['Miya','Marksman',144,56.2],['Balmond','Fighter',141,53.9],
-      ['Claude','Marksman',139,57.6],['Ruby','Fighter',135,56.3],['Helcurt','Assassin',122,59.0],
-      ['Saber','Assassin',118,55.9],['Julian','Fighter',117,52.1],['Lunox','Mage',116,60.3],
-      ['Lesley','Marksman',108,48.1],['Karrie','Marksman',107,55.1],['Hilda','Fighter',104,55.8],
-      ['Irithel','Marksman',96,50.0],['Karina','Assassin',93,50.5],['Layla','Marksman',86,52.3],
-      ['Johnson','Tank',86,51.2],['Bruno','Marksman',86,51.2],['Ling','Assassin',83,57.8],
-      ['Freya','Fighter',77,50.6],['Esmeralda','Mage',75,61.3],['Granger','Marksman',74,52.7],
-      ['Aurora','Mage',73,45.2],['Beatrix','Marksman',70,50.0],['Xavier','Mage',69,62.3],
-      ['Clint','Marksman',67,53.7],['Gatotkaca','Tank',61,59.0],['Joy','Mage',61,44.3],
-      ['Guinevere','Mage',60,51.7],['Natan','Marksman',60,56.7],['Grock','Tank',59,49.2],
-      ['Valentina','Mage',56,48.2],['Gloo','Tank',61,63.9],['Badang','Fighter',64,54.7],
-    ]
-  }
+  { pid:'p1', color:'#f0a040', name:'Fenrir', emoji:'🟠', main:'Chou', heroes:[
+    ['Chou','Fighter',701,58.2],['Claude','Marksman',340,58.5],['Ruby','Fighter',330,55.8],
+    ['Kagura','Mage',287,51.9],['Granger','Marksman',286,52.4],['Karrie','Marksman',266,58.6],
+    ['Pharsa','Mage',240,57.5],['X.Borg','Fighter',200,60.0],['Khufra','Tank',195,54.9],
+    ['Selena','Support',191,43.5],['Aurora','Mage',186,61.3],['Valentina','Mage',172,55.2],
+    ['Moskov','Marksman',164,60.4],['Roger','Marksman',147,61.2],['Kimmy','Marksman',135,50.4],
+    ['Minsitthar','Tank',127,54.3],['Lunox','Mage',124,51.6],['Xavier','Mage',118,50.8],
+    ['Beatrix','Marksman',116,51.7],['Lapu-Lapu','Fighter',115,59.1],['Grock','Tank',112,45.5],
+    ['Badang','Fighter',106,50.0],['Alpha','Fighter',104,63.5],['Alice','Mage',103,63.1],
+    ['Wanwan','Marksman',96,51.0],['Hanabi','Marksman',96,50.0],['Belerick','Tank',95,66.3],
+    ['Hylos','Tank',93,62.4],['Yve','Mage',91,62.6],['Lancelot','Assassin',86,58.1],
+    ['Luo Yi','Mage',86,55.8],['Tigreal','Tank',86,48.8],['Valir','Mage',81,58.0],
+    ['Leomord','Fighter',78,52.6],['Kaja','Support',74,51.4],['Lolita','Support',73,60.3],
+    ["Chang'e",'Mage',72,62.5],['Arlott','Fighter',69,63.8],['Vale','Mage',68,54.4],
+    ['Rafaela','Support',66,71.2],['Franco','Tank',66,45.5],['Esmeralda','Mage',66,43.9],
+    ['Khaleed','Fighter',65,58.5],['Dyrroth','Fighter',65,46.2],['Minotaur','Tank',64,60.9],
+    ['Gatotkaca','Tank',76,67.1],['Natan','Marksman',76,67.1],['Silvanna','Tank',76,60.5],
+  ]},
+  { pid:'p2', color:'#a040f0', name:'Tok Dalang', emoji:'🟣', main:'Zhask', heroes:[
+    ['Zhask','Mage',471,60.1],['Belerick','Tank',294,55.8],['X.Borg','Fighter',173,52.6],
+    ['Estes','Support',164,50.0],['Vexana','Mage',153,54.9],['Angela','Support',143,55.2],
+    ['Dyrroth','Fighter',91,62.6],['Tigreal','Tank',82,45.1],['Julian','Fighter',65,67.7],
+    ['Zhuxin','Mage',64,53.1],['Alpha','Fighter',58,48.3],['Gatotkaca','Tank',54,51.9],
+    ['Eudora','Mage',42,54.8],['Miya','Marksman',38,60.5],['Nana','Support',30,56.7],
+    ['Gord','Mage',28,57.1],['Aurora','Mage',26,42.3],['Layla','Marksman',23,43.5],
+    ['Minotaur','Tank',13,53.8],['Saber','Assassin',12,66.7],['Silvanna','Tank',12,58.3],
+    ['Cecilion','Mage',11,63.6],['Pharsa','Mage',11,45.5],['Moskov','Marksman',11,9.1],
+    ['Alucard','Fighter',10,70.0],['Roger','Marksman',9,66.7],['Sun','Fighter',9,66.7],
+    ['Hylos','Tank',9,33.3],['Franco','Tank',9,33.3],['Selena','Support',8,62.5],
+    ['Karrie','Marksman',7,42.9],['Badang','Fighter',7,42.9],['Fredrinn','Fighter',6,50.0],
+    ['Baxia','Tank',6,50.0],['Kimmy','Marksman',6,16.7],['Martis','Fighter',5,60.0],
+    ['Hanzo','Assassin',5,60.0],['Odette','Mage',5,60.0],['Atlas','Tank',4,50.0],
+    ['Chip','Tank',4,50.0],['Masha','Support',4,50.0],['Cyclops','Mage',4,25.0],
+    ['Leomord','Fighter',3,66.7],['Alice','Mage',3,33.3],['Johnson','Tank',3,33.3],
+    ['Carmilla','Support',2,100.0],['Bane','Fighter',2,50.0],['Suyou','Assassin',2,50.0],
+  ]},
+  { pid:'p3', color:'#40b8f0', name:'LeoXent', emoji:'🔵', main:'Gusion', heroes:[
+    ['Gusion','Assassin',1466,61.0],['Akai','Tank',951,56.5],['Kaja','Support',859,64.0],
+    ['Popol & Kupa','Marksman',611,63.2],['Luo Yi','Mage',572,60.1],['Argus','Fighter',537,53.8],
+    ['Grock','Tank',417,57.8],['Angela','Support',347,61.4],['Minsitthar','Tank',329,56.5],
+    ['Claude','Marksman',298,53.7],['Lancelot','Assassin',266,56.0],['Novaria','Mage',232,56.5],
+    ['Phoveus','Fighter',222,63.5],['Selena','Support',218,50.9],['X.Borg','Fighter',217,62.2],
+    ['Yi Sun-shin','Marksman',211,52.6],['Xavier','Mage',189,52.4],['Hayabusa','Assassin',153,58.8],
+    ['Hylos','Tank',145,53.1],['Atlas','Tank',128,61.7],['Zhask','Mage',125,64.0],
+    ['Khufra','Tank',125,52.8],['Johnson','Tank',124,57.3],['Granger','Marksman',123,52.8],
+    ['Alpha','Fighter',121,63.6],['Cecilion','Mage',116,65.5],['Cyclops','Mage',110,54.5],
+    ['Thamuz','Fighter',108,55.6],['Leomord','Fighter',107,57.0],['Tigreal','Tank',96,46.9],
+    ['Floryn','Support',91,64.8],['Helcurt','Assassin',90,63.3],['Gloo','Tank',87,58.6],
+    ['Melissa','Marksman',86,61.6],['Fanny','Assassin',78,50.0],['Franco','Tank',74,48.6],
+    ['Chou','Fighter',74,45.9],['Guinevere','Mage',73,53.4],['Harith','Mage',69,56.5],
+    ['Balmond','Fighter',67,47.8],['Estes','Support',60,55.0],['Diggie','Support',59,55.9],
+    ['Martis','Fighter',54,50.0],['Vexana','Mage',49,61.2],['Eudora','Mage',47,57.4],
+    ['Ruby','Fighter',43,69.8],['Nana','Support',35,57.1],['Gatotkaca','Tank',33,48.5],
+  ]},
+  { pid:'p4', color:'#f04070', name:'Sofea Trisha', emoji:'🔴', main:'Lancelot', heroes:[
+    ['Lancelot','Assassin',701,60.1],['Hayabusa','Assassin',522,58.8],['Gusion','Assassin',352,52.0],
+    ['Fanny','Assassin',308,45.8],['Harley','Mage',290,47.6],['Selena','Support',276,56.5],
+    ['Chou','Fighter',270,53.7],['Alucard','Fighter',207,55.6],['Kagura','Mage',204,48.0],
+    ['Moskov','Marksman',201,59.2],['Roger','Marksman',188,62.2],['Harith','Mage',185,58.4],
+    ['Natalia','Assassin',178,62.4],['Akai','Tank',176,52.3],['Alpha','Fighter',174,68.4],
+    ['Franco','Tank',157,48.4],['Miya','Marksman',144,56.2],['Balmond','Fighter',141,53.9],
+    ['Claude','Marksman',139,57.6],['Ruby','Fighter',135,56.3],['Helcurt','Assassin',122,59.0],
+    ['Saber','Assassin',118,55.9],['Julian','Fighter',117,52.1],['Lunox','Mage',116,60.3],
+    ['Lesley','Marksman',108,48.1],['Karrie','Marksman',107,55.1],['Hilda','Fighter',104,55.8],
+    ['Irithel','Marksman',96,50.0],['Karina','Assassin',93,50.5],['Layla','Marksman',86,52.3],
+    ['Johnson','Tank',86,51.2],['Bruno','Marksman',86,51.2],['Ling','Assassin',83,57.8],
+    ['Freya','Fighter',77,50.6],['Esmeralda','Mage',75,61.3],['Granger','Marksman',74,52.7],
+    ['Aurora','Mage',73,45.2],['Beatrix','Marksman',70,50.0],['Xavier','Mage',69,62.3],
+    ['Clint','Marksman',67,53.7],['Gatotkaca','Tank',61,59.0],['Joy','Mage',61,44.3],
+    ['Guinevere','Mage',60,51.7],['Natan','Marksman',60,56.7],['Grock','Tank',59,49.2],
+    ['Valentina','Mage',56,48.2],['Gloo','Tank',61,63.9],['Badang','Fighter',64,54.7],
+  ]},
+  { pid:'p5', color:'#40e0a0', name:'Smurff', emoji:'🟢', main:'Franco', heroes:[
+    ['Franco','Tank',900,61.2],['Edith','Tank',833,64.6],['Guinevere','Mage',184,56.0],
+    ['Tigreal','Tank',117,59.0],['Freya','Fighter',83,55.4],['Phoveus','Fighter',58,58.6],
+    ['Hylos','Tank',54,70.4],['Cici','Fighter',42,57.1],['Estes','Support',40,67.5],
+    ['Roger','Marksman',39,71.8],['Carmilla','Support',39,51.3],['Lesley','Marksman',38,42.1],
+    ['Yu Zhong','Fighter',35,51.4],['Irithel','Marksman',32,50.0],['Hanabi','Marksman',29,69.0],
+    ['Cyclops','Mage',27,66.7],['Saber','Assassin',27,55.6],['Akai','Tank',26,53.8],
+    ['Layla','Marksman',23,87.0],['Alpha','Fighter',23,60.9],['Zhask','Mage',21,71.4],
+    ['Alucard','Fighter',19,57.9],['Gloo','Tank',18,38.9],['Helcurt','Assassin',17,58.8],
+    ['Miya','Marksman',15,46.7],['Nana','Support',14,57.1],['Cecilion','Mage',14,42.9],
+    ['Eudora','Mage',14,28.6],['Atlas','Tank',9,44.4],['Zilong','Fighter',8,25.0],
+    ['Balmond','Fighter',7,57.1],['Luo Yi','Mage',7,57.1],['Uranus','Tank',6,66.7],
+    ['Khufra','Tank',6,50.0],['Kimmy','Marksman',6,50.0],['Gord','Mage',6,33.3],
+    ['Diggie','Support',5,20.0],['Karina','Assassin',5,20.0],['Hanzo','Assassin',5,20.0],
+    ['Gusion','Assassin',5,0.0],['Angela','Support',4,75.0],['Sun','Fighter',4,50.0],
+    ['Johnson','Tank',4,50.0],['Natalia','Assassin',3,100.0],['Kalea','Support',3,66.7],
+    ["Chang'e",'Mage',3,66.7],['Harith','Mage',3,66.7],['Hayabusa','Assassin',3,33.3],
+  ]},
 ];
 
 const POOL_CEILING = Math.log(9748) * (0.6222 * 0.6222);
-function calcPoolScore(m, wr) {
-  return Math.min(100, (Math.log(m) * Math.pow(wr/100, 2) / POOL_CEILING) * 100);
-}
+function poolScore(m,wr) { return Math.min(100,(Math.log(m)*Math.pow(wr/100,2)/POOL_CEILING)*100); }
+function poolWrColor(wr) { return wr>=60?'#f5b942':wr>=55?'#3de87e':wr>=50?'#f5c842':'#f05060'; }
 
-function poolWrColor(wr) {
-  if (wr >= 60) return '#f5b942';
-  if (wr >= 55) return '#3de87e';
-  if (wr >= 50) return '#f5c842';
-  return '#f05060';
-}
-
-function renderPoolSection(p) {
-  const totalMatches = p.heroes.reduce((a,h) => a+h[2], 0);
-  const avgWR = (p.heroes.reduce((a,h) => a+h[3], 0) / p.heroes.length).toFixed(1);
-  const highWR = [...p.heroes].sort((a,b)=>b[3]-a[3])[0];
-  const highMatches = p.heroes[0];
-  const scores = p.heroes.map(h => calcPoolScore(h[2],h[3]));
-  const avgScore = (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1);
-
+function buildPoolSection(p) {
+  const total = p.heroes.reduce((a,h)=>a+h[2],0);
+  const avgWR = (p.heroes.reduce((a,h)=>a+h[3],0)/p.heroes.length).toFixed(1);
+  const bestWR = [...p.heroes].sort((a,b)=>b[3]-a[3])[0];
   const rows = p.heroes.map((h,i) => {
-    const [name, role, matches, wr] = h;
-    const score = calcPoolScore(matches, wr);
-    const barW = Math.min(100, Math.max(2, wr));
-    let rankColor = 'var(--muted)'; let rankBg = '#1a2340';
-    if (i===0) { rankColor='#000'; rankBg='#f0a040'; }
-    else if (i===1) { rankColor='#000'; rankBg='#9ea8b8'; }
-    else if (i===2) { rankColor='#000'; rankBg='#c07838'; }
-    return `<tr style="border-bottom:1px solid rgba(28,42,68,0.4);">
-      <td style="padding:6px 12px;text-align:center;">
-        <span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:0.62rem;font-weight:700;font-family:'Rajdhani',sans-serif;background:${rankBg};color:${rankColor}">${i+1}</span>
-      </td>
-      <td style="padding:6px 12px;font-weight:600;color:#d8e8ff;font-size:0.82rem;">${name}</td>
-      <td style="padding:6px 12px;">
-        <span style="font-size:0.58rem;padding:1px 5px;border-radius:3px;background:rgba(255,255,255,0.05);color:var(--muted);font-weight:700;letter-spacing:0.5px;text-transform:uppercase;">${role}</span>
-      </td>
-      <td style="padding:6px 12px;text-align:right;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:0.75rem;">${matches.toLocaleString()}</td>
-      <td style="padding:6px 12px;min-width:130px;">
-        <div style="display:flex;align-items:center;gap:7px;">
-          <div style="flex:1;height:4px;background:#1a2340;border-radius:2px;overflow:hidden;">
-            <div style="height:100%;width:${barW}%;background:${poolWrColor(wr)};border-radius:2px;"></div>
-          </div>
-          <span style="font-family:'Rajdhani',sans-serif;font-size:0.82rem;font-weight:700;color:${poolWrColor(wr)};min-width:44px;text-align:right;">${wr}%</span>
+    const [name,role,m,wr] = h;
+    const sc = poolScore(m,wr);
+    const bg = i===0?'#f0a040':i===1?'#9ea8b8':i===2?'#c07838':'#1a2340';
+    const fc = i<3?'#000':'var(--muted)';
+    return `<tr style="border-bottom:1px solid rgba(28,42,68,0.4)">
+      <td style="padding:5px 10px;text-align:center"><span style="display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;border-radius:50%;font-size:0.6rem;font-weight:700;background:${bg};color:${fc}">${i+1}</span></td>
+      <td style="padding:5px 10px;font-weight:600;color:#d8e8ff;font-size:0.8rem">${name}</td>
+      <td style="padding:5px 10px"><span style="font-size:0.55rem;padding:1px 5px;border-radius:3px;background:rgba(255,255,255,0.05);color:var(--muted);font-weight:700;text-transform:uppercase">${role}</span></td>
+      <td style="padding:5px 10px;text-align:right;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:0.72rem">${m.toLocaleString()}</td>
+      <td style="padding:5px 10px;min-width:120px">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="flex:1;height:4px;background:#1a2340;border-radius:2px;overflow:hidden"><div style="height:100%;width:${Math.min(100,wr)}%;background:${poolWrColor(wr)};border-radius:2px"></div></div>
+          <span style="font-family:'Rajdhani',sans-serif;font-size:0.8rem;font-weight:700;color:${poolWrColor(wr)};min-width:40px;text-align:right">${wr}%</span>
         </div>
       </td>
-      <td style="padding:6px 12px;text-align:right;">
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;font-weight:600;color:${score>=50?'#3de87e':score>=30?'#f5c842':'#f05060'}">${score.toFixed(1)}</span>
-      </td>
+      <td style="padding:5px 10px;text-align:right"><span style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;font-weight:600;color:${sc>=50?'#3de87e':sc>=30?'#f5c842':'#f05060'}">${sc.toFixed(1)}</span></td>
     </tr>`;
   }).join('');
-
-  return `
-  <div class="player-section-pool" id="pool-sec-${p.pid}" data-pp="${p.pid}" style="margin-bottom:48px;">
-    <div style="display:flex;align-items:center;gap:14px;padding:12px 18px;background:linear-gradient(135deg,#0d1220,#060911);border-radius:10px 10px 0 0;border-left:4px solid ${p.color};border-bottom:1px solid var(--border);">
-      <div style="width:10px;height:10px;border-radius:50%;background:${p.color};box-shadow:0 0 8px ${p.color};flex-shrink:0;"></div>
+  return `<div class="player-section-pool" id="pool-sec-${p.pid}" data-pp="${p.pid}" style="margin-bottom:44px">
+    <div style="display:flex;align-items:center;gap:12px;padding:11px 16px;background:linear-gradient(135deg,#0d1220,#060911);border-radius:10px 10px 0 0;border-left:4px solid ${p.color};border-bottom:1px solid var(--border)">
+      <div style="width:9px;height:9px;border-radius:50%;background:${p.color};box-shadow:0 0 7px ${p.color}"></div>
       <div>
-        <div style="font-family:'Rajdhani',sans-serif;font-size:1.1rem;font-weight:700;letter-spacing:1px;">${p.name}</div>
-        <div style="font-size:0.72rem;color:var(--muted);margin-top:2px;">
-          Main: <strong style="color:#aac">${p.main}</strong>
-          <span style="margin:0 10px;opacity:0.4">|</span>
-          Total Matches: <strong style="color:#aac">${totalMatches.toLocaleString()}</strong>
-          <span style="margin:0 10px;opacity:0.4">|</span>
-          Avg WR: <strong style="color:${poolWrColor(parseFloat(avgWR))}">${avgWR}%</strong>
-          <span style="margin:0 10px;opacity:0.4">|</span>
-          Avg Score: <strong style="color:#5ab4f0">${avgScore}</strong>
-        </div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:700;letter-spacing:1px">${p.name}</div>
+        <div style="font-size:0.68rem;color:var(--muted);margin-top:1px">Main: <strong style="color:#aac">${p.main}</strong> · Total: <strong style="color:#aac">${total.toLocaleString()}</strong> matches · Avg WR: <strong style="color:${poolWrColor(parseFloat(avgWR))}">${avgWR}%</strong> · Best: <strong style="color:#f5b942">${bestWR[0]} ${bestWR[3]}%</strong></div>
       </div>
     </div>
-    <div style="background:var(--s1);border:1px solid var(--border);border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
-      <table style="width:100%;border-collapse:collapse;">
-        <thead>
-          <tr style="background:#090d18;border-bottom:1px solid var(--border);">
-            <th style="padding:8px 12px;text-align:center;color:var(--muted);font-size:0.65rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;width:44px;">#</th>
-            <th style="padding:8px 12px;text-align:left;color:var(--muted);font-size:0.65rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;">Hero</th>
-            <th style="padding:8px 12px;text-align:left;color:var(--muted);font-size:0.65rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;">Role</th>
-            <th style="padding:8px 12px;text-align:right;color:var(--muted);font-size:0.65rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;width:80px;">Matches</th>
-            <th style="padding:8px 12px;text-align:left;color:var(--muted);font-size:0.65rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;width:160px;">Win Rate</th>
-            <th style="padding:8px 12px;text-align:right;color:var(--muted);font-size:0.65rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;width:70px;">Score</th>
-          </tr>
-        </thead>
+    <div style="background:var(--s1);border:1px solid var(--border);border-top:none;border-radius:0 0 10px 10px;overflow:hidden">
+      <table style="width:100%;border-collapse:collapse">
+        <thead><tr style="background:#090d18;border-bottom:1px solid var(--border)">
+          <th style="padding:7px 10px;text-align:center;color:var(--muted);font-size:0.6rem;letter-spacing:1.5px;text-transform:uppercase;width:36px">#</th>
+          <th style="padding:7px 10px;text-align:left;color:var(--muted);font-size:0.6rem;letter-spacing:1.5px;text-transform:uppercase">Hero</th>
+          <th style="padding:7px 10px;text-align:left;color:var(--muted);font-size:0.6rem;letter-spacing:1.5px;text-transform:uppercase">Role</th>
+          <th style="padding:7px 10px;text-align:right;color:var(--muted);font-size:0.6rem;letter-spacing:1.5px;text-transform:uppercase;width:70px">Matches</th>
+          <th style="padding:7px 10px;text-align:left;color:var(--muted);font-size:0.6rem;letter-spacing:1.5px;text-transform:uppercase;width:150px">Win Rate</th>
+          <th style="padding:7px 10px;text-align:right;color:var(--muted);font-size:0.6rem;letter-spacing:1.5px;text-transform:uppercase;width:60px">Score</th>
+        </tr></thead>
         <tbody>${rows}</tbody>
       </table>
-      <div style="display:flex;gap:20px;padding:9px 18px;background:#0a0f1c;border-top:1px solid var(--border);font-size:0.72rem;color:var(--muted);">
-        <span>Best WR: <strong style="color:#f5b942">${highWR[0]} ${highWR[3]}%</strong></span>
-        <span>Most Played: <strong style="color:var(--text)">${highMatches[0]} (${highMatches[2].toLocaleString()})</strong></span>
-        <span>Heroes: <strong style="color:var(--text)">${p.heroes.length}</strong></span>
-      </div>
     </div>
   </div>`;
 }
 
-function renderPoolAnalysis() {
-  // Role distribution per player
-  const roleDist = document.getElementById('role-dist-grid');
-  roleDist.innerHTML = POOL_PLAYERS.map(p => {
-    const roleCounts = {};
-    p.heroes.forEach(h => { roleCounts[h[1]] = (roleCounts[h[1]]||0)+1; });
-    const sorted = Object.entries(roleCounts).sort((a,b)=>b[1]-a[1]);
-    const total = p.heroes.length;
-    const roleColors = {
-      'Assassin':'#a040f0','Fighter':'#f0a040','Mage':'#5ab4f0',
-      'Marksman':'#3de87e','Tank':'#f5b942','Support':'#f05060'
-    };
-    const bars = sorted.map(([role,count]) => {
-      const pct = ((count/total)*100).toFixed(0);
-      return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">
-        <span style="font-size:0.68rem;color:var(--muted);width:72px;flex-shrink:0;">${role}</span>
-        <div style="flex:1;height:6px;background:#1a2340;border-radius:3px;overflow:hidden;">
-          <div style="height:100%;width:${(count/total)*100}%;background:${roleColors[role]||'#5ab4f0'};border-radius:3px;opacity:0.8;"></div>
-        </div>
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--text);min-width:32px;">${count} (${pct}%)</span>
-      </div>`;
-    }).join('');
-    return `<div style="background:var(--s1);border:1px solid var(--border);border-radius:10px;overflow:hidden;">
-      <div style="padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;">
-        <div style="width:8px;height:8px;border-radius:50%;background:${p.color};box-shadow:0 0 6px ${p.color};"></div>
-        <span style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.9rem;letter-spacing:1px;">${p.name}</span>
-        <span style="margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--muted);">${p.heroes.length} heroes</span>
-      </div>
-      <div style="padding:12px 14px;">${bars}</div>
-    </div>`;
-  }).join('');
+// Build pool tabs & sections
+const poolTabBar = document.getElementById('pool-tabs');
+const poolSections = document.getElementById('pool-sections');
+const allTab = document.createElement('button');
+allTab.className = 'pool-tab';
+allTab.style.cssText = 'background:#7eb8ff;color:#000;border-color:transparent';
+allTab.textContent = 'All Players';
+allTab.onclick = () => { switchPool('all', allTab); };
+poolTabBar.appendChild(allTab);
 
-  // Key insights
-  const insightEl = document.getElementById('pool-insights');
-  const insights = [
-    {
-      title: '🎯 LeoXent — Pool Paling Balanced',
-      text: 'LeoXent ada coverage paling luas merentasi semua 6 role. Gusion (1,466 games, 61%) tunjukkan mastery genuine, tapi yang menarik dia ada Kaja (859, 64%) dan Akai (951, 56.5%) — tanda dia boleh carry ATAU support team. True flex player.'
-    },
-    {
-      title: '🗡️ Sofea Trisha — Assassin-Heavy',
-      text: 'Hampir 30% pool dia adalah Assassin. Lancelot + Hayabusa + Gusion + Fanny + Natalia + Karina + Ling + Saber + Helcurt = 9 assassins dalam top 48. High ceiling bila meta sesuai, tapi sangat terdedah bila semua kena ban.'
-    },
-    {
-      title: '🟣 Tok Dalang — Small Sample Warning',
-      text: 'Tok Dalang ada banyak heroes dengan hanya 2–10 games (Carmilla 2 games, 100% WR — meaningless). Pool dia shallow dan stats fluctuate. Zhask (471 games) adalah satu-satunya hero dengan sample size reliable. Kena expand urgent.'
-    },
-    {
-      title: '🟠 Fenrir — Versatile tapi Thin',
-      text: 'Fenrir cover semua role tapi banyak hero dia dalam range 60–110 games — cukup untuk trend, belum cukup untuk kesimpulan kuat. Kelebihan dia: dia comfortable main role apa pun. Berguna dalam group yang perlu flex tanpa forced pick.'
-    },
-    {
-      title: '📊 Power Score Gap Gusion vs Lancelot',
-      text: 'LeoXent Gusion power score ~84 (1466 games × 61% WR). Sofea Lancelot power score ~73 (701 games × 60.1% WR). Perbezaan besar — volume Gusion dalam top 48 adalah rekod tertinggi dalam keseluruhan dataset 4 player ni.'
-    },
-    {
-      title: '⚠️ Red Flags Dalam Pool',
-      text: 'Fenrir Selena 43.5% (191 games) — banyak games tapi WR under 50. Tok Dalang Moskov 9.1% (11 games) — perlu drop. Sofea Fanny 45.8% (308 games) — games banyak tapi WR teruk, tanda hero yang force main tapi belum mastered. Grock Fenrir 45.5% (112 games) — patut reconsider.'
-    }
-  ];
-  insightEl.innerHTML = insights.map(ins => `
-    <div style="background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:8px;padding:11px 13px;">
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:#5ab4f0;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;">${ins.title}</div>
-      <div style="font-size:0.78rem;line-height:1.65;color:#8aa8c8;">${ins.text}</div>
-    </div>
-  `).join('');
-
-  // Hero dominance — heroes played by 2+ players
-  const heroMap = {};
-  POOL_PLAYERS.forEach((p, pi) => {
-    p.heroes.forEach(h => {
-      if (!heroMap[h[0]]) heroMap[h[0]] = { role: h[1], players: [] };
-      heroMap[h[0]].players.push({ pidx: pi, name: p.name, color: p.color, matches: h[2], wr: h[3] });
-    });
-  });
-  const shared = Object.entries(heroMap)
-    .filter(([,v]) => v.players.length >= 2)
-    .map(([hero, v]) => {
-      const winner = v.players.reduce((a,b) => calcPoolScore(a.matches,a.wr) >= calcPoolScore(b.matches,b.wr) ? a : b);
-      return { hero, role: v.role, players: v.players, winner };
-    })
-    .sort((a,b) => {
-      const scoreA = calcPoolScore(a.winner.matches, a.winner.wr);
-      const scoreB = calcPoolScore(b.winner.matches, b.winner.wr);
-      return scoreB - scoreA;
-    });
-
-  const domEl = document.getElementById('pool-dominance');
-  domEl.innerHTML = shared.map(({hero, role, players, winner}) => {
-    const playerDots = players.map(p =>
-      `<span style="width:6px;height:6px;border-radius:50%;background:${p.color};display:inline-block;margin-right:2px;" title="${p.name}"></span>`
-    ).join('');
-    const winScore = calcPoolScore(winner.matches, winner.wr);
-    return `<div style="background:rgba(255,255,255,0.025);border:1px solid var(--border);border-radius:7px;padding:9px 11px;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:6px;margin-bottom:4px;">
-        <span style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.85rem;color:#d8e8ff;">${hero}</span>
-        <span style="font-size:0.55rem;padding:1px 4px;border-radius:2px;background:rgba(255,255,255,0.05);color:var(--muted);text-transform:uppercase;font-weight:700;flex-shrink:0;">${role}</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:5px;margin-bottom:5px;">${playerDots}<span style="font-size:0.6rem;color:var(--muted);margin-left:2px;">${players.length} players</span></div>
-      <div style="font-size:0.65rem;color:var(--muted);">Winner: <strong style="color:${winner.color}">${winner.name}</strong></div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--muted);">${winner.matches} games · ${winner.wr}% WR · Score: <span style="color:${winScore>=50?'#3de87e':'#f5c842'}">${winScore.toFixed(1)}</span></div>
-    </div>`;
-  }).join('');
-}
-
-function renderAllPools() {
-  const container = document.getElementById('pool-sections');
-  container.innerHTML = POOL_PLAYERS.map(renderPoolSection).join('');
-}
+POOL_PLAYERS.forEach(p => {
+  const btn = document.createElement('button');
+  btn.className = 'pool-tab';
+  btn.textContent = `${p.emoji} ${p.name}`;
+  btn.dataset.pp = p.pid;
+  btn.onclick = () => switchPool(p.pid, btn);
+  poolTabBar.appendChild(btn);
+  poolSections.insertAdjacentHTML('beforeend', buildPoolSection(p));
+});
 
 function switchPool(pp, btn) {
-  document.querySelectorAll('.pool-tab').forEach(t => {
-    t.style.background = 'transparent';
-    t.style.color = 'var(--muted)';
-    t.style.borderColor = 'var(--border)';
-  });
-  btn.style.background = pp === 'all' ? '#7eb8ff' : pp === 'p1' ? '#f0a040' : pp === 'p2' ? '#a040f0' : pp === 'p3' ? '#40b8f0' : '#f04070';
+  document.querySelectorAll('.pool-tab').forEach(t => { t.style.background='transparent'; t.style.color='var(--muted)'; t.style.borderColor='var(--border)'; });
+  const colors = { all:'#7eb8ff', p1:'#f0a040', p2:'#a040f0', p3:'#40b8f0', p4:'#f04070', p5:'#40e0a0' };
+  btn.style.background = colors[pp] || '#7eb8ff';
   btn.style.color = '#000';
   btn.style.borderColor = 'transparent';
-
-  document.querySelectorAll('.player-section-pool').forEach(sec => {
-    if (pp === 'all' || sec.dataset.pp === pp) sec.style.display = 'block';
-    else sec.style.display = 'none';
+  document.querySelectorAll('.player-section-pool').forEach(s => {
+    s.style.display = (pp==='all' || s.dataset.pp===pp) ? 'block' : 'none';
   });
-  // Show/hide analysis only on 'all'
-  document.getElementById('pool-analysis-section').style.display = pp === 'all' ? 'block' : 'none';
-}
-
-// Init pool page
-renderAllPools();
-renderPoolAnalysis();
-
-// Filter
-let activeRole = 'all';
-let activeSearch = '';
-
-function filterH2H(role, btn) {
-  activeRole = role;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  applyFilters();
-}
-function searchH2H(val) {
-  activeSearch = val.toLowerCase().trim();
-  applyFilters();
-}
-function applyFilters() {
-  let data = H2H_DATA;
-  if (activeRole !== 'all') data = data.filter(r => r[1] === activeRole);
-  if (activeSearch) data = data.filter(r => r[0].toLowerCase().includes(activeSearch));
-  renderH2H(data);
 }
 </script>
 </body>
