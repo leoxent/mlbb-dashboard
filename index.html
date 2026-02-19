@@ -720,6 +720,7 @@ body::before {
   <div class="page-nav">
     <button class="page-btn active" onclick="switchPage('main', this)">📊 Main Analysis</button>
     <button class="page-btn" onclick="switchPage('h2h', this)">⚔️ Head to Head</button>
+    <button class="page-btn" onclick="switchPage('pool', this)">🃏 Hero Pool</button>
   </div>
 
   <!-- =================== PAGE 1: MAIN =================== -->
@@ -1366,6 +1367,66 @@ body::before {
 
   </div><!-- end page-h2h -->
 
+  <!-- =================== PAGE 3: HERO POOL =================== -->
+  <div class="page" id="page-pool">
+
+    <div class="hdr" style="margin-bottom:24px;">
+      <div class="hdr-tag">Hero Pool Breakdown · Top 48</div>
+      <h1>Hero <span>Pool</span></h1>
+      <div class="hdr-sub">Top 48 heroes paling banyak dimainkan · Sorted by Matches</div>
+    </div>
+
+    <div class="disclaimer">
+      <span class="disclaimer-icon">ℹ️</span>
+      <span>
+        <strong>Nota:</strong> Hanya top 48 hero (by matches) untuk setiap player yang ditampilkan di sini.
+        Warna WR: <strong style="color:#f5b942">Kuning ≥ 60%</strong> · <strong style="color:#3de87e">Hijau 55–59%</strong> · <strong style="color:#f5c842">Amber 50–54%</strong> · <strong style="color:#f05060">Merah &lt;50%</strong>.
+        Power Score = ln(Matches) × WR² dinormalize 0–100.
+      </span>
+    </div>
+
+    <!-- Pool filter tabs -->
+    <div class="tabs" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px;">
+      <button class="pool-tab active" data-pp="all" onclick="switchPool('all',this)"
+        style="padding:6px 18px;border-radius:99px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:1px;cursor:pointer;transition:all .2s;">All Players</button>
+      <button class="pool-tab" data-pp="p1" onclick="switchPool('p1',this)"
+        style="padding:6px 18px;border-radius:99px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:1px;cursor:pointer;transition:all .2s;">🟠 Fenrir</button>
+      <button class="pool-tab" data-pp="p2" onclick="switchPool('p2',this)"
+        style="padding:6px 18px;border-radius:99px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:1px;cursor:pointer;transition:all .2s;">🟣 Tok Dalang</button>
+      <button class="pool-tab" data-pp="p3" onclick="switchPool('p3',this)"
+        style="padding:6px 18px;border-radius:99px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:1px;cursor:pointer;transition:all .2s;">🔵 LeoXent</button>
+      <button class="pool-tab" data-pp="p4" onclick="switchPool('p4',this)"
+        style="padding:6px 18px;border-radius:99px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:1px;cursor:pointer;transition:all .2s;">🔴 Sofea Trisha</button>
+    </div>
+
+    <div id="pool-sections"></div>
+
+    <!-- Analysis section -->
+    <div id="pool-analysis-section" style="margin-top:48px;">
+      <div class="section-title">🔬 Pool Analysis — Perbandingan & Insight</div>
+
+      <!-- Role distribution grid -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;" id="role-dist-grid"></div>
+
+      <!-- Cross-player insights -->
+      <div style="background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:28px;">
+        <div style="font-family:'Rajdhani',sans-serif;font-size:0.75rem;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border);">
+          💡 Key Insights · Cross-Player
+        </div>
+        <div id="pool-insights" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.8rem;line-height:1.65;color:#8aa8c8;"></div>
+      </div>
+
+      <!-- Top performer per hero (heroes played by 2+ players) -->
+      <div style="background:var(--s1);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:28px;">
+        <div style="padding:12px 20px;background:#090d18;border-bottom:1px solid var(--border);font-family:'Rajdhani',sans-serif;font-size:0.75rem;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--muted);">
+          🏆 Hero Dominance — Siapa Unggul Tiap Hero?
+        </div>
+        <div id="pool-dominance" style="padding:16px 20px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;"></div>
+      </div>
+    </div>
+
+  </div><!-- end page-pool -->
+
 </div><!-- end wrap -->
 
 <script>
@@ -1402,7 +1463,7 @@ const H2H_RAW = [
   ['Hanzo',       'Assassin',  null,         [5,60.0],    null,        null],
   // ---- FIGHTER ----
   ['Chou',        'Fighter',   [701,58.2],   null,        [74,45.9],   [270,53.7]],
-  ['Ruby',        'Fighter',   [330,55.8],   null,        null,        [135,56.3]],
+  ['Ruby',        'Fighter',   [330,55.8],   null,        [43,69.8],   [135,56.3]],
   ['Alpha',       'Fighter',   [104,63.5],   [58,48.3],   [121,63.6],  [174,68.4]],
   ['Lapu-Lapu',   'Fighter',   [115,59.1],   null,        null,        null],
   ['Badang',      'Fighter',   [106,50.0],   [7,42.9],    null,        [64,54.7]],
@@ -1419,7 +1480,7 @@ const H2H_RAW = [
   ['Hilda',       'Fighter',   null,         null,        null,        [104,55.8]],
   ['Balmond',     'Fighter',   null,         null,        [67,47.8],   [141,53.9]],
   ['Freya',       'Fighter',   null,         null,        null,        [77,50.6]],
-  ['X.Borg',      'Fighter',   [200,60.0],   [173,52.6],  null,        null],
+  ['X.Borg',      'Fighter',   [200,60.0],   [173,52.6],  [217,62.2],  null],
   // ---- MAGE ----
   ['Kagura',      'Mage',      [287,51.9],   null,        null,        [204,48.0]],
   ['Pharsa',      'Mage',      [240,57.5],   [11,45.5],   null,        null],
@@ -1441,12 +1502,12 @@ const H2H_RAW = [
   ['Novaria',     'Mage',      null,         null,        [232,56.5],  null],
   ['Harley',      'Mage',      null,         null,        null,        [290,47.6]],
   ['Alice',       'Mage',      [103,63.1],   [3,33.3],    null,        null],
-  ['Esmeralda',   'Mage',      [66,43.9],    null,        [75,61.3],   [75,61.3]],
+  ['Esmeralda',   'Mage',      [66,43.9],    null,        null,        [75,61.3]],
   ['Valir',       'Mage',      [81,58.0],    null,        null,        null],
   ['Guinevere',   'Mage',      null,         null,        [73,53.4],   [60,51.7]],
   ['Zhuxin',      'Mage',      null,         [64,53.1],   null,        null],
   ['Harith',      'Mage',      null,         null,        [69,56.5],   [185,58.4]],
-  ['Joy',         'Mage',      null,         null,        [61,44.3],   [61,44.3]],
+  ['Joy',         'Mage',      null,         null,        null,        [61,44.3]],
   ['Natan',       'Mage',      [76,67.1],    null,        null,        [60,56.7]],
   // ---- MARKSMAN ----
   ['Karrie',      'Marksman',  [266,58.6],   [7,42.9],    null,        [107,55.1]],
@@ -1466,13 +1527,14 @@ const H2H_RAW = [
   ['Popol&Kupa',  'Marksman',  null,         null,        [611,63.2],  null],
   ['Claude',      'Marksman',  [340,58.5],   null,        [298,53.7],  [139,57.6]],
   ['Yi Sun-shin', 'Marksman',  null,         null,        [211,52.6],  null],
+  ['Melissa',     'Marksman',  null,         null,        [86,61.6],   null],
   // ---- TANK ----
   ['Khufra',      'Tank',      [195,54.9],   null,        [125,52.8],  null],
   ['Tigreal',     'Tank',      [86,48.8],    [82,45.1],   [96,46.9],   null],
   ['Hylos',       'Tank',      [93,62.4],    [9,33.3],    [145,53.1],  null],
   ['Belerick',    'Tank',      [95,66.3],    [294,55.8],  null,        null],
   ['Grock',       'Tank',      [112,45.5],   null,        [417,57.8],  [59,49.2]],
-  ['Gatotkaca',   'Tank',      [76,67.1],    [54,51.9],   [61,59.0],   [61,59.0]],
+  ['Gatotkaca',   'Tank',      [76,67.1],    [54,51.9],   [33,48.5],   [61,59.0]],
   ['Minotaur',    'Tank',      [64,60.9],    [13,53.8],   null,        null],
   ['Baxia',       'Tank',      null,         [6,50.0],    null,        null],
   ['Atlas',       'Tank',      null,         [4,50.0],    [128,61.7],  null],
@@ -1489,7 +1551,7 @@ const H2H_RAW = [
   ['Estes',       'Support',   null,         [164,50.0],  [60,55.0],   null],
   ['Rafaela',     'Support',   [66,71.2],    null,        null,        null],
   ['Lolita',      'Support',   [73,60.3],    null,        null,        null],
-  ['Nana',        'Support',   null,         [30,56.7],   null,        null],
+  ['Nana',        'Support',   null,         [30,56.7],   [35,57.1],   null],
   ['Kaja',        'Support',   [74,51.4],    null,        [859,64.0],  null],
   ['Diggie',      'Support',   null,         null,        [59,55.9],   null],
   ['Floryn',      'Support',   null,         null,        [91,64.8],   null],
@@ -1701,6 +1763,317 @@ function renderH2H(data) {
 
 // Initial render
 renderH2H(H2H_DATA);
+
+// ===== HERO POOL PAGE =====
+const POOL_PLAYERS = [
+  {
+    pid: 'p1', color: '#f0a040', name: 'Fenrir', main: 'Chou', hp: '2619',
+    heroes: [
+      ['Chou','Fighter',701,58.2],['Claude','Marksman',340,58.5],['Ruby','Fighter',330,55.8],
+      ['Kagura','Mage',287,51.9],['Granger','Marksman',286,52.4],['Karrie','Marksman',266,58.6],
+      ['Pharsa','Mage',240,57.5],['X.Borg','Fighter',200,60.0],['Khufra','Tank',195,54.9],
+      ['Selena','Support',191,43.5],['Aurora','Mage',186,61.3],['Valentina','Mage',172,55.2],
+      ['Moskov','Marksman',164,60.4],['Roger','Marksman',147,61.2],['Kimmy','Marksman',135,50.4],
+      ['Minsitthar','Tank',127,54.3],['Lunox','Mage',124,51.6],['Xavier','Mage',118,50.8],
+      ['Beatrix','Marksman',116,51.7],['Lapu-Lapu','Fighter',115,59.1],['Grock','Tank',112,45.5],
+      ['Badang','Fighter',106,50.0],['Alpha','Fighter',104,63.5],['Alice','Mage',103,63.1],
+      ['Wanwan','Marksman',96,51.0],['Hanabi','Marksman',96,50.0],['Belerick','Tank',95,66.3],
+      ['Hylos','Tank',93,62.4],['Yve','Mage',91,62.6],['Lancelot','Assassin',86,58.1],
+      ['Luo Yi','Mage',86,55.8],['Tigreal','Tank',86,48.8],['Valir','Mage',81,58.0],
+      ['Leomord','Fighter',78,52.6],['Kaja','Support',74,51.4],['Lolita','Support',73,60.3],
+      ["Chang'e",'Mage',72,62.5],['Arlott','Fighter',69,63.8],['Vale','Mage',68,54.4],
+      ['Rafaela','Support',66,71.2],['Franco','Tank',66,45.5],['Esmeralda','Mage',66,43.9],
+      ['Khaleed','Fighter',65,58.5],['Dyrroth','Fighter',65,46.2],['Minotaur','Tank',64,60.9],
+      ['Gatotkaca','Tank',76,67.1],['Natan','Marksman',76,67.1],['Silvanna','Tank',76,60.5],
+    ]
+  },
+  {
+    pid: 'p2', color: '#a040f0', name: 'Tok Dalang', main: 'Zhask', hp: '4098',
+    heroes: [
+      ['Zhask','Mage',471,60.1],['Belerick','Tank',294,55.8],['X.Borg','Fighter',173,52.6],
+      ['Estes','Support',164,50.0],['Vexana','Mage',153,54.9],['Angela','Support',143,55.2],
+      ['Dyrroth','Fighter',91,62.6],['Tigreal','Tank',82,45.1],['Julian','Fighter',65,67.7],
+      ['Zhuxin','Mage',64,53.1],['Alpha','Fighter',58,48.3],['Gatotkaca','Tank',54,51.9],
+      ['Eudora','Mage',42,54.8],['Miya','Marksman',38,60.5],['Nana','Support',30,56.7],
+      ['Gord','Mage',28,57.1],['Aurora','Mage',26,42.3],['Layla','Marksman',23,43.5],
+      ['Minotaur','Tank',13,53.8],['Saber','Assassin',12,66.7],['Silvanna','Tank',12,58.3],
+      ['Cecilion','Mage',11,63.6],['Pharsa','Mage',11,45.5],['Moskov','Marksman',11,9.1],
+      ['Alucard','Fighter',10,70.0],['Roger','Marksman',9,66.7],['Sun','Fighter',9,66.7],
+      ['Hylos','Tank',9,33.3],['Franco','Tank',9,33.3],['Selena','Support',8,62.5],
+      ['Karrie','Marksman',7,42.9],['Badang','Fighter',7,42.9],['Fredrinn','Fighter',6,50.0],
+      ['Baxia','Tank',6,50.0],['Kimmy','Marksman',6,16.7],['Martis','Fighter',5,60.0],
+      ['Hanzo','Assassin',5,60.0],['Odette','Mage',5,60.0],['Atlas','Tank',4,50.0],
+      ['Chip','Tank',4,50.0],['Masha','Support',4,50.0],['Cyclops','Mage',4,25.0],
+      ['Leomord','Fighter',3,66.7],['Alice','Mage',3,33.3],['Johnson','Tank',3,33.3],
+      ['Carmilla','Support',2,100.0],['Bane','Fighter',2,50.0],['Suyou','Assassin',2,50.0],
+    ]
+  },
+  {
+    pid: 'p3', color: '#40b8f0', name: 'LeoXent', main: 'Gusion', hp: '2994',
+    heroes: [
+      ['Gusion','Assassin',1466,61.0],['Akai','Tank',951,56.5],['Kaja','Support',859,64.0],
+      ['Popol & Kupa','Marksman',611,63.2],['Luo Yi','Mage',572,60.1],['Argus','Fighter',537,53.8],
+      ['Grock','Tank',417,57.8],['Angela','Support',347,61.4],['Minsitthar','Tank',329,56.5],
+      ['Claude','Marksman',298,53.7],['Lancelot','Assassin',266,56.0],['Novaria','Mage',232,56.5],
+      ['Phoveus','Fighter',222,63.5],['Selena','Support',218,50.9],['X.Borg','Fighter',217,62.2],
+      ['Yi Sun-shin','Marksman',211,52.6],['Xavier','Mage',189,52.4],['Hayabusa','Assassin',153,58.8],['Hylos','Tank',145,53.1],
+      ['Atlas','Tank',128,61.7],['Zhask','Mage',125,64.0],['Khufra','Tank',125,52.8],
+      ['Johnson','Tank',124,57.3],['Granger','Marksman',123,52.8],['Alpha','Fighter',121,63.6],
+      ['Cecilion','Mage',116,65.5],['Cyclops','Mage',110,54.5],['Thamuz','Fighter',108,55.6],
+      ['Leomord','Fighter',107,57.0],['Tigreal','Tank',96,46.9],['Floryn','Support',91,64.8],
+      ['Helcurt','Assassin',90,63.3],['Gloo','Tank',87,58.6],['Melissa','Marksman',86,61.6],
+      ['Fanny','Assassin',78,50.0],['Franco','Tank',74,48.6],['Chou','Fighter',74,45.9],
+      ['Guinevere','Mage',73,53.4],['Harith','Mage',69,56.5],['Balmond','Fighter',67,47.8],
+      ['Estes','Support',60,55.0],['Diggie','Support',59,55.9],['Martis','Fighter',54,50.0],
+      ['Vexana','Mage',49,61.2],['Eudora','Mage',47,57.4],
+      ['Ruby','Fighter',43,69.8],['Nana','Support',35,57.1],['Gatotkaca','Tank',33,48.5],
+    ]
+  },
+  {
+    pid: 'p4', color: '#f04070', name: 'Sofea Trisha', main: 'Lancelot', hp: '1706',
+    heroes: [
+      ['Lancelot','Assassin',701,60.1],['Hayabusa','Assassin',522,58.8],['Gusion','Assassin',352,52.0],
+      ['Fanny','Assassin',308,45.8],['Harley','Mage',290,47.6],['Selena','Support',276,56.5],
+      ['Chou','Fighter',270,53.7],['Alucard','Fighter',207,55.6],['Kagura','Mage',204,48.0],
+      ['Moskov','Marksman',201,59.2],['Roger','Marksman',188,62.2],['Harith','Mage',185,58.4],
+      ['Natalia','Assassin',178,62.4],['Akai','Tank',176,52.3],['Alpha','Fighter',174,68.4],
+      ['Franco','Tank',157,48.4],['Miya','Marksman',144,56.2],['Balmond','Fighter',141,53.9],
+      ['Claude','Marksman',139,57.6],['Ruby','Fighter',135,56.3],['Helcurt','Assassin',122,59.0],
+      ['Saber','Assassin',118,55.9],['Julian','Fighter',117,52.1],['Lunox','Mage',116,60.3],
+      ['Lesley','Marksman',108,48.1],['Karrie','Marksman',107,55.1],['Hilda','Fighter',104,55.8],
+      ['Irithel','Marksman',96,50.0],['Karina','Assassin',93,50.5],['Layla','Marksman',86,52.3],
+      ['Johnson','Tank',86,51.2],['Bruno','Marksman',86,51.2],['Ling','Assassin',83,57.8],
+      ['Freya','Fighter',77,50.6],['Esmeralda','Mage',75,61.3],['Granger','Marksman',74,52.7],
+      ['Aurora','Mage',73,45.2],['Beatrix','Marksman',70,50.0],['Xavier','Mage',69,62.3],
+      ['Clint','Marksman',67,53.7],['Gatotkaca','Tank',61,59.0],['Joy','Mage',61,44.3],
+      ['Guinevere','Mage',60,51.7],['Natan','Marksman',60,56.7],['Grock','Tank',59,49.2],
+      ['Valentina','Mage',56,48.2],['Gloo','Tank',61,63.9],['Badang','Fighter',64,54.7],
+    ]
+  }
+];
+
+const POOL_CEILING = Math.log(9748) * (0.6222 * 0.6222);
+function calcPoolScore(m, wr) {
+  return Math.min(100, (Math.log(m) * Math.pow(wr/100, 2) / POOL_CEILING) * 100);
+}
+
+function poolWrColor(wr) {
+  if (wr >= 60) return '#f5b942';
+  if (wr >= 55) return '#3de87e';
+  if (wr >= 50) return '#f5c842';
+  return '#f05060';
+}
+
+function renderPoolSection(p) {
+  const totalMatches = p.heroes.reduce((a,h) => a+h[2], 0);
+  const avgWR = (p.heroes.reduce((a,h) => a+h[3], 0) / p.heroes.length).toFixed(1);
+  const highWR = [...p.heroes].sort((a,b)=>b[3]-a[3])[0];
+  const highMatches = p.heroes[0];
+  const scores = p.heroes.map(h => calcPoolScore(h[2],h[3]));
+  const avgScore = (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1);
+
+  const rows = p.heroes.map((h,i) => {
+    const [name, role, matches, wr] = h;
+    const score = calcPoolScore(matches, wr);
+    const barW = Math.min(100, Math.max(2, wr));
+    let rankColor = 'var(--muted)'; let rankBg = '#1a2340';
+    if (i===0) { rankColor='#000'; rankBg='#f0a040'; }
+    else if (i===1) { rankColor='#000'; rankBg='#9ea8b8'; }
+    else if (i===2) { rankColor='#000'; rankBg='#c07838'; }
+    return `<tr style="border-bottom:1px solid rgba(28,42,68,0.4);">
+      <td style="padding:6px 12px;text-align:center;">
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:0.62rem;font-weight:700;font-family:'Rajdhani',sans-serif;background:${rankBg};color:${rankColor}">${i+1}</span>
+      </td>
+      <td style="padding:6px 12px;font-weight:600;color:#d8e8ff;font-size:0.82rem;">${name}</td>
+      <td style="padding:6px 12px;">
+        <span style="font-size:0.58rem;padding:1px 5px;border-radius:3px;background:rgba(255,255,255,0.05);color:var(--muted);font-weight:700;letter-spacing:0.5px;text-transform:uppercase;">${role}</span>
+      </td>
+      <td style="padding:6px 12px;text-align:right;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:0.75rem;">${matches.toLocaleString()}</td>
+      <td style="padding:6px 12px;min-width:130px;">
+        <div style="display:flex;align-items:center;gap:7px;">
+          <div style="flex:1;height:4px;background:#1a2340;border-radius:2px;overflow:hidden;">
+            <div style="height:100%;width:${barW}%;background:${poolWrColor(wr)};border-radius:2px;"></div>
+          </div>
+          <span style="font-family:'Rajdhani',sans-serif;font-size:0.82rem;font-weight:700;color:${poolWrColor(wr)};min-width:44px;text-align:right;">${wr}%</span>
+        </div>
+      </td>
+      <td style="padding:6px 12px;text-align:right;">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;font-weight:600;color:${score>=50?'#3de87e':score>=30?'#f5c842':'#f05060'}">${score.toFixed(1)}</span>
+      </td>
+    </tr>`;
+  }).join('');
+
+  return `
+  <div class="player-section-pool" id="pool-sec-${p.pid}" data-pp="${p.pid}" style="margin-bottom:48px;">
+    <div style="display:flex;align-items:center;gap:14px;padding:12px 18px;background:linear-gradient(135deg,#0d1220,#060911);border-radius:10px 10px 0 0;border-left:4px solid ${p.color};border-bottom:1px solid var(--border);">
+      <div style="width:10px;height:10px;border-radius:50%;background:${p.color};box-shadow:0 0 8px ${p.color};flex-shrink:0;"></div>
+      <div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:1.1rem;font-weight:700;letter-spacing:1px;">${p.name}</div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-top:2px;">
+          Main: <strong style="color:#aac">${p.main}</strong>
+          <span style="margin:0 10px;opacity:0.4">|</span>
+          Total Matches: <strong style="color:#aac">${totalMatches.toLocaleString()}</strong>
+          <span style="margin:0 10px;opacity:0.4">|</span>
+          Avg WR: <strong style="color:${poolWrColor(parseFloat(avgWR))}">${avgWR}%</strong>
+          <span style="margin:0 10px;opacity:0.4">|</span>
+          Avg Score: <strong style="color:#5ab4f0">${avgScore}</strong>
+        </div>
+      </div>
+    </div>
+    <div style="background:var(--s1);border:1px solid var(--border);border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+      <table style="width:100%;border-collapse:collapse;">
+        <thead>
+          <tr style="background:#090d18;border-bottom:1px solid var(--border);">
+            <th style="padding:8px 12px;text-align:center;color:var(--muted);font-size:0.65rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;width:44px;">#</th>
+            <th style="padding:8px 12px;text-align:left;color:var(--muted);font-size:0.65rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;">Hero</th>
+            <th style="padding:8px 12px;text-align:left;color:var(--muted);font-size:0.65rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;">Role</th>
+            <th style="padding:8px 12px;text-align:right;color:var(--muted);font-size:0.65rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;width:80px;">Matches</th>
+            <th style="padding:8px 12px;text-align:left;color:var(--muted);font-size:0.65rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;width:160px;">Win Rate</th>
+            <th style="padding:8px 12px;text-align:right;color:var(--muted);font-size:0.65rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;width:70px;">Score</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <div style="display:flex;gap:20px;padding:9px 18px;background:#0a0f1c;border-top:1px solid var(--border);font-size:0.72rem;color:var(--muted);">
+        <span>Best WR: <strong style="color:#f5b942">${highWR[0]} ${highWR[3]}%</strong></span>
+        <span>Most Played: <strong style="color:var(--text)">${highMatches[0]} (${highMatches[2].toLocaleString()})</strong></span>
+        <span>Heroes: <strong style="color:var(--text)">${p.heroes.length}</strong></span>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderPoolAnalysis() {
+  // Role distribution per player
+  const roleDist = document.getElementById('role-dist-grid');
+  roleDist.innerHTML = POOL_PLAYERS.map(p => {
+    const roleCounts = {};
+    p.heroes.forEach(h => { roleCounts[h[1]] = (roleCounts[h[1]]||0)+1; });
+    const sorted = Object.entries(roleCounts).sort((a,b)=>b[1]-a[1]);
+    const total = p.heroes.length;
+    const roleColors = {
+      'Assassin':'#a040f0','Fighter':'#f0a040','Mage':'#5ab4f0',
+      'Marksman':'#3de87e','Tank':'#f5b942','Support':'#f05060'
+    };
+    const bars = sorted.map(([role,count]) => {
+      const pct = ((count/total)*100).toFixed(0);
+      return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">
+        <span style="font-size:0.68rem;color:var(--muted);width:72px;flex-shrink:0;">${role}</span>
+        <div style="flex:1;height:6px;background:#1a2340;border-radius:3px;overflow:hidden;">
+          <div style="height:100%;width:${(count/total)*100}%;background:${roleColors[role]||'#5ab4f0'};border-radius:3px;opacity:0.8;"></div>
+        </div>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--text);min-width:32px;">${count} (${pct}%)</span>
+      </div>`;
+    }).join('');
+    return `<div style="background:var(--s1);border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+      <div style="padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;">
+        <div style="width:8px;height:8px;border-radius:50%;background:${p.color};box-shadow:0 0 6px ${p.color};"></div>
+        <span style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.9rem;letter-spacing:1px;">${p.name}</span>
+        <span style="margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--muted);">${p.heroes.length} heroes</span>
+      </div>
+      <div style="padding:12px 14px;">${bars}</div>
+    </div>`;
+  }).join('');
+
+  // Key insights
+  const insightEl = document.getElementById('pool-insights');
+  const insights = [
+    {
+      title: '🎯 LeoXent — Pool Paling Balanced',
+      text: 'LeoXent ada coverage paling luas merentasi semua 6 role. Gusion (1,466 games, 61%) tunjukkan mastery genuine, tapi yang menarik dia ada Kaja (859, 64%) dan Akai (951, 56.5%) — tanda dia boleh carry ATAU support team. True flex player.'
+    },
+    {
+      title: '🗡️ Sofea Trisha — Assassin-Heavy',
+      text: 'Hampir 30% pool dia adalah Assassin. Lancelot + Hayabusa + Gusion + Fanny + Natalia + Karina + Ling + Saber + Helcurt = 9 assassins dalam top 48. High ceiling bila meta sesuai, tapi sangat terdedah bila semua kena ban.'
+    },
+    {
+      title: '🟣 Tok Dalang — Small Sample Warning',
+      text: 'Tok Dalang ada banyak heroes dengan hanya 2–10 games (Carmilla 2 games, 100% WR — meaningless). Pool dia shallow dan stats fluctuate. Zhask (471 games) adalah satu-satunya hero dengan sample size reliable. Kena expand urgent.'
+    },
+    {
+      title: '🟠 Fenrir — Versatile tapi Thin',
+      text: 'Fenrir cover semua role tapi banyak hero dia dalam range 60–110 games — cukup untuk trend, belum cukup untuk kesimpulan kuat. Kelebihan dia: dia comfortable main role apa pun. Berguna dalam group yang perlu flex tanpa forced pick.'
+    },
+    {
+      title: '📊 Power Score Gap Gusion vs Lancelot',
+      text: 'LeoXent Gusion power score ~84 (1466 games × 61% WR). Sofea Lancelot power score ~73 (701 games × 60.1% WR). Perbezaan besar — volume Gusion dalam top 48 adalah rekod tertinggi dalam keseluruhan dataset 4 player ni.'
+    },
+    {
+      title: '⚠️ Red Flags Dalam Pool',
+      text: 'Fenrir Selena 43.5% (191 games) — banyak games tapi WR under 50. Tok Dalang Moskov 9.1% (11 games) — perlu drop. Sofea Fanny 45.8% (308 games) — games banyak tapi WR teruk, tanda hero yang force main tapi belum mastered. Grock Fenrir 45.5% (112 games) — patut reconsider.'
+    }
+  ];
+  insightEl.innerHTML = insights.map(ins => `
+    <div style="background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:8px;padding:11px 13px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:#5ab4f0;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;">${ins.title}</div>
+      <div style="font-size:0.78rem;line-height:1.65;color:#8aa8c8;">${ins.text}</div>
+    </div>
+  `).join('');
+
+  // Hero dominance — heroes played by 2+ players
+  const heroMap = {};
+  POOL_PLAYERS.forEach((p, pi) => {
+    p.heroes.forEach(h => {
+      if (!heroMap[h[0]]) heroMap[h[0]] = { role: h[1], players: [] };
+      heroMap[h[0]].players.push({ pidx: pi, name: p.name, color: p.color, matches: h[2], wr: h[3] });
+    });
+  });
+  const shared = Object.entries(heroMap)
+    .filter(([,v]) => v.players.length >= 2)
+    .map(([hero, v]) => {
+      const winner = v.players.reduce((a,b) => calcPoolScore(a.matches,a.wr) >= calcPoolScore(b.matches,b.wr) ? a : b);
+      return { hero, role: v.role, players: v.players, winner };
+    })
+    .sort((a,b) => {
+      const scoreA = calcPoolScore(a.winner.matches, a.winner.wr);
+      const scoreB = calcPoolScore(b.winner.matches, b.winner.wr);
+      return scoreB - scoreA;
+    });
+
+  const domEl = document.getElementById('pool-dominance');
+  domEl.innerHTML = shared.map(({hero, role, players, winner}) => {
+    const playerDots = players.map(p =>
+      `<span style="width:6px;height:6px;border-radius:50%;background:${p.color};display:inline-block;margin-right:2px;" title="${p.name}"></span>`
+    ).join('');
+    const winScore = calcPoolScore(winner.matches, winner.wr);
+    return `<div style="background:rgba(255,255,255,0.025);border:1px solid var(--border);border-radius:7px;padding:9px 11px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:6px;margin-bottom:4px;">
+        <span style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.85rem;color:#d8e8ff;">${hero}</span>
+        <span style="font-size:0.55rem;padding:1px 4px;border-radius:2px;background:rgba(255,255,255,0.05);color:var(--muted);text-transform:uppercase;font-weight:700;flex-shrink:0;">${role}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:5px;margin-bottom:5px;">${playerDots}<span style="font-size:0.6rem;color:var(--muted);margin-left:2px;">${players.length} players</span></div>
+      <div style="font-size:0.65rem;color:var(--muted);">Winner: <strong style="color:${winner.color}">${winner.name}</strong></div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--muted);">${winner.matches} games · ${winner.wr}% WR · Score: <span style="color:${winScore>=50?'#3de87e':'#f5c842'}">${winScore.toFixed(1)}</span></div>
+    </div>`;
+  }).join('');
+}
+
+function renderAllPools() {
+  const container = document.getElementById('pool-sections');
+  container.innerHTML = POOL_PLAYERS.map(renderPoolSection).join('');
+}
+
+function switchPool(pp, btn) {
+  document.querySelectorAll('.pool-tab').forEach(t => {
+    t.style.background = 'transparent';
+    t.style.color = 'var(--muted)';
+    t.style.borderColor = 'var(--border)';
+  });
+  btn.style.background = pp === 'all' ? '#7eb8ff' : pp === 'p1' ? '#f0a040' : pp === 'p2' ? '#a040f0' : pp === 'p3' ? '#40b8f0' : '#f04070';
+  btn.style.color = '#000';
+  btn.style.borderColor = 'transparent';
+
+  document.querySelectorAll('.player-section-pool').forEach(sec => {
+    if (pp === 'all' || sec.dataset.pp === pp) sec.style.display = 'block';
+    else sec.style.display = 'none';
+  });
+  // Show/hide analysis only on 'all'
+  document.getElementById('pool-analysis-section').style.display = pp === 'all' ? 'block' : 'none';
+}
+
+// Init pool page
+renderAllPools();
+renderPoolAnalysis();
 
 // Filter
 let activeRole = 'all';
