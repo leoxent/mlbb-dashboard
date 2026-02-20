@@ -303,6 +303,195 @@ body::before {
 .pv-sw-box.wk  .pv-sw-label { color: var(--red); }
 .pv-sw-item { color: var(--muted); }
 
+/* ===== ROSTER PAGE STYLES ===== */
+
+/* Info Banner */
+.info-banner { margin: 20px auto 0; max-width: 700px; }
+.info-box {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 12px 18px;
+  background: rgba(90,180,240,0.06); border: 1px solid rgba(90,180,240,0.18);
+  border-radius: 10px; font-size: 0.78rem; color: var(--muted); line-height: 1.6; text-align: left;
+}
+.gold-text { color: var(--gold); font-weight: 600; }
+
+/* Stats Bar */
+.stats-bar {
+  display: flex; justify-content: center; gap: 0;
+  margin: 28px auto 0;
+  background: var(--s1); border: 1px solid var(--border); border-radius: 10px;
+  overflow: hidden; max-width: 480px;
+}
+.stat-item {
+  flex: 1; padding: 14px 20px; text-align: center;
+  border-right: 1px solid var(--border);
+}
+.stat-item:last-child { border-right: none; }
+.stat-value {
+  display: block; font-family: 'Rajdhani', sans-serif;
+  font-size: 1.5rem; font-weight: 700; color: var(--gold); line-height: 1;
+}
+.stat-label {
+  display: block; font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem; color: var(--muted); letter-spacing: 1.5px;
+  text-transform: uppercase; margin-top: 4px;
+}
+
+/* Roster Grid */
+.roster-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 14px; margin-top: 36px;
+}
+
+/* Player card inside roster — override the analysis-grid .player-card */
+#page-roster .player-card {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 14px; overflow: hidden;
+  display: flex; flex-direction: column;
+  transition: border-color .25s, transform .25s, box-shadow .25s;
+  cursor: default; position: relative;
+}
+#page-roster .player-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 2px; opacity: 0; transition: opacity .25s; z-index: 3;
+}
+#page-roster .player-card[data-role="EXP"]::before   { background: linear-gradient(90deg, #00d4ff, #0090cc); }
+#page-roster .player-card[data-role="JUNGLE"]::before { background: linear-gradient(90deg, #06d6a0, #028a60); }
+#page-roster .player-card[data-role="MID"]::before    { background: linear-gradient(90deg, #c77dff, #8030c0); }
+#page-roster .player-card[data-role="GOLD"]::before   { background: linear-gradient(90deg, var(--gold), #c08020); }
+#page-roster .player-card[data-role="ROAM"]::before   { background: linear-gradient(90deg, #4cc9f0, #2070b0); }
+
+#page-roster .player-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+}
+#page-roster .player-card:hover::before { opacity: 1; }
+#page-roster .player-card[data-role="EXP"]:hover   { border-color: rgba(0,212,255,0.35); box-shadow: 0 16px 48px rgba(0,212,255,0.08); }
+#page-roster .player-card[data-role="JUNGLE"]:hover { border-color: rgba(6,214,160,0.35); box-shadow: 0 16px 48px rgba(6,214,160,0.08); }
+#page-roster .player-card[data-role="MID"]:hover    { border-color: rgba(199,125,255,0.35); box-shadow: 0 16px 48px rgba(199,125,255,0.08); }
+#page-roster .player-card[data-role="GOLD"]:hover   { border-color: rgba(245,166,35,0.35); box-shadow: 0 16px 48px rgba(245,166,35,0.08); }
+#page-roster .player-card[data-role="ROAM"]:hover   { border-color: rgba(76,201,240,0.35); box-shadow: 0 16px 48px rgba(76,201,240,0.08); }
+
+/* Card Photo Area */
+.card-photo {
+  width: 100%; aspect-ratio: 3 / 4; position: relative;
+  background: #090d18; overflow: hidden; flex-shrink: 0;
+}
+
+.photo-placeholder {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 8px; color: var(--dim);
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem;
+  letter-spacing: 2px; text-transform: uppercase;
+  background:
+    repeating-linear-gradient(45deg,
+      rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px,
+      transparent 1px, transparent 12px);
+  transition: background .3s;
+}
+
+.card-photo img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center top;
+}
+
+.player-tagline {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 1.5px;
+  color: var(--muted);
+  opacity: 0.6;
+  margin-bottom: 10px;
+  font-weight: 700;
+  font-style: italic;
+}
+
+#page-roster .player-card:hover .photo-placeholder {
+  background:
+    repeating-linear-gradient(45deg,
+      rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px,
+      transparent 1px, transparent 12px);
+}
+.corner-decoration {
+  position: absolute; top: 8px; left: 8px; z-index: 2;
+  width: 18px; height: 18px;
+  border-top: 2px solid rgba(255,255,255,0.15);
+  border-left: 2px solid rgba(255,255,255,0.15);
+}
+
+/* Role Badge */
+.role-badge {
+  position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+  z-index: 2; padding: 3px 12px; border-radius: 99px;
+  font-family: 'Rajdhani', sans-serif; font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase; white-space: nowrap;
+  backdrop-filter: blur(8px);
+}
+.role-EXP    { background: rgba(0,212,255,0.18); color: #00d4ff; border: 1px solid rgba(0,212,255,0.35); }
+.role-JUNGLE { background: rgba(6,214,160,0.18); color: #06d6a0; border: 1px solid rgba(6,214,160,0.35); }
+.role-MID    { background: rgba(199,125,255,0.18); color: #c77dff; border: 1px solid rgba(199,125,255,0.35); }
+.role-GOLD   { background: rgba(245,166,35,0.18); color: var(--gold); border: 1px solid rgba(245,166,35,0.35); }
+.role-ROAM   { background: rgba(76,201,240,0.18); color: #4cc9f0; border: 1px solid rgba(76,201,240,0.35); }
+
+/* Card Body */
+.card-body { padding: 14px 14px 10px; flex: 1; display: flex; flex-direction: column; }
+.player-number {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.58rem; color: var(--muted);
+  letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px;
+}
+.player-ign {
+  font-family: 'Rajdhani', sans-serif; font-size: 1.15rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase; color: #e0eeff; line-height: 1; margin-bottom: 2px;
+}
+.player-name { font-size: 0.72rem; color: var(--muted); margin-bottom: 10px; }
+.card-divider { height: 1px; background: var(--border); margin-bottom: 10px; }
+.fav-hero-label {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.58rem; color: var(--muted);
+  letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px;
+}
+.hero-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 9px; background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border); border-radius: 5px;
+  font-size: 0.7rem; color: var(--text); font-weight: 500;
+  transition: border-color .15s, background .15s;
+}
+.hero-tag:hover { background: rgba(255,255,255,0.07); border-color: #3a5080; }
+.star { color: var(--gold); font-size: 0.6rem; }
+.hero-placeholder {
+  display: inline-flex; align-items: center; padding: 3px 9px;
+  background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.08);
+  border-radius: 5px; font-size: 0.65rem; color: var(--dim); font-style: italic;
+}
+.player-desc { font-size: 0.72rem; line-height: 1.65; color: #7090b0; flex: 1; }
+.desc-placeholder { font-style: italic; color: var(--dim); font-size: 0.68rem; }
+
+/* Card Footer */
+.card-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 14px; border-top: 1px solid var(--border);
+  background: rgba(0,0,0,0.25);
+}
+.social-links { display: flex; gap: 6px; }
+.social-link {
+  width: 26px; height: 26px; border-radius: 6px;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.65rem; font-weight: 700; color: var(--muted);
+  text-decoration: none; transition: all .15s;
+  font-family: 'IBM Plex Mono', monospace; cursor: pointer;
+}
+.social-link:hover { background: rgba(255,255,255,0.09); color: var(--text); border-color: #3a5080; }
+.nationality-flag { font-size: 1rem; line-height: 1; }
+
+/* Responsive Roster */
+@media (max-width: 900px) { .roster-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .roster-grid { grid-template-columns: 1fr; } .stats-bar { max-width: 100%; } }
+
+/* ===== END ROSTER STYLES ===== */
+
 /* === FOOTER METHODOLOGY === */
 .footer-methodology {
   background: linear-gradient(135deg, #080c18 0%, #050810 100%);
@@ -378,7 +567,6 @@ body::before {
   .pv-sw { grid-template-columns: 1fr; }
 }
 
-/* Scroll margin for jump targets */
 .player-section-pool { scroll-margin-top: 20px; }
 </style>
 </head>
@@ -390,6 +578,7 @@ body::before {
     <button class="page-btn active" onclick="switchPage('main',this)">📊 Main Ranking</button>
     <button class="page-btn" onclick="switchPage('h2h',this)">⚔️ Head to Head</button>
     <button class="page-btn" onclick="switchPage('pool',this)">🃏 Hero Pool</button>
+    <button class="page-btn" onclick="switchPage('roster',this)">⭐ Roster</button>
   </div>
 
   <!-- ===== PAGE 1: MAIN ===== -->
@@ -419,7 +608,6 @@ body::before {
     <!-- PODIUM -->
     <div class="section-title">🏆 Final Ranking — EPI v2.0 Formula</div>
     <div class="podium">
-      <!-- #2 -->
       <div class="pod-card pod-2">
         <div class="pod-glow"></div>
         <div class="pod-rank">#2</div>
@@ -433,7 +621,6 @@ body::before {
           <div class="pod-stat-row"><span>Matches</span><span>6,360</span></div>
         </div>
       </div>
-      <!-- #1 -->
       <div class="pod-card pod-1">
         <div class="pod-glow"></div>
         <div class="pod-rank">#1</div>
@@ -447,7 +634,6 @@ body::before {
           <div class="pod-stat-row"><span>Matches</span><span>9,748</span></div>
         </div>
       </div>
-      <!-- #3 -->
       <div class="pod-card pod-3">
         <div class="pod-glow"></div>
         <div class="pod-rank">#3</div>
@@ -463,7 +649,6 @@ body::before {
       </div>
     </div>
 
-    <!-- RANK 4 & 5 -->
     <div class="rankx-card" style="margin-bottom:12px;">
       <div class="rx-badge">#4</div>
       <div>
@@ -576,45 +761,12 @@ body::before {
           <td><span class="sv lo">3.270</span><div class="note">1,863 games</div></td>
         </tr>
         <tr style="background:rgba(245,185,66,0.06);">
-          <td>
-            <div class="cat" style="color:var(--gold);font-weight:700;">EPI Score v2.0</div>
-            <div class="note">Σ × log₁₀(M) · scaled /100</div>
-          </td>
-          <td>
-            <div style="display:flex;flex-direction:column;gap:3px">
-              <span class="sv best" style="font-size:1rem;line-height:1">3.881</span>
-              <div style="height:4px;background:var(--dim);border-radius:2px;overflow:hidden;width:80px"><div style="height:100%;width:100%;background:var(--gold);border-radius:2px;box-shadow:0 0 4px rgba(245,185,66,0.4)"></div></div>
-              <span style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--gold);opacity:0.7">100 / 100</span>
-            </div>
-          </td>
-          <td>
-            <div style="display:flex;flex-direction:column;gap:3px">
-              <span class="sv good" style="font-size:1rem;line-height:1">3.452</span>
-              <div style="height:4px;background:var(--dim);border-radius:2px;overflow:hidden;width:80px"><div style="height:100%;width:88.9%;background:var(--silver);border-radius:2px"></div></div>
-              <span style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--silver);opacity:0.7">88.9 / 100</span>
-            </div>
-          </td>
-          <td>
-            <div style="display:flex;flex-direction:column;gap:3px">
-              <span class="sv ok" style="font-size:1rem;line-height:1">3.269</span>
-              <div style="height:4px;background:var(--dim);border-radius:2px;overflow:hidden;width:80px"><div style="height:100%;width:84.2%;background:var(--bronze);border-radius:2px"></div></div>
-              <span style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--bronze);opacity:0.7">84.2 / 100</span>
-            </div>
-          </td>
-          <td>
-            <div style="display:flex;flex-direction:column;gap:3px">
-              <span class="sv ok" style="font-size:1rem;line-height:1">2.760</span>
-              <div style="height:4px;background:var(--dim);border-radius:2px;overflow:hidden;width:80px"><div style="height:100%;width:71.1%;background:#5ab4f0;border-radius:2px"></div></div>
-              <span style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:#5ab4f0;opacity:0.7">71.1 / 100</span>
-            </div>
-          </td>
-          <td>
-            <div style="display:flex;flex-direction:column;gap:3px">
-              <span class="sv ok" style="font-size:1rem;line-height:1">2.657</span>
-              <div style="height:4px;background:var(--dim);border-radius:2px;overflow:hidden;width:80px"><div style="height:100%;width:68.5%;background:#a040f0;border-radius:2px"></div></div>
-              <span style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:#a040f0;opacity:0.7">68.5 / 100</span>
-            </div>
-          </td>
+          <td><div class="cat" style="color:var(--gold);font-weight:700;">EPI Score v2.0</div><div class="note">Σ × log₁₀(M) · scaled /100</div></td>
+          <td><div style="display:flex;flex-direction:column;gap:3px"><span class="sv best" style="font-size:1rem;line-height:1">3.881</span><div style="height:4px;background:var(--dim);border-radius:2px;overflow:hidden;width:80px"><div style="height:100%;width:100%;background:var(--gold);border-radius:2px;box-shadow:0 0 4px rgba(245,185,66,0.4)"></div></div><span style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--gold);opacity:0.7">100 / 100</span></div></td>
+          <td><div style="display:flex;flex-direction:column;gap:3px"><span class="sv good" style="font-size:1rem;line-height:1">3.452</span><div style="height:4px;background:var(--dim);border-radius:2px;overflow:hidden;width:80px"><div style="height:100%;width:88.9%;background:var(--silver);border-radius:2px"></div></div><span style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--silver);opacity:0.7">88.9 / 100</span></div></td>
+          <td><div style="display:flex;flex-direction:column;gap:3px"><span class="sv ok" style="font-size:1rem;line-height:1">3.269</span><div style="height:4px;background:var(--dim);border-radius:2px;overflow:hidden;width:80px"><div style="height:100%;width:84.2%;background:var(--bronze);border-radius:2px"></div></div><span style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--bronze);opacity:0.7">84.2 / 100</span></div></td>
+          <td><div style="display:flex;flex-direction:column;gap:3px"><span class="sv ok" style="font-size:1rem;line-height:1">2.760</span><div style="height:4px;background:var(--dim);border-radius:2px;overflow:hidden;width:80px"><div style="height:100%;width:71.1%;background:#5ab4f0;border-radius:2px"></div></div><span style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:#5ab4f0;opacity:0.7">71.1 / 100</span></div></td>
+          <td><div style="display:flex;flex-direction:column;gap:3px"><span class="sv ok" style="font-size:1rem;line-height:1">2.657</span><div style="height:4px;background:var(--dim);border-radius:2px;overflow:hidden;width:80px"><div style="height:100%;width:68.5%;background:#a040f0;border-radius:2px"></div></div><span style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:#a040f0;opacity:0.7">68.5 / 100</span></div></td>
         </tr>
       </tbody>
     </table>
@@ -622,8 +774,6 @@ body::before {
     <!-- PLAYER ANALYSIS -->
     <div class="section-title">🔬 Analisa Per Player</div>
     <div class="analysis-grid">
-
-      <!-- LeoXent -->
       <div class="player-card">
         <div class="pc-header">
           <div class="pc-dot" style="background:var(--p3);box-shadow:0 0 6px var(--p3)"></div>
@@ -648,8 +798,6 @@ body::before {
           </div>
         </div>
       </div>
-
-      <!-- Sofea Trisha -->
       <div class="player-card">
         <div class="pc-header">
           <div class="pc-dot" style="background:var(--p4);box-shadow:0 0 6px var(--p4)"></div>
@@ -674,8 +822,6 @@ body::before {
           </div>
         </div>
       </div>
-
-      <!-- Fenrir -->
       <div class="player-card">
         <div class="pc-header">
           <div class="pc-dot" style="background:var(--p1);box-shadow:0 0 6px var(--p1)"></div>
@@ -700,8 +846,6 @@ body::before {
           </div>
         </div>
       </div>
-
-      <!-- Smurff -->
       <div class="player-card">
         <div class="pc-header">
           <div class="pc-dot" style="background:var(--p5);box-shadow:0 0 6px var(--p5)"></div>
@@ -726,8 +870,6 @@ body::before {
           </div>
         </div>
       </div>
-
-      <!-- Tok Dalang -->
       <div class="player-card" style="grid-column: span 2;">
         <div class="pc-header">
           <div class="pc-dot" style="background:var(--p2);box-shadow:0 0 6px var(--p2)"></div>
@@ -752,7 +894,6 @@ body::before {
           </div>
         </div>
       </div>
-
     </div>
 
     <!-- FINAL VERDICT -->
@@ -774,12 +915,10 @@ body::before {
       <h1>Hero <span>Battle</span></h1>
       <div class="hdr-sub">Siapa lagi jago untuk setiap hero? · Power Score: ln(MP) × WR²</div>
     </div>
-
     <div class="disclaimer">
       <span class="disclaimer-icon">ℹ️</span>
       <span><strong>Power Score Formula: Score = ln(MP) × WR²</strong> — ln(MP) bagi diminishing returns kepada volume, WR² membesarkan gap antara WR tinggi vs rendah. Score dinormalize absolute (ceiling = ln(9748) × 0.6222²). Gap &lt;5 mata = ⚖️ Contested. Sample &lt;30 games ditanda ⚠️. <strong style="color:#f05060">Hanya Top 48 hero per player dimasukkan.</strong></span>
     </div>
-
     <div class="h2h-filter">
       <span class="h2h-filter-label">Filter:</span>
       <button class="filter-btn active" onclick="filterH2H('all',this)">Semua</button>
@@ -791,7 +930,6 @@ body::before {
       <button class="filter-btn" onclick="filterH2H('Support',this)">Support</button>
       <input class="h2h-search" type="text" placeholder="🔍  Cari hero..." oninput="searchH2H(this.value)">
     </div>
-
     <div class="h2h-grid" id="h2h-grid"></div>
     <div class="h2h-no-results" id="h2h-empty" style="display:none;">Tiada hero dijumpai.</div>
   </div>
@@ -803,20 +941,205 @@ body::before {
       <h1>Hero <span>Pool</span></h1>
       <div class="hdr-sub">Top 48 heroes paling banyak dimainkan · Power Score: ln(M) × WR²</div>
     </div>
-
     <div class="disclaimer">
       <span class="disclaimer-icon">ℹ️</span>
       <span><strong>Nota:</strong> Hanya top 48 hero (by matches) untuk setiap player. Warna WR: <strong style="color:#f5b942">Kuning ≥60%</strong> · <strong style="color:#3de87e">Hijau 55–59%</strong> · <strong style="color:#f5c842">Amber 50–54%</strong> · <strong style="color:#f05060">Merah &lt;50%</strong>. Verdict pool dibawah setiap jadual.</span>
     </div>
-
-    <!-- JUMP LINKS -->
     <div class="pool-jump-bar" id="pool-jump-bar">
       <span class="pool-jump-label">Jump ke ↓</span>
     </div>
-
     <div class="pool-tab-bar" id="pool-tabs"></div>
     <div id="pool-sections"></div>
   </div>
+
+  <!-- ===== PAGE 4: ROSTER ===== -->
+  <div class="page" id="page-roster">
+    <div class="hdr" style="margin-bottom:24px;">
+      <div class="hdr-tag">Mobile Legends Bang Bang · Official Team Roster</div>
+      <h1>Team <span>Roster</span></h1>
+
+      <div class="info-banner">
+        <div class="info-box">
+          <span style="margin-right:8px;font-size:1rem;flex-shrink:0">⚡</span>
+          <span><strong style="color:#5ab4f0">Team Overview:</strong> Ini adalah halaman rasmi roster pasukan. Setiap pemain membawa <span class="gold-text">peranan unik</span> dalam formasi kompetitif kami. Maklumat hero pilihan dan deskripsi pemain dikemaskini setiap musim. Placeholder boleh digantikan dengan foto dan info sebenar pemain.</span>
+        </div>
+      </div>
+
+      <div class="stats-bar">
+        <div class="stat-item">
+          <span class="stat-value">5</span>
+          <span class="stat-label">Players</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">—</span>
+          <span class="stat-label">MPL Season</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">—</span>
+          <span class="stat-label">Win Rate</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">—</span>
+          <span class="stat-label">Championships</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="roster-grid">
+
+      <!-- Player 1: JUNGLE -->
+<div class="player-card" data-role="JUNGLE">
+  <div class="card-photo">
+    <!-- <div class="photo-placeholder"> -->
+      <!-- <span>SOFEA</span> -->
+	  <!-- <div class="card-photo"> -->
+  <img src="images/sofea_.png" alt="Sofea Trisha" class="player-photo">
+    <!-- </div> -->
+    <div class="corner-decoration"></div>
+    <div class="role-badge role-JUNGLE">JUNGLE</div>
+  </div>
+  <div class="card-body">
+    <div class="player-number">#01 · JUNGLER</div>
+    <div class="player-ign">Sofea Trisha</div>
+    <div class="player-tagline">⚡ The Assassin Prodigy</div>
+    <div class="card-divider"></div>
+    <div class="fav-hero-label">⚔ Favourite Heroes</div>
+    <div class="hero-tags">
+      <span class="hero-tag"><span class="star">★</span> Lancelot</span>
+      <span class="hero-tag"><span class="star">★</span> Hayabusa</span>
+      <span class="hero-tag"><span class="star">★</span> Alpha</span>
+    </div>
+    <div class="player-desc">
+      High-ceiling assassin carry dengan tempo snowball yang agresif.
+    </div>
+  </div>
+  <div class="card-footer">
+    <span class="nationality-flag">🇲🇾</span>
+  </div>
+</div>
+
+
+<!-- Player 2: EXP -->
+<div class="player-card" data-role="EXP">
+  <div class="card-photo">
+    <img src="images/fenrir.png" alt="Fenrir" class="player-photo">
+    <div class="corner-decoration"></div>
+    <div class="role-badge role-EXP">EXP LANE</div>
+  </div>
+  <div class="card-body">
+    <div class="player-number">#02 · EXP LANER</div>
+    <div class="player-ign">Fenrir</div>
+    <div class="player-tagline">🧩 The Draft Nightmare</div>
+    <div class="card-divider"></div>
+    <div class="fav-hero-label">⚔ Favourite Heroes</div>
+    <div class="hero-tags">
+      <span class="hero-tag"><span class="star">★</span> Chou</span>
+      <span class="hero-tag"><span class="star">★</span> Ruby</span>
+      <span class="hero-tag"><span class="star">★</span> Karrie</span>
+    </div>
+    <div class="player-desc">
+      Versatile player dengan fleksibiliti hampir semua role.
+    </div>
+  </div>
+  <div class="card-footer">
+    <span class="nationality-flag">🇲🇾</span>
+  </div>
+</div>
+
+
+<!-- Player 3: MID -->
+<div class="player-card" data-role="MID">
+  <div class="card-photo">
+    <img src="images/tok.png" alt="Tok" class="player-photo">
+    <div class="corner-decoration"></div>
+    <div class="role-badge role-MID">MID LANE</div>
+  </div>
+  <div class="card-body">
+    <div class="player-number">#03 · MID LANER</div>
+    <div class="player-ign">Tok Dalang</div>
+    <div class="player-tagline">🔮 The Arcane Specialist</div>
+    <div class="card-divider"></div>
+    <div class="fav-hero-label">⚔ Favourite Heroes</div>
+    <div class="hero-tags">
+      <span class="hero-tag"><span class="star">★</span> Zhask</span>
+      <span class="hero-tag"><span class="star">★</span> Vexana</span>
+      <span class="hero-tag"><span class="star">★</span> Julian</span>
+    </div>
+    <div class="player-desc">
+      Mage-focused player dengan control tempo dari mid lane.
+    </div>
+  </div>
+  <div class="card-footer">
+    <span class="nationality-flag">🇲🇾</span>
+  </div>
+</div>
+
+
+<!-- Player 4: GOLD -->
+<div class="player-card" data-role="GOLD">
+  <div class="card-photo">
+    <div class="photo-placeholder">
+      <span>LEO</span>
+    </div>
+    <div class="corner-decoration"></div>
+    <div class="role-badge role-GOLD">GOLD LANE</div>
+  </div>
+  <div class="card-body">
+    <div class="player-number">#04 · GOLD LANER</div>
+    <div class="player-ign">LeoXent</div>
+    <div class="player-tagline">👑 The Complete Package</div>
+    <div class="card-divider"></div>
+    <div class="fav-hero-label">⚔ Favourite Heroes</div>
+    <div class="hero-tags">
+      <span class="hero-tag"><span class="star">★</span> Popol & Kupa</span>
+      <span class="hero-tag"><span class="star">★</span> Gusion</span>
+      <span class="hero-tag"><span class="star">★</span> Kaja</span>
+    </div>
+    <div class="player-desc">
+      Depth tinggi dan konsisten merentasi pelbagai role.
+    </div>
+  </div>
+  <div class="card-footer">
+    <span class="nationality-flag">🇲🇾</span>
+  </div>
+</div>
+
+
+<!-- Player 5: ROAM -->
+<div class="player-card" data-role="ROAM">
+  <div class="card-photo">
+    <img src="images/smurff.png" alt="Smurff" class="player-photo">
+    <div class="corner-decoration"></div>
+    <div class="role-badge role-ROAM">ROAM</div>
+  </div>
+  <div class="card-body">
+    <div class="player-number">#05 · ROAMER</div>
+    <div class="player-ign">Smurff</div>
+    <div class="player-tagline">🛡 The Roam General</div>
+    <div class="card-divider"></div>
+    <div class="fav-hero-label">⚔ Favourite Heroes</div>
+    <div class="hero-tags">
+      <span class="hero-tag"><span class="star">★</span> Franco</span>
+      <span class="hero-tag"><span class="star">★</span> Edith</span>
+      <span class="hero-tag"><span class="star">★</span> Hylos</span>
+    </div>
+    <div class="player-desc">
+      Initiator specialist dengan teamfight setup paling solid.
+    </div>
+  </div>
+  <div class="card-footer">
+    <span class="nationality-flag">🇲🇾</span>
+  </div>
+</div>
+
+    </div><!-- end roster-grid -->
+
+    <div class="disclaimer" style="margin-top:32px;">
+      <span class="disclaimer-icon">ℹ️</span>
+      <span>Roster page adalah template. Gantikan placeholder dengan nama sebenar, foto, dan hero pilihan pemain. Role badge warna berbeza untuk setiap posisi: <strong style="color:#00d4ff">EXP</strong> · <strong style="color:#06d6a0">Jungle</strong> · <strong style="color:#c77dff">Mid</strong> · <strong style="color:var(--gold)">Gold</strong> · <strong style="color:#4cc9f0">Roam</strong></span>
+    </div>
+
+  </div><!-- end page-roster -->
 
 </div><!-- end wrap -->
 
@@ -825,15 +1148,11 @@ body::before {
   <div class="footer-inner">
     <div class="footer-title">📐 Metodologi & Formula</div>
     <div class="footer-subtitle">Elite Performance Index v2.0 (EPI) · 8-Metric · Hero Mastery Score (HMS) Pool Depth</div>
-
     <div class="meth-grid">
-
       <div class="meth-card">
         <div class="meth-card-title">🧮 Formula Utama — EPI v2.0</div>
         <div class="meth-formula">EPI = Σ(Vᵢ × Wᵢ) × log₁₀(Matches)<br><br>= (KDA×0.28 + TF%×0.20 + WR×0.12<br>&nbsp;&nbsp;&nbsp;+ DMGratio×0.12 + Turret×0.08<br>&nbsp;&nbsp;&nbsp;+ MVPRate×0.08 + HMS×0.06<br>&nbsp;&nbsp;&nbsp;+ CSForm×0.06)<br>&nbsp;&nbsp;× log₁₀(Total Matches)<br><br>HMS = Σ[ ln(M) × kredit(WR) ]<br>WR≥50%: (WR−50) · 45–49.9%: |WR−50|×0.4 · &lt;45%: 0</div>
-        <div class="meth-text">
-          Formula v2.0 mengembangkan EPI asal daripada 5 metrik kepada <strong>8 metrik</strong>, menambah MVP Rate, Hero Pool Depth, dan Current Season Form. Setiap metrik dinormalkan menggunakan nilai tertinggi dalam group sebagai benchmark (1.0) sebelum didarabkan weightage.
-        </div>
+        <div class="meth-text">Formula v2.0 mengembangkan EPI asal daripada 5 metrik kepada <strong>8 metrik</strong>, menambah MVP Rate, Hero Pool Depth, dan Current Season Form. Setiap metrik dinormalkan menggunakan nilai tertinggi dalam group sebagai benchmark (1.0) sebelum didarabkan weightage.</div>
         <table class="weight-breakdown">
           <thead><tr><th>Metrik</th><th>Weight</th><th>Justifikasi</th></tr></thead>
           <tbody>
@@ -848,7 +1167,6 @@ body::before {
           </tbody>
         </table>
       </div>
-
       <div class="meth-card">
         <div class="meth-card-title">📋 Cara Pengiraan (Step-by-Step)</div>
         <div class="step-list">
@@ -859,44 +1177,32 @@ body::before {
           <div class="step-item"><strong>Kira Reliability Factor</strong> — log₁₀(Total Matches). Fungsi logaritma memastikan veteran dihargai tapi secara diminishing returns.</div>
           <div class="step-item"><strong>EPI Final</strong> — darabkan Weighted Sum dengan Reliability Factor. Scaled 0–100 dengan membahagikan kepada EPI tertinggi dalam group × 100.</div>
         </div>
-        <div class="meth-note">
-          <strong>⚠️ Limitasi Formula:</strong> EPI adalah <strong>"buta"</strong> terhadap rank lawan, mod permainan, dan peranan spesifik dalam team. Player tank/support mungkin nampak undervalued dalam KDA dan DMG ratio. Pool Depth dikira berdasarkan average WR top heroes sahaja — bukan keseluruhan pool.
-        </div>
+        <div class="meth-note"><strong>⚠️ Limitasi Formula:</strong> EPI adalah <strong>"buta"</strong> terhadap rank lawan, mod permainan, dan peranan spesifik dalam team. Player tank/support mungkin nampak undervalued dalam KDA dan DMG ratio. Pool Depth dikira berdasarkan average WR top heroes sahaja — bukan keseluruhan pool.</div>
       </div>
-
       <div class="meth-card">
         <div class="meth-card-title">⚔️ Power Score (Hero H2H)</div>
         <div class="meth-formula">PowerScore = ln(MP) × WR²<br>Scaled = (raw ÷ ceiling) × 100<br>ceiling = ln(9748) × 0.6222²</div>
-        <div class="meth-text">
-          Digunakan dalam Head-to-Head hero comparison. <strong>ln(MP)</strong> memberi diminishing returns kepada volume. <strong>WR²</strong> membesarkan gap antara WR tinggi dan rendah. Ceiling ditetapkan secara absolute supaya score bermakna merentasi semua hero. Gap &lt;5 mata dalam group dianggap <strong>Contested ⚖️</strong>.
-        </div>
+        <div class="meth-text">Digunakan dalam Head-to-Head hero comparison. <strong>ln(MP)</strong> memberi diminishing returns kepada volume. <strong>WR²</strong> membesarkan gap antara WR tinggi dan rendah. Ceiling ditetapkan secara absolute supaya score bermakna merentasi semua hero. Gap &lt;5 mata dalam group dianggap <strong>Contested ⚖️</strong>.</div>
       </div>
-
       <div class="meth-card">
         <div class="meth-card-title">💡 Kenapa 3 Metrik Baru?</div>
         <div class="meth-text">EPI v1.0 hanya menilai mekanik dan efficiency semasa permainan. Tiga metrik baru menambah dimensi penting:</div>
         <div style="margin-top:14px;display:flex;flex-direction:column;gap:8px;">
           <div style="padding:10px 12px;background:rgba(245,185,66,0.06);border:1px solid rgba(245,185,66,0.15);border-radius:7px">
             <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--gold);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">MVP Rate × 0.08</div>
-            <div style="font-size:0.76rem;color:#8aa8c8;line-height:1.6">Pengiktirafan impak dalam setiap perlawanan. Player yang kerap dapat MVP bukan sekadar bermain baik — mereka bermain baik <em>lebih baik dari semua orang</em> dalam game tu. Win Rate tinggi tak semestinya datang dari individu yang benar-benar carry.</div>
+            <div style="font-size:0.76rem;color:#8aa8c8;line-height:1.6">Pengiktirafan impak dalam setiap perlawanan. Player yang kerap dapat MVP bukan sekadar bermain baik — mereka bermain baik <em>lebih baik dari semua orang</em> dalam game tu.</div>
           </div>
           <div style="padding:10px 12px;background:rgba(90,180,240,0.06);border:1px solid rgba(90,180,240,0.15);border-radius:7px">
             <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:#5ab4f0;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Hero Mastery Score (HMS) × 0.06</div>
-            <div style="font-size:0.76rem;color:#8aa8c8;line-height:1.6">Formula: <strong style="color:var(--gold)">Σ[ ln(M) × kredit(WR) ]</strong> per hero.<br>
-            · WR ≥ 50% → kredit penuh: <code style="color:var(--gold)">(WR − 50)</code><br>
-            · WR 45–49.9% → kredit separa ×0.4: <code style="color:var(--yellow)">|WR − 50| × 0.4</code><br>
-            · WR &lt; 45% → sifar, tak contribute<br>
-            Ini mengukur <em>berapa ramai hero yang player betul-betul mahir</em> — hero susah yang struggle sedikit (45–49%) tetap diberi kredit kecil, tapi hero yang fail teruk tidak dikira.</div>
+            <div style="font-size:0.76rem;color:#8aa8c8;line-height:1.6">Formula: <strong style="color:var(--gold)">Σ[ ln(M) × kredit(WR) ]</strong> per hero. WR ≥ 50% → kredit penuh. WR 45–49.9% → kredit separa ×0.4. WR &lt; 45% → sifar. Mengukur berapa banyak hero yang player betul-betul mahir.</div>
           </div>
           <div style="padding:10px 12px;background:rgba(61,232,126,0.05);border:1px solid rgba(61,232,126,0.12);border-radius:7px">
             <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:#3de87e;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Current Season Form × 0.06</div>
-            <div style="font-size:0.76rem;color:#8aa8c8;line-height:1.6">Stats all-time boleh "terlindung" oleh prestasi lama. Current season form mencerminkan keadaan pemain sekarang — adakah dia sedang naik atau turun? Player yang consistently improve perlu diberi kredit.</div>
+            <div style="font-size:0.76rem;color:#8aa8c8;line-height:1.6">Stats all-time boleh "terlindung" oleh prestasi lama. Current season form mencerminkan keadaan pemain sekarang — adakah dia sedang naik atau turun?</div>
           </div>
         </div>
       </div>
-
     </div>
-
     <div class="footer-cutoff">
       DATA CUTOFF: 17 FEBRUARI 2026 · ALL SEASONS RANKED · 5 PLAYERS · EPI v2.0<br>
       Analisa ini tidak rasmi · Berdasarkan data dikongsi oleh pemain sendiri · Formula oleh pakar analisis data
@@ -1039,7 +1345,6 @@ function renderH2H(data) {
   const filtered = data.filter(row => row.slice(2).filter(p=>p!==null).length >= 2);
   if (!filtered.length) { empty.style.display='block'; return; }
   empty.style.display = 'none';
-
   filtered.forEach(row => {
     const [hero, role, ...pdata] = row;
     const present = pdata.map((p,i) => p ? {idx:i, matches:p[0], wr:p[1]} : null).filter(Boolean);
@@ -1051,22 +1356,15 @@ function renderH2H(data) {
     const wName = PLAYERS_META[winner.idx].name;
     const wColor = PLAYERS_META[winner.idx].color;
     const summary = contested ? `⚖️ Rapat (gap ${gap} mata) — contested` : `👑 ${wName} unggul +${gap} mata`;
-
     const card = document.createElement('div');
     card.className = 'h2h-card';
     card.dataset.role = role;
     card.dataset.hero = hero.toLowerCase();
-
     let cells = '';
     PLAYERS_META.forEach((pm,i) => {
       const p = pdata[i];
       if (!p) {
-        cells += `<div class="h2h-player-cell h2h-no-data">
-          <div class="h2h-cell-name"><span class="h2h-cell-dot" style="background:${pm.color}"></span>${pm.name.split(' ')[0]}</div>
-          <div class="h2h-wr-big" style="color:var(--muted)">—</div>
-          <div class="h2h-matches-small">Tak main</div>
-          <div class="h2h-mini-bar"></div>
-        </div>`;
+        cells += `<div class="h2h-player-cell h2h-no-data"><div class="h2h-cell-name"><span class="h2h-cell-dot" style="background:${pm.color}"></span>${pm.name.split(' ')[0]}</div><div class="h2h-wr-big" style="color:var(--muted)">—</div><div class="h2h-matches-small">Tak main</div><div class="h2h-mini-bar"></div></div>`;
       } else {
         const pObj = present.find(x=>x.idx===i);
         const {score,raw,lnMP,wrSq} = pObj.scoreObj;
@@ -1079,30 +1377,14 @@ function renderH2H(data) {
           <div class="h2h-matches-small">${p[0].toLocaleString()}g${low?' ⚠️':''}</div>
           <div class="h2h-mini-bar"><div class="h2h-mini-fill" style="width:${Math.min(100,p[1])}%;background:${wrColor(p[1])}"></div></div>
           <div style="margin-top:6px;padding:5px 7px;background:rgba(0,0,0,0.25);border-radius:4px;border:1px solid rgba(255,255,255,0.04)">
-            <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:0.58rem;margin-bottom:3px">
-              <span style="color:var(--muted)">SCORE</span>
-              <span style="color:${scoreColor(score)};font-weight:700">${score.toFixed(1)}</span>
-            </div>
-            <div style="height:2px;background:#1a2340;border-radius:1px;overflow:hidden">
-              <div style="height:100%;width:${Math.min(100,score)}%;background:${scoreColor(score)};border-radius:1px"></div>
-            </div>
-            <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:0.55rem;margin-top:4px;color:var(--muted)">
-              <span>ln(${p[0]})=${lnMP.toFixed(2)}</span>
-              <span>WR²=${wrSq.toFixed(3)}</span>
-            </div>
+            <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:0.58rem;margin-bottom:3px"><span style="color:var(--muted)">SCORE</span><span style="color:${scoreColor(score)};font-weight:700">${score.toFixed(1)}</span></div>
+            <div style="height:2px;background:#1a2340;border-radius:1px;overflow:hidden"><div style="height:100%;width:${Math.min(100,score)}%;background:${scoreColor(score)};border-radius:1px"></div></div>
+            <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:0.55rem;margin-top:4px;color:var(--muted)"><span>ln(${p[0]})=${lnMP.toFixed(2)}</span><span>WR²=${wrSq.toFixed(3)}</span></div>
           </div>
         </div>`;
       }
     });
-
-    card.innerHTML = `
-      <div class="h2h-card-header">
-        <span class="h2h-hero-name">${hero}</span>
-        <span class="h2h-role-tag">${role}</span>
-        <span class="h2h-verdict-badge" style="background:${wColor}22;color:${wColor};border:1px solid ${wColor}44">👑 ${wName}</span>
-      </div>
-      <div class="h2h-players">${cells}</div>
-      <div class="h2h-summary">${summary}</div>`;
+    card.innerHTML = `<div class="h2h-card-header"><span class="h2h-hero-name">${hero}</span><span class="h2h-role-tag">${role}</span><span class="h2h-verdict-badge" style="background:${wColor}22;color:${wColor};border:1px solid ${wColor}44">👑 ${wName}</span></div><div class="h2h-players">${cells}</div><div class="h2h-summary">${summary}</div>`;
     grid.appendChild(card);
   });
 }
@@ -1212,7 +1494,6 @@ const POOL_PLAYERS = [
   ]},
 ];
 
-// ===== POOL VERDICT DATA =====
 const POOL_VERDICTS = {
   p1: {
     verdict: `Pool Fenrir adalah yang paling versatile dan seimbang dalam group ini dari sudut role coverage. Dia bukan specialist dalam satu role — dia adalah generalist sejati yang boleh bermain hampir setiap posisi dengan kompeten. Marksman pool dia (Karrie 58.6%, Moskov 60.4%, Roger 61.2%) sangat kukuh dan menunjukkan kemampuan carry lane yang solid. Kelebihan utama pool dia adalah consistency — tiada hero dengan WR bawah 43% dalam top 48, bermakna dia jarang "terpaksa" main sesuatu yang dia tak mahir. Dengan 48 hero yang tested, Fenrir adalah pemain yang paling susah untuk di-counter pick dalam group.`,
@@ -1221,19 +1502,8 @@ const POOL_VERDICTS = {
       { rank: '#2', role: 'Marksman', count: 10, avgWR: '56.8%', note: 'Karrie · Moskov · Roger — carry pool solid' },
       { rank: '#3', role: 'Mage', count: 11, avgWR: '57.2%', note: 'Aurora 61.3% · Yve 62.6% · Alice 63.1%' },
     ],
-    str: [
-      'Pool paling luas & versatile dalam group',
-      'Fighter pool terdalam — Chou (701g, 58.2%) sebagai anchor',
-      'Marksman reliable — Roger 61.2%, Moskov 60.4%',
-      'High-WR outliers: Rafaela 71.2%, Belerick 66.3%, Natan 67.1%',
-      'Tiada "lubang" role — boleh flex ke mana-mana posisi',
-    ],
-    wk: [
-      'Tiada dedicated Assassin main — hanya Lancelot (86g)',
-      'Tank pool kurang dalam berbanding Smurff/LeoXent',
-      'Selena 43.5% — satu hero below-threshold yang menarik perhatian',
-      'Pool luas tapi kurang spike ultra-tinggi seperti 1,000+ game single hero',
-    ]
+    str: ['Pool paling luas & versatile dalam group','Fighter pool terdalam — Chou (701g, 58.2%) sebagai anchor','Marksman reliable — Roger 61.2%, Moskov 60.4%','High-WR outliers: Rafaela 71.2%, Belerick 66.3%, Natan 67.1%','Tiada "lubang" role — boleh flex ke mana-mana posisi'],
+    wk: ['Tiada dedicated Assassin main — hanya Lancelot (86g)','Tank pool kurang dalam berbanding Smurff/LeoXent','Selena 43.5% — satu hero below-threshold yang menarik perhatian','Pool luas tapi kurang spike ultra-tinggi seperti 1,000+ game single hero']
   },
   p2: {
     verdict: `Pool Tok Dalang adalah yang paling khusus dalam group — dia jelas adalah Mage/Tank specialist yang bergantung sangat kepada Zhask sebagai anchor utama. Dengan 471 games Zhask pada 60.1%, dia ada pengalaman mendalam pada satu hero. Masalahnya, pool dia lebih nipis dari orang lain — banyak hero yang ada sample kecil (<20 games) yang menjadikan WR mereka tidak reliable. Walau bagaimanapun, untuk season semasa, dia menunjukkan improvement yang ketara. Hero depth pool Mage dia adalah yang terbaik dalam group dari sudut spesifik role, dengan Zhask, Vexana, dan Cecilion semua ada WR meyakinkan.`,
@@ -1242,20 +1512,8 @@ const POOL_VERDICTS = {
       { rank: '#2', role: 'Tank', count: 10, avgWR: '50.1%', note: 'Belerick 294g · Tigreal 82g — utility focus' },
       { rank: '#3', role: 'Fighter', count: 10, avgWR: '56.3%', note: 'Dyrroth 62.6% · Julian 67.7% — high WR' },
     ],
-    str: [
-      'Zhask mastery paling dalam dalam group (471g, 60.1%)',
-      'Julian 67.7% & Dyrroth 62.6% — Fighter WR tertinggi bila bermain',
-      'Cecilion 63.6% & Alucard 70.0% — high-ceiling picks',
-      'Mage depth solid: Zhask + Vexana + Zhuxin + Eudora',
-      'Trajectory terbaik — pool makin improve season ini',
-    ],
-    wk: [
-      'Sample terkecil — banyak hero WR tidak reliable (<20g)',
-      'Marksman pool hampir kosong — sangat lemah di lane ini',
-      'Moskov 9.1% (11g) — outlier negatif yang ketara',
-      'Assassin hampir tiada — hanya Saber & Hanzo game count kecil',
-      'Terlalu bergantung pada Zhask — boleh di-counter pick',
-    ]
+    str: ['Zhask mastery paling dalam dalam group (471g, 60.1%)','Julian 67.7% & Dyrroth 62.6% — Fighter WR tertinggi bila bermain','Cecilion 63.6% & Alucard 70.0% — high-ceiling picks','Mage depth solid: Zhask + Vexana + Zhuxin + Eudora','Trajectory terbaik — pool makin improve season ini'],
+    wk: ['Sample terkecil — banyak hero WR tidak reliable (<20g)','Marksman pool hampir kosong — sangat lemah di lane ini','Moskov 9.1% (11g) — outlier negatif yang ketara','Assassin hampir tiada — hanya Saber & Hanzo game count kecil','Terlalu bergantung pada Zhask — boleh di-counter pick']
   },
   p3: {
     verdict: `LeoXent memiliki pool yang paling seimbang dan dalam dari sudut kualiti dalam group ini. Berbeza dengan Fenrir yang versatile secara breadth, LeoXent ada depth yang luar biasa — Gusion 1,466 games dan Akai 951 games menunjukkan level mastery yang sangat jarang dalam sesebuah player. Pool dia merentasi semua 6 role dengan minimum viable experience, bermakna dia boleh adapt kepada meta atau team comp tanpa kelemahan. Kelebihan paling besar pool dia adalah konsistensi WR — hampir semua hero dalam 50–65% range, dengan sedikit sekali outlier negatif.`,
@@ -1264,19 +1522,8 @@ const POOL_VERDICTS = {
       { rank: '#2', role: 'Assassin/Fighter', count: 13, avgWR: '56.8%', note: 'Gusion 1,466g · Phoveus 63.5% · Helcurt 63.3%' },
       { rank: '#3', role: 'Mage', count: 9, avgWR: '57.8%', note: 'Cecilion 65.5% · Zhask 64.0% · Floryn 64.8%' },
     ],
-    str: [
-      'Gusion depth paling dalam dalam group (1,466g, 61.0%) 👑',
-      'Akai 951g + Kaja 859g — roam mastery luar biasa',
-      'Semua 6 role terwakili dengan viable experience',
-      'Tiada hero WR bawah 45% dalam top 30',
-      'Support pool terkuat: Kaja 64.0%, Angela 61.4%, Floryn 64.8%',
-    ],
-    wk: [
-      'Marksman pool agak lemah — hanya Popol & Kupa sebagai anchor',
-      'Chou 45.9% — hero yang biasa jadi concern',
-      'Terlalu banyak bergantung Assassin/Roam meta',
-      'Depth pool jauh dari Fenrir dari sudut bilangan hero',
-    ]
+    str: ['Gusion depth paling dalam dalam group (1,466g, 61.0%) 👑','Akai 951g + Kaja 859g — roam mastery luar biasa','Semua 6 role terwakili dengan viable experience','Tiada hero WR bawah 45% dalam top 30','Support pool terkuat: Kaja 64.0%, Angela 61.4%, Floryn 64.8%'],
+    wk: ['Marksman pool agak lemah — hanya Popol & Kupa sebagai anchor','Chou 45.9% — hero yang biasa jadi concern','Terlalu banyak bergantung Assassin/Roam meta','Depth pool jauh dari Fenrir dari sudut bilangan hero']
   },
   p4: {
     verdict: `Sofea Trisha adalah Assassin specialist tulen — pool dia didominasi sepenuhnya oleh Lancelot, Hayabusa, Gusion, Fanny, dan Natalia. Ini adalah pool yang paling "laser-focused" dalam group, dan dengan MVP Rate tertinggi, jelas bahawa fokus mendalam pada hero carry berhasil dari sudut impak. Masalahnya, pool Sofea juga adalah yang paling risiko — Fanny 45.8% dan Harley 47.6% menunjukkan ada hero dalam top 5 yang perlu dipertingkatkan. Pool dia kurang Tank/Support yang reliable, bermakna dalam meta yang memerlukan flex, dia mungkin terhad.`,
@@ -1285,20 +1532,8 @@ const POOL_VERDICTS = {
       { rank: '#2', role: 'Fighter', count: 9, avgWR: '55.1%', note: 'Alpha 68.4% · Alucard 55.6% · Chou 53.7%' },
       { rank: '#3', role: 'Marksman', count: 10, avgWR: '54.3%', note: 'Roger 62.2% · Moskov 59.2% · Miya 56.2%' },
     ],
-    str: [
-      'Assassin pool paling dalam & focused dalam group',
-      'Natalia 62.4% (178g) — hidden gem carry',
-      'Alpha 68.4% (174g) — Fighter WR tertinggi dalam group 🔥',
-      'Roger 62.2% & Esmeralda 61.3% — solid secondary picks',
-      'MVP Rate #1 membuktikan hero-hero ini betul-betul carry',
-    ],
-    wk: [
-      'Fanny 45.8% (308g) — pool anchor dengan WR merah',
-      'Harley 47.6% & Kagura 48.0% — dua lagi WR negatif dalam top picks',
-      'Tank/Support pool paling nipis dalam group',
-      'Terlalu bergantung pada Assassin meta — mudah di-counter pick',
-      'Lesley 48.1% — Marksman yang perlu dipertingkatkan',
-    ]
+    str: ['Assassin pool paling dalam & focused dalam group','Natalia 62.4% (178g) — hidden gem carry','Alpha 68.4% (174g) — Fighter WR tertinggi dalam group 🔥','Roger 62.2% & Esmeralda 61.3% — solid secondary picks','MVP Rate #1 membuktikan hero-hero ini betul-betul carry'],
+    wk: ['Fanny 45.8% (308g) — pool anchor dengan WR merah','Harley 47.6% & Kagura 48.0% — dua lagi WR negatif dalam top picks','Tank/Support pool paling nipis dalam group','Terlalu bergantung pada Assassin meta — mudah di-counter pick','Lesley 48.1% — Marksman yang perlu dipertingkatkan']
   },
   p5: {
     verdict: `Smurff adalah Tank/Initiator specialist yang paling konsisten dalam group. Pool dia adalah definisi "sedikit tapi berkualiti" — Franco 900 games dan Edith 833 games menunjukkan mastery yang sangat mendalam pada dua hero. WR outlier tertinggi antara semua player: Layla 87.0% (23g), Roger 71.8% (39g), Hanabi 69.0% (29g), dan Hylos 70.4% (54g) menunjukkan bila dia keluar dari comfort zone Tank-nya pun, hasilnya mengejutkan positif. Kelemahannya adalah pool breadth yang sangat terhad — banyak hero dengan sample kecil yang menjadikan WR tidak reliable.`,
@@ -1307,20 +1542,8 @@ const POOL_VERDICTS = {
       { rank: '#2', role: 'Fighter', count: 9, avgWR: '55.3%', note: 'Freya · Phoveus 58.6% · Cici · Roger' },
       { rank: '#3', role: 'Support', count: 5, avgWR: '59.2%', note: 'Estes 67.5% · Carmilla 51.3% · Angela 75.0%' },
     ],
-    str: [
-      'Franco + Edith — Tank combo paling solid dalam group 🛡️',
-      'Hylos 70.4% (54g) — clutch tank yang konsisten',
-      'WR outlier tertinggi: Layla 87.0%, Angela 75.0%',
-      'Estes 67.5% (40g) — Support mastery tersembunyi',
-      'Roger 71.8% (39g) — flex carry yang meyakinkan',
-    ],
-    wk: [
-      'Pool paling nipis dari sudut breadth — banyak sample kecil',
-      'Hampir tiada Assassin atau Mage viable',
-      'Gloo 38.9% (18g) & Eudora 28.6% (14g) — outlier negatif',
-      'Lesley 42.1% & Cecilion 42.9% — lemah pada hero bukan comfort zone',
-      'Terlalu dependent pada Franco/Edith — predictable dalam draft',
-    ]
+    str: ['Franco + Edith — Tank combo paling solid dalam group 🛡️','Hylos 70.4% (54g) — clutch tank yang konsisten','WR outlier tertinggi: Layla 87.0%, Angela 75.0%','Estes 67.5% (40g) — Support mastery tersembunyi','Roger 71.8% (39g) — flex carry yang meyakinkan'],
+    wk: ['Pool paling nipis dari sudut breadth — banyak sample kecil','Hampir tiada Assassin atau Mage viable','Gloo 38.9% (18g) & Eudora 28.6% (14g) — outlier negatif','Lesley 42.1% & Cecilion 42.9% — lemah pada hero bukan comfort zone','Terlalu dependent pada Franco/Edith — predictable dalam draft']
   }
 };
 
@@ -1331,10 +1554,8 @@ function poolWrColor(wr) { return wr>=60?'#f5b942':wr>=55?'#3de87e':wr>=50?'#f5c
 function buildPoolVerdict(p) {
   const vd = POOL_VERDICTS[p.pid];
   if (!vd) return '';
-
   const rankColors = ['#f5b942','#9eaabf','#c07838'];
   const roleIcons = { 'Fighter':'⚔️','Tank':'🛡️','Mage':'🔮','Assassin':'🗡️','Marksman':'🏹','Support':'💚','Tank/Support':'🛡️','Assassin/Fighter':'⚔️' };
-
   const roleBoxes = vd.topRoles.map((r,i) => `
     <div class="pv-role-box" style="border-color:${rankColors[i]}22;background:${rankColors[i]}08">
       <div class="pv-role-rank" style="color:${rankColors[i]}">${r.rank} ROLE</div>
@@ -1342,10 +1563,8 @@ function buildPoolVerdict(p) {
       <div class="pv-role-stat" style="color:#6a8aaa;margin-top:3px">${r.count} heroes · avg ${r.avgWR}</div>
       <div style="font-size:0.62rem;color:#4a6070;margin-top:5px;line-height:1.4">${r.note}</div>
     </div>`).join('');
-
   const strItems = vd.str.map(s => `<div style="display:flex;gap:6px;margin-bottom:4px"><span style="color:#3de87e;flex-shrink:0;margin-top:1px">✓</span><span>${s}</span></div>`).join('');
   const wkItems = vd.wk.map(w => `<div style="display:flex;gap:6px;margin-bottom:4px"><span style="color:#f05060;flex-shrink:0;margin-top:1px">✗</span><span>${w}</span></div>`).join('');
-
   return `
   <div class="pool-verdict-card">
     <div class="pool-verdict-inner">
@@ -1353,22 +1572,11 @@ function buildPoolVerdict(p) {
         <span style="width:8px;height:8px;border-radius:50%;background:${p.color};display:inline-block;box-shadow:0 0 6px ${p.color}"></span>
         📋 Pool Verdict — ${p.name}
       </div>
-
-      <div class="pv-grid" style="margin-bottom:16px">
-        ${roleBoxes}
-      </div>
-
+      <div class="pv-grid" style="margin-bottom:16px">${roleBoxes}</div>
       <div class="pv-body">${vd.verdict}</div>
-
       <div class="pv-sw">
-        <div class="pv-sw-box str">
-          <div class="pv-sw-label">✦ Kelebihan Pool</div>
-          <div style="font-size:0.73rem;color:var(--muted)">${strItems}</div>
-        </div>
-        <div class="pv-sw-box wk">
-          <div class="pv-sw-label">✦ Kelemahan Pool</div>
-          <div style="font-size:0.73rem;color:var(--muted)">${wkItems}</div>
-        </div>
+        <div class="pv-sw-box str"><div class="pv-sw-label">✦ Kelebihan Pool</div><div style="font-size:0.73rem;color:var(--muted)">${strItems}</div></div>
+        <div class="pv-sw-box wk"><div class="pv-sw-label">✦ Kelemahan Pool</div><div style="font-size:0.73rem;color:var(--muted)">${wkItems}</div></div>
       </div>
     </div>
   </div>`;
@@ -1397,7 +1605,6 @@ function buildPoolSection(p) {
       <td style="padding:5px 10px;text-align:right"><span style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;font-weight:600;color:${sc>=50?'#3de87e':sc>=30?'#f5c842':'#f05060'}">${sc.toFixed(1)}</span></td>
     </tr>`;
   }).join('');
-
   return `<div class="player-section-pool" id="pool-sec-${p.pid}" data-pp="${p.pid}" style="margin-bottom:44px">
     <div id="anchor-${p.pid}" style="scroll-margin-top:20px"></div>
     <div style="display:flex;align-items:center;gap:12px;padding:11px 16px;background:linear-gradient(135deg,#0d1220,#060911);border-radius:10px 10px 0 0;border-left:4px solid ${p.color};border-bottom:1px solid var(--border)">
@@ -1424,7 +1631,6 @@ function buildPoolSection(p) {
   </div>`;
 }
 
-// Build pool tabs & jump links & sections
 const poolTabBar = document.getElementById('pool-tabs');
 const poolJumpBar = document.getElementById('pool-jump-bar');
 const poolSections = document.getElementById('pool-sections');
@@ -1437,7 +1643,6 @@ allTab.onclick = () => { switchPool('all', allTab); };
 poolTabBar.appendChild(allTab);
 
 POOL_PLAYERS.forEach(p => {
-  // Tab button
   const btn = document.createElement('button');
   btn.className = 'pool-tab';
   btn.textContent = `${p.emoji} ${p.name}`;
@@ -1445,7 +1650,6 @@ POOL_PLAYERS.forEach(p => {
   btn.onclick = () => switchPool(p.pid, btn);
   poolTabBar.appendChild(btn);
 
-  // Jump link
   const jl = document.createElement('a');
   jl.className = 'jump-link';
   jl.style.cssText = `color:${p.color};border-color:${p.color}33;background:${p.color}0d`;
@@ -1453,7 +1657,6 @@ POOL_PLAYERS.forEach(p => {
   jl.href = '#';
   jl.onclick = (e) => {
     e.preventDefault();
-    // Make sure "All Players" is active so section is visible
     switchPool('all', allTab);
     setTimeout(() => {
       const anchor = document.getElementById('anchor-' + p.pid);
@@ -1462,26 +1665,21 @@ POOL_PLAYERS.forEach(p => {
   };
   poolJumpBar.appendChild(jl);
 
-  // Section
   poolSections.insertAdjacentHTML('beforeend', buildPoolSection(p));
 });
 
-// ===== COMBINED POOL VERDICT SEGMENT =====
 const combinedVerdictHTML = `
 <div id="pool-combined-verdict" style="margin-top:16px;margin-bottom:48px">
   <div style="font-family:'Rajdhani',sans-serif;font-size:0.75rem;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border)">
     ⚡ Verdict Keseluruhan — Hero Pool Comparison
   </div>
-
-  <!-- Comparison grid: 5 players side by side -->
   <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0;background:var(--s1);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px">
     ${POOL_PLAYERS.map((p,i) => {
       const vd = POOL_VERDICTS[p.pid];
       const total = p.heroes.reduce((a,h)=>a+h[2],0);
       const avgWR = (p.heroes.reduce((a,h)=>a+h[3],0)/p.heroes.length).toFixed(1);
-      const above50 = p.heroes.filter(h=>h[3]>=50).length;
-      const above55 = p.heroes.filter(h=>h[3]>=55).length;
       const above60 = p.heroes.filter(h=>h[3]>=60).length;
+      const above55 = p.heroes.filter(h=>h[3]>=55).length;
       const below45 = p.heroes.filter(h=>h[3]<45).length;
       const maxSingleGame = Math.max(...p.heroes.map(h=>h[2]));
       const maxHero = p.heroes.find(h=>h[2]===maxSingleGame);
@@ -1501,22 +1699,10 @@ const combinedVerdictHTML = `
           <div style="font-family:'IBM Plex Mono',monospace;font-size:0.58rem;color:var(--muted);margin-top:2px">AVG WR (top 48)</div>
         </div>
         <div style="padding:10px 14px;display:flex;flex-direction:column;gap:6px">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <span style="font-size:0.62rem;color:var(--muted)">Total games</span>
-            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--text);font-weight:600">${total.toLocaleString()}</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <span style="font-size:0.62rem;color:var(--muted)">≥60% WR</span>
-            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:#f5b942;font-weight:600">${above60} hero</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <span style="font-size:0.62rem;color:var(--muted)">≥55% WR</span>
-            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:#3de87e;font-weight:600">${above55} hero</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <span style="font-size:0.62rem;color:var(--muted)">&lt;45% WR</span>
-            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:${below45>0?'#f05060':'#3de87e'};font-weight:600">${below45} hero</span>
-          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:0.62rem;color:var(--muted)">Total games</span><span style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--text);font-weight:600">${total.toLocaleString()}</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:0.62rem;color:var(--muted)">≥60% WR</span><span style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:#f5b942;font-weight:600">${above60} hero</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:0.62rem;color:var(--muted)">≥55% WR</span><span style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:#3de87e;font-weight:600">${above55} hero</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:0.62rem;color:var(--muted)">&lt;45% WR</span><span style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:${below45>0?'#f05060':'#3de87e'};font-weight:600">${below45} hero</span></div>
           <div style="border-top:1px solid var(--border);padding-top:6px;margin-top:2px">
             <div style="font-size:0.58rem;color:var(--muted);margin-bottom:2px">Top Role</div>
             <div style="font-family:'Rajdhani',sans-serif;font-size:0.78rem;font-weight:700;color:${p.color}">${topRole[0]} <span style="color:var(--muted);font-weight:400">(${topRole[1]})</span></div>
@@ -1530,91 +1716,32 @@ const combinedVerdictHTML = `
       </div>`;
     }).join('')}
   </div>
-
-  <!-- Rankings bar -->
-  <div style="background:var(--s1);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:20px">
-    <div style="padding:10px 16px;background:#090d18;border-bottom:1px solid var(--border);font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase">Pool Category Rankings</div>
-    <div style="padding:14px 16px;display:flex;flex-direction:column;gap:10px">
+  <div style="background:linear-gradient(135deg,#0a1020 0%,#06090f 100%);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:12px;padding:22px 26px">
+    <div style="font-family:'Rajdhani',sans-serif;font-size:0.82rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:16px">🏆 Kesimpulan: Siapa Pool Terbaik?</div>
+    <div style="display:flex;flex-direction:column;gap:14px">
       ${[
-        { label:'Pool Breadth (versatility)', icon:'🌐', ranks:['LeoXent','Fenrir','Sofea Trisha','Tok Dalang','Smurff'], colors:['#40b8f0','#f0a040','#f04070','#a040f0','#40e0a0'], note:'Bilangan hero dengan viable WR merentasi semua role' },
-        { label:'Single Hero Mastery', icon:'👑', ranks:['LeoXent','Smurff','Sofea Trisha','Fenrir','Tok Dalang'], colors:['#40b8f0','#40e0a0','#f04070','#f0a040','#a040f0'], note:'Kedalaman pada satu hero signature (games × WR)' },
-        { label:'Avg WR Consistency', icon:'📊', ranks:['Fenrir','LeoXent','Sofea Trisha','Tok Dalang','Smurff'], colors:['#f0a040','#40b8f0','#f04070','#a040f0','#40e0a0'], note:'Rata-rata WR top 48 hero — semakin tinggi semakin konsisten' },
-        { label:'High-WR Heroes (≥60%)', icon:'🔥', ranks:['LeoXent','Fenrir','Smurff','Sofea Trisha','Tok Dalang'], colors:['#40b8f0','#f0a040','#40e0a0','#f04070','#a040f0'], note:'Bilangan hero dengan WR ≥60% dalam pool' },
-        { label:'Risk (WR <45% heroes)', icon:'⚠️', ranks:['Fenrir','LeoXent','Tok Dalang','Sofea Trisha','Smurff'], colors:['#40b8f0','#f0a040','#a040f0','#f04070','#40e0a0'], note:'Fenrir = paling selamat · Smurff ada beberapa hero WR rendah' },
-        { label:'Tank/Support Depth', icon:'🛡️', ranks:['Smurff','LeoXent','Fenrir','Tok Dalang','Sofea Trisha'], colors:['#40e0a0','#40b8f0','#f0a040','#a040f0','#f04070'], note:'Smurff dominant jelas · Sofea hampir tiada Tank/Support' },
-        { label:'Assassin/Carry Pool', icon:'🗡️', ranks:['Sofea Trisha','LeoXent','Fenrir','Tok Dalang','Smurff'], colors:['#f04070','#40b8f0','#f0a040','#a040f0','#40e0a0'], note:'Sofea adalah Assassin specialist tulen dalam group ini' },
-      ].map(cat => `
-        <div>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-            <span style="font-size:0.72rem;color:#9ab8d8">${cat.icon} ${cat.label}</span>
-            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.58rem;color:var(--muted)">${cat.note}</span>
-          </div>
-          <div style="display:flex;gap:4px;align-items:center">
-            ${cat.ranks.map((name,i) => `
-              <div style="display:flex;align-items:center;gap:4px;padding:4px 8px;border-radius:5px;background:${cat.colors[i]}12;border:1px solid ${cat.colors[i]}28;flex:1">
-                <span style="font-family:'IBM Plex Mono',monospace;font-size:0.56rem;color:${i===0?cat.colors[i]:'var(--muted)'};font-weight:700">#${i+1}</span>
-                <span style="font-size:0.68rem;font-weight:600;color:${i===0?cat.colors[i]:'#7090b0'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${name.split(' ')[0]}</span>
-              </div>`).join('')}
+        {color:'#40b8f0',rank:1,name:'LeoXent',label:'Pool Paling Seimbang & Dalam',body:'Gusion 1,466 games dengan 61.0% adalah signature mastery yang tiada tandingan dalam group. Kelebihan sebenar pool LeoXent bukan pada satu hero — dia ada depth merentasi semua 6 role dengan hampir tiada kelemahan. Support pool (Kaja 64%, Angela 61%, Floryn 64.8%) adalah yang terkuat, dan pool Assassin dia boleh compete dengan Sofea dari sudut kualiti.'},
+        {color:'#f0a040',rank:2,name:'Fenrir',label:'Pool Paling Versatile & Selamat',body:'Dari sudut breadth dan ketiadaan "lubang" dalam pool, Fenrir mengatasi semua orang. Average WR tertinggi dalam group dan hampir tiada hero below 45% menunjukkan dia adalah pemain yang paling consistent dari sudut kualiti pool. Marksman dan Fighter pool dia adalah yang terlengkap.'},
+        {color:'#f04070',rank:3,name:'Sofea Trisha',label:'Pool Paling Fokus & Berisiko Tinggi',body:'Pool Sofea adalah definisi "high risk, high reward." Sebagai Assassin specialist tulen, dia ada depth carry pool yang boleh melahirkan MVP Rate tertinggi dalam group. Tapi ketiadaan Tank/Support yang reliable dan beberapa hero anchor dengan WR merah bermakna pool dia sangat bergantung kepada meta.'},
+        {color:'#40e0a0',rank:4,name:'Smurff',label:'Pool Paling Specialist & Reliable',body:'Smurff bukan pemain dengan pool yang luas — tapi dalam bidang Tank/Initiator, dia adalah yang terbaik. Franco 900 games dan Edith 833 games menunjukkan mastery yang genuinely rare. WR outlier dia (Roger 71.8%, Layla 87.0%, Hylos 70.4%) menunjukkan bila dia keluar dari comfort zone pun hasilnya meyakinkan.'},
+        {color:'#a040f0',rank:5,name:'Tok Dalang',label:'Pool Paling Underrated & Berkembang',body:'Pool Tok Dalang nampak terhad pada permukaan tapi ada beberapa gems tersembunyi — Julian 67.7%, Cecilion 63.6%, Alucard 70.0%. Masalah utama: banyak hero dalam top 48 ada sample kecil. Yang paling penting: pool dia sedang berkembang — trajectory season semasa menunjukkan dia aktif expanding pool dan improving.'},
+      ].map(item => `
+        <div style="display:flex;gap:14px;align-items:flex-start;padding:12px 14px;background:${item.color}0d;border:1px solid ${item.color}22;border-radius:8px">
+          <div style="flex-shrink:0;width:32px;height:32px;border-radius:50%;background:${item.color}20;border:1px solid ${item.color}40;display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-weight:700;color:${item.color};font-size:0.9rem">${item.rank}</div>
+          <div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:0.9rem;font-weight:700;color:${item.color};letter-spacing:1px;margin-bottom:4px">${item.name} — ${item.label}</div>
+            <div style="font-size:0.78rem;color:#8aaac8;line-height:1.7">${item.body}</div>
           </div>
         </div>`).join('')}
     </div>
-  </div>
-
-  <!-- Final combined verdict text -->
-  <div style="background:linear-gradient(135deg,#0a1020 0%,#06090f 100%);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:12px;padding:22px 26px">
-    <div style="font-family:'Rajdhani',sans-serif;font-size:0.82rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:16px">🏆 Kesimpulan: Siapa Pool Terbaik?</div>
-
-    <div style="display:flex;flex-direction:column;gap:14px">
-      <div style="display:flex;gap:14px;align-items:flex-start;padding:12px 14px;background:rgba(64,184,240,0.06);border:1px solid rgba(64,184,240,0.15);border-radius:8px">
-        <div style="flex-shrink:0;width:32px;height:32px;border-radius:50%;background:rgba(64,184,240,0.15);border:1px solid rgba(64,184,240,0.3);display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-weight:700;color:#40b8f0;font-size:0.9rem">1</div>
-        <div>
-          <div style="font-family:'Rajdhani',sans-serif;font-size:0.9rem;font-weight:700;color:#40b8f0;letter-spacing:1px;margin-bottom:4px">🔵 LeoXent — Pool Paling Seimbang & Dalam</div>
-          <div style="font-size:0.78rem;color:#8aaac8;line-height:1.7">Gusion 1,466 games dengan 61.0% adalah signature mastery yang tiada tandingan dalam group. Tapi kelebihan sebenar pool LeoXent bukan pada satu hero — dia ada depth merentasi semua 6 role dengan hampir tiada kelemahan. Support pool (Kaja 64%, Angela 61%, Floryn 64.8%) adalah yang terkuat, dan pool Assassin dia boleh compete dengan Sofea dari sudut kualiti. Ini adalah pool yang paling susah untuk di-counter pick dan paling reliable dalam sebarang situasi.</div>
-        </div>
-      </div>
-
-      <div style="display:flex;gap:14px;align-items:flex-start;padding:12px 14px;background:rgba(240,160,64,0.06);border:1px solid rgba(240,160,64,0.15);border-radius:8px">
-        <div style="flex-shrink:0;width:32px;height:32px;border-radius:50%;background:rgba(240,160,64,0.15);border:1px solid rgba(240,160,64,0.3);display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-weight:700;color:#f0a040;font-size:0.9rem">2</div>
-        <div>
-          <div style="font-family:'Rajdhani',sans-serif;font-size:0.9rem;font-weight:700;color:#f0a040;letter-spacing:1px;margin-bottom:4px">🟠 Fenrir — Pool Paling Versatile & Selamat</div>
-          <div style="font-size:0.78rem;color:#8aaac8;line-height:1.7">Dari sudut breadth dan ketiadaan "lubang" dalam pool, Fenrir mengatasi semua orang. Average WR tertinggi dalam group (berdasarkan top 48) dan hampir tiada hero below 45% menunjukkan dia adalah pemain yang paling consistent dari sudut kualiti pool. Marksman dan Fighter pool dia adalah yang terlengkap, dengan beberapa high-WR outlier (Rafaela 71.2%, Belerick 66.3%) yang menunjukkan kemampuan flex yang sangat berguna dalam draft.</div>
-        </div>
-      </div>
-
-      <div style="display:flex;gap:14px;align-items:flex-start;padding:12px 14px;background:rgba(240,64,112,0.06);border:1px solid rgba(240,64,112,0.15);border-radius:8px">
-        <div style="flex-shrink:0;width:32px;height:32px;border-radius:50%;background:rgba(240,64,112,0.15);border:1px solid rgba(240,64,112,0.3);display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-weight:700;color:#f04070;font-size:0.9rem">3</div>
-        <div>
-          <div style="font-family:'Rajdhani',sans-serif;font-size:0.9rem;font-weight:700;color:#f04070;letter-spacing:1px;margin-bottom:4px">🔴 Sofea Trisha — Pool Paling Fokus & Berisiko Tinggi</div>
-          <div style="font-size:0.78rem;color:#8aaac8;line-height:1.7">Pool Sofea adalah definisi "high risk, high reward." Sebagai Assassin specialist tulen, dia ada depth carry pool yang boleh melahirkan MVP Rate tertinggi dalam group. Tapi ketiadaan Tank/Support yang reliable dan beberapa hero anchor dengan WR merah (Fanny 45.8%, Harley 47.6%) bermakna pool dia sangat bergantung kepada meta. Dalam meta Assassin-friendly, pool dia mungkin yang paling merbahaya — tapi dalam meta tank/utility, dia akan berjuang.</div>
-        </div>
-      </div>
-
-      <div style="display:flex;gap:14px;align-items:flex-start;padding:12px 14px;background:rgba(64,224,160,0.05);border:1px solid rgba(64,224,160,0.12);border-radius:8px">
-        <div style="flex-shrink:0;width:32px;height:32px;border-radius:50%;background:rgba(64,224,160,0.12);border:1px solid rgba(64,224,160,0.25);display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-weight:700;color:#40e0a0;font-size:0.9rem">4</div>
-        <div>
-          <div style="font-family:'Rajdhani',sans-serif;font-size:0.9rem;font-weight:700;color:#40e0a0;letter-spacing:1px;margin-bottom:4px">🟢 Smurff — Pool Paling Specialist & Reliable Dalam Rolnya</div>
-          <div style="font-size:0.78rem;color:#8aaac8;line-height:1.7">Smurff bukan pemain dengan pool yang luas — tapi dalam bidang yang dia pilih (Tank/Initiator), dia adalah yang terbaik tanpa persoalan. Franco 900 games dan Edith 833 games menunjukkan mastery yang genuinely rare. WR outlier dia (Roger 71.8%, Layla 87.0%, Hylos 70.4%) adalah data yang mengejutkan dan menunjukkan bila dia keluar dari comfort zone pun hasilnya meyakinkan. Kelemahan: dalam meta yang memerlukan carry atau Mage, pool dia hampir kosong.</div>
-        </div>
-      </div>
-
-      <div style="display:flex;gap:14px;align-items:flex-start;padding:12px 14px;background:rgba(160,64,240,0.05);border:1px solid rgba(160,64,240,0.12);border-radius:8px">
-        <div style="flex-shrink:0;width:32px;height:32px;border-radius:50%;background:rgba(160,64,240,0.12);border:1px solid rgba(160,64,240,0.25);display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-weight:700;color:#a040f0;font-size:0.9rem">5</div>
-        <div>
-          <div style="font-family:'Rajdhani',sans-serif;font-size:0.9rem;font-weight:700;color:#a040f0;letter-spacing:1px;margin-bottom:4px">🟣 Tok Dalang — Pool Paling Underrated & Dalam Proses Berkembang</div>
-          <div style="font-size:0.78rem;color:#8aaac8;line-height:1.7">Pool Tok Dalang nampak terhad pada permukaan tapi ada beberapa gems tersembunyi — Julian 67.7%, Cecilion 63.6%, Alucard 70.0% menunjukkan keupayaan yang sebenar bila dia bermain hero yang sesuai. Masalah utama: banyak hero dalam top 48 ada sample kecil yang menjadikan WR tidak reliable untuk dinilai secara adil. Yang paling penting: pool dia sedang berkembang — trajectory season semasa menunjukkan dia aktif expanding pool dan improving. Dalam 6–12 bulan lagi, gambar pool dia mungkin akan berubah drastik.</div>
-        </div>
-      </div>
-    </div>
-
     <div style="margin-top:16px;padding:10px 14px;background:rgba(245,185,66,0.06);border:1px solid rgba(245,185,66,0.15);border-radius:7px;font-size:0.75rem;color:#9ab4cc;line-height:1.7">
-      <strong style="color:var(--gold)">⚡ Kesimpulan Akhir Pool:</strong> Untuk group play yang memerlukan adaptability dan reliabiliti, <strong style="color:#40b8f0">LeoXent</strong> adalah pilihan paling selamat. Untuk draft yang memerlukan pure carry, <strong style="color:#f04070">Sofea</strong> adalah ancaman paling berbahaya. Untuk team yang perlu anchor dan initiator kukuh, <strong style="color:#40e0a0">Smurff</strong> adalah pilihan ideal. Pool bukan semuanya — tetapi siapa yang mampu adapt pool mereka kepada keperluan team adalah yang akan menang dalam jangka panjang.
+      <strong style="color:var(--gold)">⚡ Kesimpulan Akhir Pool:</strong> Untuk group play yang memerlukan adaptability, <strong style="color:#40b8f0">LeoXent</strong> adalah pilihan paling selamat. Untuk draft yang memerlukan pure carry, <strong style="color:#f04070">Sofea</strong> adalah ancaman paling berbahaya. Untuk team yang perlu anchor kukuh, <strong style="color:#40e0a0">Smurff</strong> adalah pilihan ideal.
     </div>
   </div>
 </div>`;
 
 poolSections.insertAdjacentHTML('beforeend', combinedVerdictHTML);
 
-// Add jump link for combined verdict
 const jlCombined = document.createElement('a');
 jlCombined.className = 'jump-link';
 jlCombined.style.cssText = 'color:#f5b942;border-color:#f5b94233;background:#f5b94210';
